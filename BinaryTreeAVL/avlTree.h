@@ -8,20 +8,19 @@
 template<class T>
 class AvlTree{
 public:
-    AvlTree() = default;
+    AvlTree();
     AvlTree(const AvlTree<T>& otherTree) = delete;
     AvlTree<T>& operator=(const AvlTree<T>& otherTree) = delete;
     ~AvlTree() = default;
 
     void insert(Node<T>* temp, const T& key);
     void updateHeights(Node<T>* node);
-
-
     /////////////////////////////////////toDelete
     Node<T>* getRoot() const {
         return m_root;
     }
 
+    void updateBalance(Node<T>* node);
 
 private:
     Node<T>* m_root;
@@ -29,6 +28,10 @@ private:
 
 };
 
+
+
+template<class T>
+AvlTree<T>::AvlTree(): m_root(nullptr){};
 
 
 int max(int a, int b) {
@@ -52,7 +55,7 @@ template<class T>
 void AvlTree<T>::insert(Node<T>* temp, const T& key){
     
     if(temp == nullptr){
-        if(m_root != nullptr){
+        if(m_root == nullptr){
             //todo: ERROR -  check if avl tree is not empty
         } 
         m_root = newNode(key);
@@ -87,42 +90,52 @@ void AvlTree<T>::insert(Node<T>* temp, const T& key){
     else{
         tempParent->setRight(node);
     }
-    updateHeights(node);
 }
-
 
 template<class T>
 void AvlTree<T>::updateHeights(Node<T> *node) {
     if (node == nullptr) {
         //todo - ERROR
     }
-
     bool isHeightUpdated = 1;
-    while(isHeightUpdated && node) {
+    while(isHeightUpdated && node->getParent()) {
         if (!node->getLeft() && !node->getRight()) {
             node = node->getParent();
-            continue;
         }
-        int heightRight = 0;
-        int heightLeft = 0;
-        if (node->getRight()) {
-            heightRight = (node->getRight())->getHeight();
+        else{
+            int heightRight = 0;
+            int heightLeft = 0;
+            if (node->getRight()) {
+                heightRight = (node->getRight())->getHeight();
+            }
+            if (node->getLeft()) {
+                heightLeft = (node->getLeft())->getHeight();
+            }
+            int maxHeight = max(heightLeft, heightRight);
+            if ((maxHeight+1) == node->getHeight()) {
+                isHeightUpdated = 0;
+                continue;
+            }
+            node->setHeight(maxHeight+1);
         }
-        if (node->getLeft()) {
-            heightLeft = (node->getLeft())->getHeight();
-        }
-        int maxHeight = max(heightLeft, heightRight);
-        if ((maxHeight+1) == node->getHeight()) {
-            isHeightUpdated = 0;
-            continue;
-        }
-        node->setHeight(maxHeight+1);
-        node = node->getParent();
     }
 }
 
-
-
+//template<class T>
+//void AvlTree<T>::updateBalance(Node<T>* node){
+//    if(!node){
+//        //todo: ERROR
+//    }
+//
+//    bool isBalanceUpdated = 1;
+//    while(isBalanceUpdated && node->getParent()){
+//        if(!node->getLeft() && !node->getRight()){
+//            node=node->getParent();
+//            continue;
+//        }
+//
+//    }
+//}
 
 
 #endif //DATA_STRUCTURES_EX1_AvlTree_H

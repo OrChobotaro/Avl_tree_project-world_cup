@@ -18,6 +18,14 @@ void printInorder(Node<int>* node)
 
 
 
+#include <iostream>
+#include <random>
+
+
+
+
+
+
 int main(){
 
     AvlTree<int> tree1;
@@ -27,6 +35,8 @@ int main(){
     tree1.insert(tree1.getRoot(), 103);
     tree1.insert(tree1.getRoot(), 76);
     tree1.insert(tree1.getRoot(), 100);
+
+
 
     return 0;
 }
