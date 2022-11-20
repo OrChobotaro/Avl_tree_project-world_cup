@@ -1,4 +1,5 @@
-// 
+/*
+//
 // 234218 Data Structures 1.
 // Semester: 2023A (winter).
 // Wet Exercise #1.
@@ -130,3 +131,4 @@ void query_get_all_players(string cmd, world_cup_t *obj, int teamID)
     }
     delete[] out_mem;
 }
+*/
