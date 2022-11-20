@@ -1,5 +1,23 @@
 #include "BinaryTreeAVL/avlTree.h"
 
+void printInorder(Node<int>* node)
+{
+    if (node == NULL)
+        return;
+
+    /* first recur on left child */
+    printInorder(node->getLeft());
+
+    /* then print the data of node */
+    std::cout << node->getKey() << " ";
+
+    /* now recur on right child */
+    printInorder(node->getRight());
+}
+
+
+
+
 int main(){
 
     AvlTree<int> tree1;
