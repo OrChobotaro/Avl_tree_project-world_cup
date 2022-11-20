@@ -16,6 +16,13 @@ public:
     void insert(Node<T>* temp, const T& key);
     void updateHeights(Node<T>* node);
 
+
+    /////////////////////////////////////toDelete
+    Node<T>* getRoot() const {
+        return m_root;
+    }
+
+
 private:
     Node<T>* m_root;
     Node<T>* newNode(const T& key); //todo: לבדוק אם צריך לקבל גם אב
@@ -45,7 +52,7 @@ template<class T>
 void AvlTree<T>::insert(Node<T>* temp, const T& key){
     
     if(temp == nullptr){
-        if(m_root == nullptr){
+        if(m_root != nullptr){
             //todo: ERROR -  check if avl tree is not empty
         } 
         m_root = newNode(key);
@@ -80,6 +87,7 @@ void AvlTree<T>::insert(Node<T>* temp, const T& key){
     else{
         tempParent->setRight(node);
     }
+    updateHeights(node);
 }
 
 
@@ -90,20 +98,26 @@ void AvlTree<T>::updateHeights(Node<T> *node) {
     }
 
     bool isHeightUpdated = 1;
-    while(isHeightUpdated && node->getParent()) {
-        if (node->getHeight() == 0) {
+    while(isHeightUpdated && node) {
+        if (!node->getLeft() && !node->getRight()) {
             node = node->getParent();
+            continue;
         }
-        else{
-            int heightRight = (node->getRight())->getHeight();
-            int heightLeft = (node->getLeft())->getHeight();
-            int maxHeight = max(heightLeft, heightRight);
-            if ((maxHeight+1) == node->getHeight()) {
-                isHeightUpdated = 0;
-                continue;
-            }
-            node->setHeight(maxHeight+1);
+        int heightRight = 0;
+        int heightLeft = 0;
+        if (node->getRight()) {
+            heightRight = (node->getRight())->getHeight();
         }
+        if (node->getLeft()) {
+            heightLeft = (node->getLeft())->getHeight();
+        }
+        int maxHeight = max(heightLeft, heightRight);
+        if ((maxHeight+1) == node->getHeight()) {
+            isHeightUpdated = 0;
+            continue;
+        }
+        node->setHeight(maxHeight+1);
+        node = node->getParent();
     }
 }
 
