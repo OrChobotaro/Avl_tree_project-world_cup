@@ -31,7 +31,7 @@ int main(){
     AvlTree<int> tree1;
 
     // Tree RR
-    tree1.insert(nullptr, 63);
+    tree1.insert(tree1.getRoot(), 63);
     tree1.insert(tree1.getRoot(), 20);
     tree1.insert(tree1.getRoot(), 100);
     tree1.insert(tree1.getRoot(), 78);
@@ -43,7 +43,7 @@ int main(){
     tree1.insert(tree1.getRoot(), 154);
     tree1.insert(tree1.getRoot(), 160);
     //printInorder(tree1.getRoot());
-    tree1.balanceTree(tree1.find(160));
+    //tree1.balanceTree(tree1.find(160));
 
 
     //Tree LR
@@ -62,7 +62,7 @@ int main(){
     tree2.insert(tree2.getRoot(), 14);
     tree2.insert(tree2.getRoot(), 11);
     //printInorder(tree2.getRoot());
-    tree2.balanceTree(tree2.find(11));
+    //tree2.balanceTree(tree2.find(11));
 
     //Tree RL
     AvlTree<int> treeRL;
@@ -78,7 +78,30 @@ int main(){
     treeRL.insert(treeRL.getRoot(), 10);
     treeRL.insert(treeRL.getRoot(), 17);
     treeRL.insert(treeRL.getRoot(), 15);
-    treeRL.balanceTree(treeRL.find(15));
+    //treeRL.balanceTree(treeRL.find(15));
+
+//    Node<int>* nodeTest;
+//    nodeTest = treeRL.findFollowNode(treeRL.find(13));
+//
+//    treeRL.switchNodes(treeRL.find(13), treeRL.find(8));
+
+
+    //removeTree
+    AvlTree<int> removeTree;
+    removeTree.insert(removeTree.getRoot(), 5);
+    removeTree.insert(removeTree.getRoot(), 2);
+    removeTree.insert(removeTree.getRoot(), 8);
+    removeTree.insert(removeTree.getRoot(), 1);
+    removeTree.insert(removeTree.getRoot(), 6);
+    removeTree.insert(removeTree.getRoot(), 4);
+    removeTree.insert(removeTree.getRoot(), 3);
+    removeTree.insert(removeTree.getRoot(), 10);
+    removeTree.insert(removeTree.getRoot(), 7);
+    removeTree.insert(removeTree.getRoot(), 9);
+    removeTree.insert(removeTree.getRoot(), 11);
+    removeTree.insert(removeTree.getRoot(), 12);
+
+    removeTree.remove(1);
 
     return 0;
 }
