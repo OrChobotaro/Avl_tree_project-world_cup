@@ -37,7 +37,7 @@ public:
     Node<T>* getRoot() const;
 
 
-    void balanceTree(Node<T>* lastAddedNode);
+    Node<T>* balanceTree(Node<T>* lastAddedNode);
     int calcBalance(Node<T>* node);
 
     void updateHeights(Node<T>* node);
@@ -158,6 +158,7 @@ bool isLeaf(Node<T>* node){
 
 template<class T>
 int calcHeight(Node<T>* node){
+    assert(node);
     int heightRight = 0;
     int heightLeft = 0;
     if (node->getRight()) {
@@ -174,8 +175,7 @@ Node<T>* AvlTree<T>::balanceTree(Node<T>* lastAddedNode){
     assert(lastAddedNode);
     Node<T>* node = lastAddedNode;
 
-    bool isBalanceUpdated = true; // todo: change name / check if needed
-    while(node && isBalanceUpdated){
+    while(node){
         if(isLeaf(node)){
             node = node->getParent();
             continue;
@@ -192,21 +192,19 @@ Node<T>* AvlTree<T>::balanceTree(Node<T>* lastAddedNode){
 
         if(currentNodeBalance == 2){
             if(leftBalance == 0 || leftBalance == 1){
-                LL(node);
+                return LL(node);
             }
             else if(leftBalance == -1){
-                LR(node);
+                return LR(node);
             }
-            isBalanceUpdated = false;
         }
         else if(currentNodeBalance == -2){
             if(rightBalance == 0 || rightBalance == -1){
-                RR(node);
+                return RR(node);
             }
             else if(rightBalance == 1){
-                RL(node);
+                return RL(node);
             }
-            isBalanceUpdated = false;
         }
         node = node->getParent();
     }
@@ -406,7 +404,6 @@ Node<T>* AvlTree<T>::LL(Node<T>* unbalancedNode){
         m_root = nodeA;
     }
 
-
     updateHeights(unbalancedNode);
     return nodeA;
 }
@@ -422,7 +419,10 @@ Node<T>* AvlTree<T>::RR(Node<T>* unbalancedNode){
 
     // AL -> Right B
     unbalancedNode->setRight(nodeALeft);
-    nodeALeft->setParent(unbalancedNode);
+    if(nodeALeft){
+
+        nodeALeft->setParent(unbalancedNode);
+    }
 
     // A -> Parent B
     unbalancedNode->setParent(nodeA);
@@ -475,6 +475,27 @@ Node<T>* AvlTree<T>::find(const T& key) const {
     }
     //todo: Throw error NodeNotFound
     return nullptr;
+}
+
+template<class T>
+Node<T>* AvlTree<T>::findFollowNode(Node<T>* node){
+    Node<T>* temp = node;
+    Node<T>* followingNode = temp;
+    temp = temp->getRight();
+    while(temp){
+        followingNode = temp;
+        temp = temp->getLeft();
+    }
+    return followingNode;
+}
+
+template<class T>
+bool AvlTree<T>::isLeft(Node<T>* parent, Node<T>* node){
+    bool isLeft = false;
+    if(parent->getLeft() == node){
+        isLeft = true;
+    }
+    return isLeft;
 }
 
 
