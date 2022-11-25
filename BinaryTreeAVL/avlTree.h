@@ -8,13 +8,6 @@
 #include <assert.h>
 
 
-
-
-
-
-
-
-
 template<class T>
 class AvlTree{
 public:
@@ -23,8 +16,8 @@ public:
     AvlTree<T>& operator=(const AvlTree<T>& otherTree) = delete;
     ~AvlTree() = default;
 
-    StatusType insert(Node<T>* temp, const T& key);
-    StatusType insertToBinaryTree (Node<T>* temp, Node<T>* node, const T& key);
+    StatusType insert(const T& key);
+    StatusType insertToBinaryTree (Node<T>* node, const T& key);
 
     StatusType remove (const T& key);
     Node<T>* removeFromBinaryTree (Node<T>* node);
@@ -74,10 +67,13 @@ Node<T>* AvlTree<T>::getRoot() const {
 
 
 template<class T>
-StatusType AvlTree<T>::insert(Node<T>* temp, const T& key){
+StatusType AvlTree<T>::insert(const T& key){
+/*    if (!key) {
+        return StatusType::FAILURE;
+    }*/
     try {
         Node<T>* node = newNode(key);
-        StatusType result = insertToBinaryTree(temp, node, key);
+        StatusType result = insertToBinaryTree(node, key);
         if (result == StatusType::FAILURE) {
             delete node;
             return StatusType::FAILURE;
@@ -93,16 +89,14 @@ StatusType AvlTree<T>::insert(Node<T>* temp, const T& key){
 
 
 template <class T>
-StatusType AvlTree<T>::insertToBinaryTree (Node<T>* temp, Node<T>* node, const T& key) {
-    if(temp == nullptr){
-        if(m_root == nullptr){
-            m_root = node;
-            return StatusType::SUCCESS;
-        }
-        return StatusType::FAILURE;
+StatusType AvlTree<T>::insertToBinaryTree (Node<T>* node, const T& key) {
+    if(m_root == nullptr){
+        m_root = node;
+        return StatusType::SUCCESS;
     }
 
-    Node<T>* tempParent;
+    Node<T>* temp = m_root;
+    Node<T>* tempParent = nullptr;
     bool isLeft;
 
     while(temp != nullptr){
@@ -129,6 +123,9 @@ StatusType AvlTree<T>::insertToBinaryTree (Node<T>* temp, Node<T>* node, const T
     }
     return StatusType::SUCCESS;
 }
+
+
+
 
 
 

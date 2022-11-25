@@ -1,6 +1,7 @@
 #ifndef DATA_STRUCTURES_EX1_NODE_H
 #define DATA_STRUCTURES_EX1_NODE_H
 
+
 int max(int a, int b);
 
 
@@ -8,7 +9,7 @@ template<class T>
 class Node {
 public:
     Node() = delete;
-    Node(T key);
+    Node(const T& key);
     Node(const Node& otherNode) = delete;
     Node& operator=(const Node& otherNode) = delete;
     ~Node() = default;
@@ -49,7 +50,7 @@ private:
 
 
 template<class T>
-Node<T>::Node(T key):
+Node<T>::Node(const T& key):
     m_key(key), m_parent(nullptr), m_height(0), m_left(nullptr), m_right(nullptr){};
 
 
@@ -224,6 +225,7 @@ bool Node<T>::isLeftNew(Node<T>* parent){
     }
     return isLeft;
 }
+
 
 
 
