@@ -2,7 +2,7 @@
 
 void printInorder(Node<int>* node)
 {
-    if (node == NULL)
+    if (node == nullptr)
         return;
 
     /* first recur on left child */
@@ -17,9 +17,8 @@ void printInorder(Node<int>* node)
 
 
 
-
 #include <iostream>
-#include <random>
+
 
 
 
@@ -95,13 +94,26 @@ int main(){
     removeTree.insert(removeTree.getRoot(), 6);
     removeTree.insert(removeTree.getRoot(), 4);
     removeTree.insert(removeTree.getRoot(), 3);
-    removeTree.insert(removeTree.getRoot(), 10);
-    removeTree.insert(removeTree.getRoot(), 7);
-    removeTree.insert(removeTree.getRoot(), 9);
-    removeTree.insert(removeTree.getRoot(), 11);
-    removeTree.insert(removeTree.getRoot(), 12);
 
+
+
+
+    //trying to remove not existing node
+    StatusType res = removeTree.remove(20);
+
+
+    removeTree.remove(2);
+    removeTree.remove(5);
+    removeTree.remove(4);
+    removeTree.remove(3);
     removeTree.remove(1);
+    removeTree.remove(6);
+    removeTree.remove(8);
+    removeTree.remove(8);
+
+
+
+
 
     return 0;
 }
