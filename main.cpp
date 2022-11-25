@@ -28,7 +28,7 @@ void printInorder(Node<int>* node)
 
 int main(){
 
-    AvlTree<int> tree1;
+/*    AvlTree<int> tree1;
 
     // Tree RR
     tree1.insert(tree1.getRoot(), 63);
@@ -62,22 +62,25 @@ int main(){
     tree2.insert(tree2.getRoot(), 14);
     tree2.insert(tree2.getRoot(), 11);
     //printInorder(tree2.getRoot());
-    //tree2.balanceTree(tree2.find(11));
+    //tree2.balanceTree(tree2.find(11));*/
 
     //Tree RL
     AvlTree<int> treeRL;
-    treeRL.insert(treeRL.getRoot(), 11);
-    treeRL.insert(treeRL.getRoot(), 19);
-    treeRL.insert(treeRL.getRoot(), 25);
-    treeRL.insert(treeRL.getRoot(), 23);
-    treeRL.insert(treeRL.getRoot(), 8);
-    treeRL.insert(treeRL.getRoot(), 13);
-    treeRL.insert(treeRL.getRoot(), 29);
-    treeRL.insert(treeRL.getRoot(), 6);
-    treeRL.insert(treeRL.getRoot(), 12);
-    treeRL.insert(treeRL.getRoot(), 10);
-    treeRL.insert(treeRL.getRoot(), 17);
-    treeRL.insert(treeRL.getRoot(), 15);
+    treeRL.insert(11);
+    treeRL.insert(19);
+    treeRL.insert(25);
+    treeRL.insert(23);
+    treeRL.insert(8);
+    treeRL.insert(13);
+    treeRL.insert(29);
+    treeRL.insert(6);
+    treeRL.insert(12);
+    treeRL.insert(10);
+    treeRL.insert(17);
+    treeRL.insert(15);
+
+
+    treeRL.switchNodes(nullptr, treeRL.find(4));
     //treeRL.balanceTree(treeRL.find(15));
 
 //    Node<int>* nodeTest;
@@ -87,7 +90,7 @@ int main(){
 
 
     //removeTree
-    AvlTree<int> removeTree;
+/*    AvlTree<int> removeTree;
     removeTree.insert(removeTree.getRoot(), 5);
     removeTree.insert(removeTree.getRoot(), 2);
     removeTree.insert(removeTree.getRoot(), 8);
@@ -101,7 +104,7 @@ int main(){
     removeTree.insert(removeTree.getRoot(), 11);
     removeTree.insert(removeTree.getRoot(), 12);
 
-    removeTree.remove(1);
+    removeTree.remove(1);*/
 
     return 0;
 }
