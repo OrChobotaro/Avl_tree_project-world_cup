@@ -1,4 +1,6 @@
 #include "BinaryTreeAVL/avlTree.h"
+#include <iostream>
+
 
 void printInorder(Node<int>* node)
 {
@@ -17,7 +19,7 @@ void printInorder(Node<int>* node)
 
 
 
-#include <iostream>
+
 
 
 
@@ -79,7 +81,7 @@ int main(){
     treeRL.insert(15);
 
 
-    treeRL.switchNodes(nullptr, treeRL.find(4));
+    //treeRL.switchNodes(nullptr, treeRL.find(4));
     //treeRL.balanceTree(treeRL.find(15));
 
 //    Node<int>* nodeTest;
@@ -89,14 +91,14 @@ int main(){
 
 
     //removeTree
-/*    AvlTree<int> removeTree;
-    removeTree.insert(removeTree.getRoot(), 5);
-    removeTree.insert(removeTree.getRoot(), 2);
-    removeTree.insert(removeTree.getRoot(), 8);
-    removeTree.insert(removeTree.getRoot(), 1);
-    removeTree.insert(removeTree.getRoot(), 6);
-    removeTree.insert(removeTree.getRoot(), 4);
-    removeTree.insert(removeTree.getRoot(), 3);
+    AvlTree<int> removeTree;
+    removeTree.insert(5);
+    removeTree.insert(2);
+    removeTree.insert(8);
+    removeTree.insert(1);
+    removeTree.insert(6);
+    removeTree.insert(4);
+    removeTree.insert(3);
 
 
 
