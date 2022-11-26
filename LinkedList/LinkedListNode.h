@@ -8,13 +8,13 @@ public:
 
     LinkedListNode() = delete;
     LinkedListNode(T data);
-    LinkedListNode(const LinkedListNode& otherNode) = delete;
+    LinkedListNode(const LinkedListNode& otherNode) = default;
     //LinkedListNode& operator=(const LinkedListNode& otherNode);
     ~LinkedListNode() = default;
 
     LinkedListNode<T>* getNext() const;
     LinkedListNode<T>* getPrevious() const;
-    LinkedListNode<T>* getData() const;
+    T getData() const;
 
     void setNext(LinkedListNode<T>* next);
     void setPrevious(LinkedListNode<T>* previous);
@@ -51,7 +51,7 @@ LinkedListNode<T>* LinkedListNode<T>::getPrevious() const {
 }
 
 template<class T>
-LinkedListNode<T>* LinkedListNode<T>::getData() const{
+T LinkedListNode<T>::getData() const{
     return m_data;
 }
 
