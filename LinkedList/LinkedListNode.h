@@ -7,8 +7,10 @@ class LinkedListNode{
 public:
 
     LinkedListNode() = delete;
+
     LinkedListNode(const T& data);
-    LinkedListNode(const LinkedListNode& otherNode) = delete;
+    LinkedListNode(const LinkedListNode& otherNode) = default;
+
     //LinkedListNode& operator=(const LinkedListNode& otherNode);
     ~LinkedListNode() = default;
 

@@ -2,6 +2,7 @@
 #include <iostream>
 #include "LinkedList/LinkedListNode.h"
 #include "LinkedList/LinkedList.h"
+#include "BinaryTreeAVL/EmptyTree.h"
 
 
 void printInorder(Node<int>* node)
@@ -84,14 +85,7 @@ int main(){
     treeRL.insert(15);
 
 
-    //treeRL.switchNodes(nullptr, treeRL.find(4));
-    //treeRL.balanceTree(treeRL.find(15));
-
-//    Node<int>* nodeTest;
-//    nodeTest = treeRL.findFollowNode(treeRL.find(13));
-//
-//    treeRL.switchNodes(treeRL.find(13), treeRL.find(8));
-
+/*
 
     //removeTree
     AvlTree<int> removeTree;
@@ -118,8 +112,10 @@ int main(){
     removeTree.remove(8);
     removeTree.remove(8);
 
+
     LinkedListNode<int> *endNode = new LinkedListNode<int>(0);
     LinkedListNode<int> *startNode = new LinkedListNode<int>(0);
+
     LinkedListNode<int> *node1 = new LinkedListNode<int>(4);
     LinkedListNode<int> *node2 = new LinkedListNode<int>(6);
     LinkedListNode<int> *node3 = new LinkedListNode<int>(7);
@@ -143,6 +139,13 @@ int main(){
     myList.insertAfter(node2, 8, &node3);
     myList.insertAfter(node3, 10, &node4);
     myList.insertAfter(node4, 38, &node5);
+    myList.insertAfter(node5, 56, &node6);
+    myList.insertAfter(node6, 99, &node7);
+    myList.insertAfter(node7, 101, &node8);
+    myList.insertAfter(node8, 323, &node9);
+
+
+    /*
 
     myList2.insertAfter(myList2.getStart(),3 , &node6);
     myList2.insertAfter(node6, 4, &node7);
@@ -156,6 +159,7 @@ int main(){
 
 
 
+
 //    myList.deleteNode(node1);
 //    myList.deleteNode(node2);
 //    myList.deleteNode(node3);
@@ -163,6 +167,8 @@ int main(){
 //    myList.deleteNode(node5);
 
 
+    AvlTree<int> tree = buildEmptyTree(9, 0);
+    updateEmptyTree(tree, myList);
 
 
     return 0;

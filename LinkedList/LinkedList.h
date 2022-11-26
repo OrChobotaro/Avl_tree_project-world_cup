@@ -5,7 +5,6 @@
 #include "../wet1util.h"
 
 
-
 template<class T>
 class LinkedList{
 public:
@@ -14,7 +13,7 @@ public:
 
     LinkedList(const T& nullParam);
 
-    LinkedList(const LinkedList<T>& otherList) = delete;
+    LinkedList(const LinkedList<T>& otherList) = default;
     LinkedList<T>& operator=(const LinkedList& otherList) = delete;
 
     LinkedListNode<T>* getStart();
@@ -331,6 +330,7 @@ StatusType LinkedList<T>::deleteNode(LinkedListNode<T>* nodeToRemove){
 
 
 
+
 //template<class T>
 //StatusType uniteListsNew(LinkedList<int>& List1, LinkedList<int>& List2, LinkedList<T>& newList, T nullData){
 //
@@ -389,6 +389,7 @@ StatusType LinkedList<T>::deleteNode(LinkedListNode<T>* nodeToRemove){
 //
 //    return StatusType::SUCCESS;
 //}
+
 
 template<class T>
 StatusType uniteLists(LinkedListNode<T>* startList1, LinkedListNode<T>* startList2,
@@ -456,6 +457,7 @@ StatusType uniteLists(LinkedListNode<T>* startList1, LinkedListNode<T>* startLis
     return StatusType::SUCCESS;
 
 }
+
 
 
 #endif //DATA_STRUCTURES_EX1_LINKEDLIST_H
