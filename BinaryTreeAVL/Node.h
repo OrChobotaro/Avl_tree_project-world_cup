@@ -34,7 +34,7 @@ public:
     bool isLeaf();
     int calcHeight();
 
-
+    void setKey(T newKey);
 
 private:
     T m_key;
@@ -42,7 +42,7 @@ private:
     Node<T>* m_left;
     Node<T>* m_parent;
     int m_height;
-    void setKey(T newKey);
+
 };
 
 

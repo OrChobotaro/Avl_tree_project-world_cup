@@ -2,6 +2,7 @@
 #define DATA_STRUCTURES_EX1_LINKEDLIST_H
 
 #include "LinkedListNode.h"
+#include "../wet1util.h"
 
 
 
@@ -14,7 +15,7 @@ public:
 
     LinkedList(const T& nullParam);
 
-    LinkedList(const LinkedList<T>& otherList) = delete;
+    LinkedList(const LinkedList<T>& otherList) = default;
     LinkedList<T>& operator=(const LinkedList& otherList) = delete;
 
     LinkedListNode<T>* getStart();
@@ -324,7 +325,7 @@ StatusType LinkedList<T>::deleteNode(LinkedListNode<T>* nodeToRemove){
 //
 //
 //}
-
+/*
 template<class T>
 StatusType uniteListsNew(LinkedList<int>& List1, LinkedList<int>& List2, LinkedList<T>& newList, T nullData){
 
@@ -382,4 +383,6 @@ StatusType uniteListsNew(LinkedList<int>& List1, LinkedList<int>& List2, LinkedL
     return StatusType::SUCCESS;
 }
 
+
+ */
 #endif //DATA_STRUCTURES_EX1_LINKEDLIST_H
