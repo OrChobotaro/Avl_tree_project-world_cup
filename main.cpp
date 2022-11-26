@@ -100,7 +100,7 @@ int main(){
 
 
     //trying to remove not existing node
-    StatusType res = removeTree.remove(20);
+//    StatusType res = removeTree.remove(20);
 
 
     removeTree.remove(2);
@@ -112,8 +112,9 @@ int main(){
     removeTree.remove(8);
     removeTree.remove(8);
 
-*/
 
+    LinkedListNode<int> *endNode = new LinkedListNode<int>(0);
+    LinkedListNode<int> *startNode = new LinkedListNode<int>(0);
 
     LinkedListNode<int> *node1 = new LinkedListNode<int>(4);
     LinkedListNode<int> *node2 = new LinkedListNode<int>(6);
@@ -152,18 +153,23 @@ int main(){
     myList2.insertAfter(node8, 7, &node9);
     myList2.insertAfter(node9, 40, &node10);
 
-    //uniteListsNew(myList, myList2, myListNew, 0);
+
+    uniteLists(myList.getStart(), myList2.getStart(), startNode, endNode);
+//    uniteLists(myList.getStart(), myList2.getStart(), startNode, endNode);
 
 
-    myList.deleteNode(node1);
-    myList.deleteNode(node2);
-    myList.deleteNode(node3);
-    myList.deleteNode(node4);
-    myList.deleteNode(node5);
 
-    */
+
+//    myList.deleteNode(node1);
+//    myList.deleteNode(node2);
+//    myList.deleteNode(node3);
+//    myList.deleteNode(node4);
+//    myList.deleteNode(node5);
+
+
     AvlTree<int> tree = buildEmptyTree(9, 0);
     updateEmptyTree(tree, myList);
+
 
     return 0;
 }

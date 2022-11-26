@@ -66,7 +66,7 @@ private:
 
 
 template<class T>
-AvlTree<T>::AvlTree(): m_root(nullptr){};
+AvlTree<T>::AvlTree(): m_root(nullptr){}
 
 
 template<class T>

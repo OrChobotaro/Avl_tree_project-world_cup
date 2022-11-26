@@ -7,8 +7,10 @@ class LinkedListNode{
 public:
 
     LinkedListNode() = delete;
-    LinkedListNode(T data);
+
+    LinkedListNode(const T& data);
     LinkedListNode(const LinkedListNode& otherNode) = default;
+
     //LinkedListNode& operator=(const LinkedListNode& otherNode);
     ~LinkedListNode() = default;
 
@@ -25,12 +27,12 @@ private:
     T m_data;
     LinkedListNode<T>* m_next;
     LinkedListNode<T>* m_previous;
-    void setData(T newData);
+    void setData(const T& newData);
 };
 
 
 template<class T>
-LinkedListNode<T>::LinkedListNode(T data): m_data(data), m_next(nullptr), m_previous(nullptr){}
+LinkedListNode<T>::LinkedListNode(const T& data): m_data(data), m_next(nullptr), m_previous(nullptr){}
 
 //template<class T>
 //LinkedListNode<T>& LinkedListNode<T>::operator=(const LinkedListNode& otherNode){
@@ -66,7 +68,7 @@ void LinkedListNode<T>::setPrevious(LinkedListNode<T>* previous){
 }
 
 template<class T>
-void LinkedListNode<T>::setData(T newData){
+void LinkedListNode<T>::setData(const T& newData){
     m_data = newData;
 }
 
