@@ -1,8 +1,8 @@
-#include "BinaryTreeAVL/avlTree.h"
+#include "avlTree.h"
 #include <iostream>
-#include "LinkedList/LinkedListNode.h"
-#include "LinkedList/LinkedList.h"
-#include "BinaryTreeAVL/EmptyTree.h"
+#include "LinkedListNode.h"
+#include "LinkedList.h"
+#include "EmptyTree.h"
 
 
 void printInorder(Node<int>* node)
@@ -145,7 +145,6 @@ int main(){
     myList.insertAfter(node8, 323, &node9);
 
 
-    /*
 
     myList2.insertAfter(myList2.getStart(),3 , &node6);
     myList2.insertAfter(node6, 4, &node7);
@@ -171,5 +170,7 @@ int main(){
     updateEmptyTree(tree, myList);
 
 
+
+    */
     return 0;
 }

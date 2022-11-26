@@ -10,7 +10,7 @@ do { \
   cout << endl; \
 } while(0)
 
-#include "LinkedList/LinkedList.h"
+#include "LinkedList.h"
 
 
 bool test

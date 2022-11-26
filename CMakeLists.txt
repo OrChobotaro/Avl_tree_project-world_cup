@@ -4,18 +4,20 @@ project(Data_Structures_ex1)
 set(CMAKE_CXX_STANDARD 14)
 
 add_executable(Data_Structures_ex1
-        BinaryTreeAVL/Node.cpp
-        BinaryTreeAVL/Node.h
-        BinaryTreeAVL/avlTree.cpp
-        BinaryTreeAVL/avlTree.h
-        BinaryTreeAVL/EmptyTree.cpp
-        BinaryTreeAVL/EmptyTree.h
-        PlayersTree/PlayerNode.cpp
-        PlayersTree/PlayerNode.h
-        TeamsTree/TeamNode.cpp
-        TeamsTree/TeamNode.h
-        LinkedList/LinkedList.cpp
-        LinkedList/LinkedList.h
-        LinkedList/LinkedListNode.cpp
-        LinkedList/LinkedListNode.h
+        Node.cpp
+        Node.h
+        avlTree.cpp
+        avlTree.h
+        EmptyTree.cpp
+        EmptyTree.h
+        PlayerNode.cpp
+        PlayerNode.h
+        TeamNode.cpp
+        TeamNode.h
+        LinkedList.cpp
+        LinkedList.h
+        LinkedListNode.cpp
+        LinkedListNode.h
+        RankPlayerData.cpp
+        RankPlayerData.h
         main.cpp)

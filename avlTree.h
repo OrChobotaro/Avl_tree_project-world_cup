@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include "Node.h"
-#include "../wet1util.h"
+#include "wet1util.h"
 #include <exception>
 #include <assert.h>
 
