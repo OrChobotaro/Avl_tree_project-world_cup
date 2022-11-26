@@ -1,5 +1,7 @@
 #include "BinaryTreeAVL/avlTree.h"
 #include <iostream>
+#include "LinkedList/LinkedListNode.h"
+#include "LinkedList/LinkedList.h"
 
 
 void printInorder(Node<int>* node)
@@ -117,7 +119,44 @@ int main(){
     removeTree.remove(8);
 
 
+    LinkedListNode<int> *node1 = new LinkedListNode<int>(4);
+    LinkedListNode<int> *node2 = new LinkedListNode<int>(6);
+    LinkedListNode<int> *node3 = new LinkedListNode<int>(7);
+    LinkedListNode<int> *node4 = new LinkedListNode<int>(5);
+    LinkedListNode<int> *node5 = new LinkedListNode<int>(3);
 
+    LinkedListNode<int> *node6 = new LinkedListNode<int>(4);
+    LinkedListNode<int> *node7 = new LinkedListNode<int>(6);
+    LinkedListNode<int> *node8 = new LinkedListNode<int>(7);
+    LinkedListNode<int> *node9 = new LinkedListNode<int>(5);
+    LinkedListNode<int> *node10 = new LinkedListNode<int>(3);
+
+
+    LinkedList<int> myList(0);
+    LinkedList<int> myList2(0);
+    LinkedList<int> myListNew(0);
+
+
+    myList.insertAfter(myList.getStart(), 2, &node1);
+    myList.insertAfter(node1, 5, &node2);
+    myList.insertAfter(node2, 8, &node3);
+    myList.insertAfter(node3, 10, &node4);
+    myList.insertAfter(node4, 38, &node5);
+
+    myList2.insertAfter(myList2.getStart(),3 , &node6);
+    myList2.insertAfter(node6, 4, &node7);
+    myList2.insertAfter(node7, 6, &node8);
+    myList2.insertAfter(node8, 7, &node9);
+    myList2.insertAfter(node9, 40, &node10);
+
+    uniteListsNew(myList, myList2, myListNew, 0);
+
+
+    myList.deleteNode(node1);
+    myList.deleteNode(node2);
+    myList.deleteNode(node3);
+    myList.deleteNode(node4);
+    myList.deleteNode(node5);
 
 
     AvlTree<int> tree = buildEmptyTree(9, 0);
