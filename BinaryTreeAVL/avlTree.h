@@ -9,10 +9,18 @@
 
 
 template<class T>
+int calcDistFromRoot(Node<T>* node);
+
+
+template<class T>
+void updateHeights(Node<T>* node);
+
+
+template<class T>
 class AvlTree{
 public:
     AvlTree();
-    AvlTree(const AvlTree<T>& otherTree) = delete;
+    AvlTree(const AvlTree<T>& otherTree);
     AvlTree<T>& operator=(const AvlTree<T>& otherTree) = delete;
     ~AvlTree() = default;
 
@@ -27,11 +35,13 @@ public:
     //todo: check if needed!
     Node<T>* getRoot() const;
 
+    void setRoot(Node<T>* node);
+
 
     Node<T>* balanceTree(Node<T>* lastAddedNode);
     int calcBalance(Node<T>* node);
 
-    void updateHeights(Node<T>* node);
+
     Node<T>* find(const T& key) const;
     Node<T>* findFollowNode(Node<T>* node);
     //void switchNodes(Node<T>* node1, Node<T>* node2);
@@ -43,9 +53,16 @@ public:
     Node<T>* LR(Node<T>* unbalancedNode);
     Node<T>* RL(Node<T>* unbalancedNode);
 
+
+    void auxEmptyTree(Node<T>* node, int height, const T& nullKey);
+
+    Node<T>* newNode(const T& key); //todo: לבדוק אם צריך לקבל גם אב
+
+
+
 private:
     Node<T>* m_root;
-    Node<T>* newNode(const T& key); //todo: לבדוק אם צריך לקבל גם אב
+
 
 };
 
@@ -130,7 +147,7 @@ StatusType AvlTree<T>::insertToBinaryTree (Node<T>* node, const T& key) {
 
 
 template<class T>
-void AvlTree<T>::updateHeights(Node<T> *node) {
+void updateHeights(Node<T> *node) {
     assert(node);
     while(node) {
         if (node->isLeaf()) {
@@ -541,7 +558,133 @@ Node<T>* AvlTree<T>::findFollowNode(Node<T>* node){
 
 
 
+int calcEmptyTreeHeight(int requiredSize) {
+    int height = 0;
+    int temp = 2;
+    while (requiredSize > temp) {
+        temp *=2;
+        height+=1;
+    }
+    return height;
+}
 
+
+int twoExponent (int exponent) {
+    int result = 1;
+    while(exponent > 0) {
+        result *= 2;
+        --exponent;
+    }
+    return result;
+}
+
+
+template<class T>
+AvlTree<T> buildCompleteEmptyTree(int requiredSize, const T& nullKey) {
+    int height = calcEmptyTreeHeight(requiredSize);
+    AvlTree<T> tree;
+    Node<T>* root = tree.newNode(nullKey);
+    root->setHeight(height);
+    tree.setRoot(root);
+    tree.auxEmptyTree(tree.getRoot(), height-1, nullKey);
+    return tree;
+
+}
+
+
+template<class T>
+void AvlTree<T>::auxEmptyTree(Node<T>* node, int height, const T& nullKey) {
+    if (node == nullptr) {
+        return;
+    }
+    if (height == -1) {
+        return;
+    }
+    Node<T>* rightNode = newNode(nullKey);
+    rightNode->setParent(node);
+    rightNode->setHeight(height);
+    node->setRight(rightNode);
+    auxEmptyTree(rightNode, height-1, nullKey);
+
+    Node<T>* leftNode = newNode(nullKey);
+    leftNode->setParent(node);
+    leftNode->setHeight(height);
+    node->setLeft(leftNode);
+    auxEmptyTree(leftNode, height-1, nullKey);
+
+}
+
+
+
+template<class T>
+AvlTree<T> buildEmptyTree(int requiredSize, const T& nullKey) {
+    int height = calcEmptyTreeHeight(requiredSize);
+    int numNodesCompleteTree = twoExponent(height+1) - 1;
+    int* numNodesToDelete = new int(numNodesCompleteTree - requiredSize);
+    AvlTree<T> tree = buildCompleteEmptyTree(requiredSize, nullKey);
+    deleteNodesEmptyTreeAux(tree.getRoot(), numNodesToDelete, height);
+    return tree;
+}
+
+
+template<class T>
+void deleteNodesEmptyTreeAux(Node<T>* node, int* numNodesToDelete, int height) {
+    if (node->isLeaf()) {
+        return;
+    }
+
+    deleteNodesEmptyTreeAux(node->getRight(), numNodesToDelete, height);
+    Node<T>* right = node->getRight();
+    int distRightFromRoot = calcDistFromRoot(right);
+    if (right->isLeaf() && *numNodesToDelete != 0 && distRightFromRoot == height) {
+        removeLeaf(node->getRight());
+        *numNodesToDelete -= 1;
+    }
+    deleteNodesEmptyTreeAux(node->getLeft(), numNodesToDelete, height);
+    Node<T>* left = node->getLeft();
+    int distLeftFromRoot = calcDistFromRoot(left);
+    if (left->isLeaf() && *numNodesToDelete != 0 && distLeftFromRoot == height) {
+        removeLeaf(node->getLeft());
+        *numNodesToDelete -= 1;
+        node->setHeight(0);
+    }
+    updateHeights(node);
+}
+
+
+template<class T>
+void AvlTree<T>::setRoot(Node<T> *node) {
+    m_root = node;
+}
+
+
+template<class T>
+void removeLeaf(Node<T>* node) {
+    Node<T>* parent = node->getParent();
+    if (parent) {
+        if (node->isLeftNew(parent)) {
+            parent->setLeft(nullptr);
+        }
+        else {
+            parent->setRight(nullptr);
+        }
+        node->setParent(nullptr);
+        delete node;
+        return;
+    }
+}
+
+
+template<class T>
+int calcDistFromRoot(Node<T>* node) {
+    int counter = 0;
+    Node<T>* temp = node;
+    while (temp) {
+        temp = temp->getParent();
+        counter += 1;
+    }
+    return counter-1;
+}
 
 
 #endif //DATA_STRUCTURES_EX1_AvlTree_H

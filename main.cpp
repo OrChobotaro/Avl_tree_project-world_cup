@@ -65,6 +65,7 @@ int main(){
     //printInorder(tree2.getRoot());
     //tree2.balanceTree(tree2.find(11));*/
 
+
     //Tree RL
     AvlTree<int> treeRL;
     treeRL.insert(11);
@@ -116,6 +117,10 @@ int main(){
     removeTree.remove(8);
 
 
+
+
+
+    AvlTree<int> tree = buildEmptyTree(9, 0);
 
 
     return 0;
