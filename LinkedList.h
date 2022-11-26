@@ -2,7 +2,7 @@
 #define DATA_STRUCTURES_EX1_LINKEDLIST_H
 
 #include "LinkedListNode.h"
-#include "../wet1util.h"
+#include "wet1util.h"
 
 
 template<class T>

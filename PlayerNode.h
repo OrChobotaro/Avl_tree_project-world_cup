@@ -2,7 +2,7 @@
 #define DATA_STRUCTURES_EX1_PLAYERNODE_H
 
 //#include "BinaryTreeAVL/Node.h"
-#include "../TeamsTree/TeamNode.h"
+#include "TeamNode.h"
 
 class PlayerNode : public Node<int>{
 public:

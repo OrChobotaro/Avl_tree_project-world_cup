@@ -1,0 +1,16 @@
+#ifndef DATA_STRUCTURES_EX1_RANKPLAYERDATA_H
+#define DATA_STRUCTURES_EX1_RANKPLAYERDATA_H
+
+
+class RankPlayerData {
+public:
+
+private:
+    int m_ID;
+
+
+};
+
+
+
+#endif //DATA_STRUCTURES_EX1_RANKPLAYERDATA_H

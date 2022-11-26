@@ -2,7 +2,7 @@
 #define DATA_STRUCTURES_EX1_EMPTYTREE_H
 
 #include "avlTree.h"
-#include "../LinkedList/linkedList.h"
+#include "LinkedList.h"
 
 int calcEmptyTreeHeight(int requiredSize);
 int exponent (int exponent);

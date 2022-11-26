@@ -1,7 +1,7 @@
 #ifndef DATA_STRUCTURES_EX1_TEAMNODE_H
 #define DATA_STRUCTURES_EX1_TEAMNODE_H
 
-#include "../BinaryTreeAVL/Node.h"
+#include "Node.h"
 
 class TeamNode : public Node<int>{
 public:
