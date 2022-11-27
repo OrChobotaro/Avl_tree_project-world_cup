@@ -8,9 +8,6 @@
 #include <assert.h>
 
 
-
-
-
 template<class T>
 void updateHeights(Node<T>* node);
 
@@ -21,7 +18,7 @@ public:
     AvlTree();
     AvlTree(const AvlTree<T>& otherTree) = default;
     AvlTree<T>& operator=(const AvlTree<T>& otherTree) = delete;
-    ~AvlTree() = default;
+    ~AvlTree();
 
     StatusType insert(const T& key);
     StatusType insertToBinaryTree (Node<T>* node, const T& key);
@@ -68,6 +65,10 @@ private:
 template<class T>
 AvlTree<T>::AvlTree(): m_root(nullptr){}
 
+template<class T>
+AvlTree<T>::~AvlTree(){
+
+}
 
 template<class T>
 Node<T>* AvlTree<T>::newNode(const T& key) {
@@ -85,6 +86,7 @@ StatusType AvlTree<T>::insert(const T& key){
 /*    if (!key) {
         return StatusType::FAILURE;
     }*/
+    //assert(key);
     try {
         Node<T>* node = newNode(key);
         StatusType result = insertToBinaryTree(node, key);

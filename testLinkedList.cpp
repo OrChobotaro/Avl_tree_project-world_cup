@@ -13,4 +13,8 @@ do { \
 #include "LinkedList.h"
 
 
-bool test
+//bool test_unite_lists(){
+//    res = uniteLists()
+//
+//
+//}
