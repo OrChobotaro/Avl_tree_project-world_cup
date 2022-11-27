@@ -1,6 +1,7 @@
 #ifndef DATA_STRUCTURES_EX1_LINKEDLISTNODE_H
 #define DATA_STRUCTURES_EX1_LINKEDLISTNODE_H
 
+#include "Node.h"
 
 template<class T>
 class LinkedListNode{
@@ -27,6 +28,7 @@ private:
     T m_data;
     LinkedListNode<T>* m_next;
     LinkedListNode<T>* m_previous;
+    Node<T>* m_ptrToRankTree;
     void setData(const T& newData);
 };
 
@@ -34,12 +36,6 @@ private:
 template<class T>
 LinkedListNode<T>::LinkedListNode(const T& data): m_data(data), m_next(nullptr), m_previous(nullptr){}
 
-//template<class T>
-//LinkedListNode<T>& LinkedListNode<T>::operator=(const LinkedListNode& otherNode){
-//    this->setPrevious(otherNode.getPrevious());
-//    this->setNext(otherNode.getNext());
-//    this->setData(otherNode.getData());
-//}
 
 
 template<class T>

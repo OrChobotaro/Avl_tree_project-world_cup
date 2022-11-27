@@ -19,8 +19,8 @@ public:
     LinkedListNode<T>* getStart();
     LinkedListNode<T>* getEnd();
 
-    LinkedListNode<T>* setStart(LinkedListNode<T>* node);
-    LinkedListNode<T>* setEnd(LinkedListNode<T>* node);
+    void setStart(LinkedListNode<T>* node);
+    void setEnd(LinkedListNode<T>* node);
 
     LinkedListNode<T>* newLinkedListNode(const T& data);
 
@@ -31,13 +31,8 @@ public:
 //    StatusType uniteListsNew(LinkedList<T>* List2, LinkedList<T>* newList);
     void clearList(LinkedListNode<T>* start);
 
-
-
-
-
+    int countNodes();
     ~LinkedList();
-
-
 
 
 private:
@@ -46,8 +41,16 @@ private:
 
 };
 
-//template<class T>
-//StatusType uniteListsNew(LinkedList<T>& List2, LinkedList<T>& newList, T nullData);
+template<class T>
+int LinkedList<T>::countNodes(){
+    LinkedListNode<T>* node = this->m_start;
+    int counter = 0;
+    while(node){
+        counter++;
+        node = node->getNext();
+    }
+    return counter;
+}
 
 template<class T>
 StatusType uniteLists(LinkedListNode<T>* startList1, LinkedListNode<T>* startList2,
@@ -82,12 +85,12 @@ LinkedListNode<T>* LinkedList<T>::getEnd() {
 }
 
 template<class T>
-LinkedListNode<T>* LinkedList<T>::setStart(LinkedListNode<T>* node) {
+void LinkedList<T>::setStart(LinkedListNode<T>* node) {
     m_start = node;
 }
 
 template<class T>
-LinkedListNode<T>* LinkedList<T>::setEnd(LinkedListNode<T>* node) {
+void LinkedList<T>::setEnd(LinkedListNode<T>* node) {
     m_end = node;
 }
 
@@ -111,6 +114,10 @@ void LinkedList<T>::clearList(LinkedListNode<T>* start){
 
 template<class T>
 StatusType LinkedList<T>::insertBefore(LinkedListNode<T>* node, const T& data, LinkedListNode<T>** ptrSave) {
+    assert(node);
+    assert(data);
+    assert(ptrSave);
+
     LinkedListNode<T>* previousNode = node->getPrevious();
     LinkedListNode<T>* newNodeMiddle;
 
@@ -134,6 +141,11 @@ StatusType LinkedList<T>::insertBefore(LinkedListNode<T>* node, const T& data, L
 template<class T>
 StatusType LinkedList<T>::insertAfter(LinkedListNode<T> *node, const T& data, LinkedListNode<T>** ptrSave) {
 
+    //assert(node);
+    //assert(data);
+    //assert(ptrSave);
+
+
     LinkedListNode<T>* nextNode = node->getNext();
     LinkedListNode<T>* newNodeMiddle;
     try{
@@ -155,6 +167,8 @@ StatusType LinkedList<T>::insertAfter(LinkedListNode<T> *node, const T& data, Li
 
 template<class T>
 StatusType LinkedList<T>::deleteNode(LinkedListNode<T>* nodeToRemove){
+    assert(nodeToRemove);
+
     if(!nodeToRemove){
         // check what to return if fails
         return StatusType::FAILURE;
@@ -177,224 +191,13 @@ StatusType LinkedList<T>::deleteNode(LinkedListNode<T>* nodeToRemove){
 }
 
 
-
-//template<class T>
-//StatusType LinkedList<T>::uniteLists(LinkedListNode<T>* startList1, LinkedListNode<T>* startList2,
-//                                     LinkedListNode<T>* newStart, LinkedListNode<T>** newEnd){
-//    //dont need to delete dummys - D'tor
-//    //null in onw of the lists
-//    //null in two lists
-//
-//
-//    LinkedListNode<T>* nodeList1 = startList1->getNext();
-//    LinkedListNode<T>* nodeList2 = startList2->getNext();
-//    LinkedListNode<T>* temp1;
-//    LinkedListNode<T>* temp2;
-//
-//    LinkedListNode<T>* nodeNewList = newStart;
-//    LinkedListNode<T>* tempNewNode;
-//
-//    startList1->setNext(nullptr);
-//    startList2->setNext(nullptr);
-//
-//
-//    while(nodeList1->getNext() && nodeList2->getNext()){
-//        if(startList1->getData() > startList2->getData()){
-//            temp2 = nodeList2;
-//            tempNewNode = nodeNewList;
-//
-//            tempNewNode->setNext(temp2);
-//            temp2->setPrevious(tempNewNode);
-//
-//            nodeList2 = nodeList2->getNext();
-//            nodeNewList = nodeNewList->getNext();
-//        }
-//        else{
-//            temp1 = nodeList1;
-//            tempNewNode = nodeNewList;
-//
-//            tempNewNode->setNext(temp1);
-//            temp1->setPrevious(tempNewNode);
-//
-//            nodeList1 = nodeList1->getNext();
-//            nodeNewList = nodeNewList->getNext();
-//        }
-//    }
-//
-//    if(!nodeList1->getNext()){
-//        // connecting start to end
-//        startList1->setNext(nodeList1);
-//        //clear list
-//        clearList(startList1);
-//
-//        nodeNewList->setNext(nodeList2);
-//
-//        //clear start_node1
-//        clearList(startList1);
-//
-//
-//        *newEnd =
-//    }
-//
-//
-//    return StatusType::SUCCESS;
-//
-//
-//}
-
-//
-//template<class T>
-//StatusType LinkedList<T>::uniteListsNew(LinkedList<T>* List2, LinkedList<T>* newList){
-//    //dont need to delete dummys - D'tor
-//    //null in onw of the lists
-//    //null in two lists
-//
-//    LinkedList<T>* List1 = this;
-//
-//    LinkedListNode<T>* startList1 = List1->getStart();
-//    LinkedListNode<T>* startList2 = List2->getStart();
-//
-//    LinkedListNode<T>* nodeList1 = startList1->getNext();
-//    LinkedListNode<T>* nodeList2 = startList2->getNext();
-//    LinkedListNode<T>* temp1;
-//    LinkedListNode<T>* temp2;
-//
-//    LinkedListNode<T>* newStart;
-//    try {
-//        newStart = newLinkedListNode();
-//    }
-//    catch(std::bad_alloc& e){
-//        return StatusType::FAILURE;
-//    }
-//
-//    LinkedListNode<T>* nodeNewList = newStart;
-//    LinkedListNode<T>* tempNewNode;
-//
-//    startList1->setNext(nullptr);
-//    startList2->setNext(nullptr);
-//
-//
-//    while(nodeList1->getNext() && nodeList2->getNext()){
-//        if(startList1->getData() > startList2->getData()){
-//            temp2 = nodeList2;
-//            tempNewNode = nodeNewList;
-//
-//            tempNewNode->setNext(temp2);
-//            temp2->setPrevious(tempNewNode);
-//
-//            nodeList2 = nodeList2->getNext();
-//            nodeNewList = nodeNewList->getNext();
-//        }
-//        else{
-//            temp1 = nodeList1;
-//            tempNewNode = nodeNewList;
-//
-//            tempNewNode->setNext(temp1);
-//            temp1->setPrevious(tempNewNode);
-//
-//            nodeList1 = nodeList1->getNext();
-//            nodeNewList = nodeNewList->getNext();
-//        }
-//    }
-//
-//    if(!nodeList1->getNext()){
-//        // connecting start to end list1
-//        startList1->setNext(nodeList1);
-//        //clear list1
-//        clearList(startList1);
-//
-//        nodeNewList->setNext(nodeList2);
-//
-//        //clear start_node2
-//        clearList(startList2);
-//
-//        newList->setEnd(List2->getEnd());
-//        newList->setStart(List2->getStart());
-//
-//    } else{
-//        startList2->setNext(nodeList2);
-//        clearList(startList2);
-//
-//        nodeNewList->setNext(nodeList1);
-//
-//        clearList(startList1);
-//
-//
-//    }
-//
-//
-//    return StatusType::SUCCESS;
-//
-//
-//}
-
-
-
-
-//template<class T>
-//StatusType uniteListsNew(LinkedList<int>& List1, LinkedList<int>& List2, LinkedList<T>& newList, T nullData){
-//
-//    //LinkedList<T> List1 = *this;
-//    LinkedListNode<T>* startList1 = List1.getStart()->getNext();
-//    LinkedListNode<T>* startList2 = List2.getStart()->getNext();
-//    LinkedListNode<T>* newStart;
-//    LinkedListNode<T>* newEnd;
-//
-//    try{
-//        newStart = newLinkedListNode(nullData);
-//        newEnd = newLinkedListNode(nullData);
-//    }
-//    catch(std::bad_alloc& e){
-//        return StatusType::ALLOCATION_ERROR;
-//    }
-//
-//    newList.setStart(newStart);
-//    LinkedListNode<T>* saveStart = newStart;
-//    //LinkedListNode<T>* tempStart = newStart;
-//    LinkedListNode<T>* newNode;
-//
-//    while(startList1->getNext() && startList2->getNext()) {
-//        if (startList1->getData() > startList2->getData()) {
-//
-//            try{
-//                newNode = nullptr;
-//                newNode = newLinkedListNode(startList2->getData());
-//                //tempStart = newStart;
-//                newStart->setNext(newNode);
-//                newNode->setPrevious(newStart);
-//                newStart = newStart->getNext();
-//            }
-//            catch(std::bad_alloc& e){
-//                LinkedList<T>::clearList(saveStart);
-//                return StatusType::ALLOCATION_ERROR;
-//            }
-//        }
-//        else{
-//
-//            try{
-//                LinkedListNode<T>* newNode = newLinkedListNode(startList1->getData());
-//                newStart->setNext(newNode);
-//                newNode->setPrevious(newStart);
-//                newStart = newStart->getNext();
-//
-//            }
-//            catch(std::bad_alloc& e){
-//                clearList(saveStart);
-//                return StatusType::ALLOCATION_ERROR;
-//            }
-//        }
-//
-//        newList.setEnd(newEnd);
-//    }
-//
-//    return StatusType::SUCCESS;
-//}
-
-
 template<class T>
 StatusType uniteLists(LinkedListNode<T>* startList1, LinkedListNode<T>* startList2,
                       LinkedListNode<T>* newStart, LinkedListNode<T>* newEnd){
-
+    assert(startList1);
+    assert(startList2);
+    assert(newStart);
+    assert(newEnd);
 
     if(!newStart || !newEnd){
         return StatusType::FAILURE;
@@ -429,7 +232,7 @@ StatusType uniteLists(LinkedListNode<T>* startList1, LinkedListNode<T>* startLis
         while(currNode1->getNext()){
             currNewNode->setNext(currNode1);
             currNewNode = currNewNode->getNext();
-            currNode1->getNext();
+            currNode1 = currNode1->getNext();
         }
 
 
