@@ -29,7 +29,7 @@ public:
     StatusType deleteNode(LinkedListNode<T>* nodeToRemove);
 
 //    StatusType uniteListsNew(LinkedList<T>* List2, LinkedList<T>* newList);
-    void clearList(LinkedListNode<T>* start);
+    void clearList(LinkedListNode<T>* start, LinkedListNode<T>* end);
 
     int countNodes();
     ~LinkedList();
@@ -80,7 +80,7 @@ LinkedList<T>::LinkedList(const T& nullParam) {
 
 template<class T>
 LinkedList<T>::~LinkedList() {
-    clearList(m_start);
+    clearList(m_start, m_end);
 }
 
 template<class T>
@@ -111,9 +111,9 @@ LinkedListNode<T>* LinkedList<T>::newLinkedListNode(const T& data){
 
 
 template<class T>
-void LinkedList<T>::clearList(LinkedListNode<T>* start){
+void LinkedList<T>::clearList(LinkedListNode<T>* start, LinkedListNode<T>* end){
     LinkedListNode<T>* temp;
-    while (start){
+    while (start != end){
         temp = start;
         start = start->getNext();
         delete temp;

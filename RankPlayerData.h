@@ -50,8 +50,8 @@ public:
 
     TeamData() = delete;
     TeamData(int TeamID, int points);
-    TeamData(const TeamData& otherTeam) = delete;
-    TeamData& operator=(const TeamData& otherTeam) = delete;
+    TeamData(const TeamData& otherTeam) = default;
+    TeamData& operator=(const TeamData& otherTeam) = default;
     bool operator<(const TeamData& other) const;
     bool operator>(const TeamData& other) const;
     ~TeamData() = default;
@@ -65,6 +65,8 @@ public:
     int getGames();
     AvlTree<RankPlayerData>* getPtrRankTree();
     LinkedList<RankPlayerData>* getPtrRankLinkedList();
+
+    void setPtrRankTree(AvlTree<RankPlayerData>* other);
 
 
 private:
