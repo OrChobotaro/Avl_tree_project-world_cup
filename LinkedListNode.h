@@ -21,18 +21,19 @@ public:
     LinkedListNode<T>* getPrevious() const;
     T getData() const;
 
+
     void setNext(LinkedListNode<T>* next);
     void setPrevious(LinkedListNode<T>* previous);
+    void setData(const T& newData);
 
-
+    T m_data;
 
 private:
-    T m_data;
     LinkedListNode<T>* m_next;
     LinkedListNode<T>* m_previous;
 //    Node<T>* m_ptrToRankTree;
     Node<int>* m_ptrPlayer;
-    void setData(const T& newData);
+
 };
 
 
@@ -70,5 +71,7 @@ template<class T>
 void LinkedListNode<T>::setData(const T& newData){
     m_data = newData;
 }
+
+
 
 #endif //DATA_STRUCTURES_EX1_LINKEDLISTNODE_H

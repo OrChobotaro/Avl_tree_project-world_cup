@@ -11,7 +11,7 @@ class Node {
 public:
     Node() = delete;
     Node(const T& key);
-    Node(const Node& otherNode) = delete;
+    Node(const Node& otherNode) = default;
     Node& operator=(const Node& otherNode) = delete;
     ~Node() = default;
 
@@ -26,6 +26,7 @@ public:
     void setRight(Node<T>* newRight);
     void setLeft(Node<T>* newLeft);
     void setHeight(int height);
+    void setKey(T newKey);
 
 //    bool isNextTo(Node<T> *node1);
 //    void switchCloseNodes(Node<T>* node2);
@@ -35,7 +36,7 @@ public:
     bool isLeaf();
     int calcHeight();
 
-    void setKey(T newKey);
+
 
 private:
     T m_key;
