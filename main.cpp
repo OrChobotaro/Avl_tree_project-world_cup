@@ -176,38 +176,43 @@ int main(){
 //    myList.deleteNode(node4);
 //    myList.deleteNode(node5);
 
-    PlayerData player1(-1, 0, 0, 0, 0, true);
-    LinkedList<PlayerData> myList3(player1);
+
+
+    RankPlayerData player0(-1, 0, 0, 0);
+    RankPlayerData player1(1, 0, 0, 0);
+    RankPlayerData player2(2, 0, 0, 0);
+    RankPlayerData player3(3, 0, 0, 0);
+    RankPlayerData player4(4, 0, 0, 0);
+    RankPlayerData player5(5, 0, 0, 0);
+    RankPlayerData player6(6, 0, 0, 0);
+    RankPlayerData player7(7, 0, 0, 0);
+
+
+    LinkedList<RankPlayerData> myList3(player0);
 
 
 
-    AvlTree<PlayerData> tree1 = buildEmptyTree(6, player1);
+    AvlTree<RankPlayerData> tree1 = buildEmptyTree(6, player0);
 
     TeamData team1(1, 4);
-    //PlayerData player1(11, 22, 3, 4, 1, true);
-    PlayerData player2(12, 22, 5, 1, 4, false);
-    PlayerData player3(13, 23, 1, 3, 0, false);
-    PlayerData player4(14, 22, 3, 4, 1, true);
-    PlayerData player5(18, 22, 5, 1, 4, false);
-    PlayerData player6(20, 23, 1, 3, 0, false);
 
-
-    LinkedListNode<PlayerData> *node1 = new LinkedListNode<PlayerData>(player1);
-    LinkedListNode<PlayerData> *node2 = new LinkedListNode<PlayerData>(player2);
-    LinkedListNode<PlayerData> *node3 = new LinkedListNode<PlayerData>(player3);
-    LinkedListNode<PlayerData> *node4 = new LinkedListNode<PlayerData>(player4);
-    LinkedListNode<PlayerData> *node5 = new LinkedListNode<PlayerData>(player5);
-    LinkedListNode<PlayerData> *node6 = new LinkedListNode<PlayerData>(player6);
+    //LinkedListNode<RankPlayerData> *node1 = new LinkedListNode<PlayerData>(player1);
+    LinkedListNode<RankPlayerData> *node2 = new LinkedListNode<RankPlayerData>(player2);
+    LinkedListNode<RankPlayerData> *node3 = new LinkedListNode<RankPlayerData>(player3);
+    LinkedListNode<RankPlayerData> *node4 = new LinkedListNode<RankPlayerData>(player4);
+    LinkedListNode<RankPlayerData> *node5 = new LinkedListNode<RankPlayerData>(player5);
+    LinkedListNode<RankPlayerData> *node6 = new LinkedListNode<RankPlayerData>(player6);
+    LinkedListNode<RankPlayerData> *node7 = new LinkedListNode<RankPlayerData>(player7);
 
 
     myList3.insertAfter(myList3.getStart(), player2, &node2);
-    myList3.insertAfter(node2, player3, &node1);
-    myList3.insertAfter(node1, player1, &node3);
-    myList3.insertAfter(node3, player1, &node4);
-    myList3.insertAfter(node4, player1, &node5);
-    myList3.insertAfter(node5, player1, &node6);
+    myList3.insertAfter(node2, player3, &node3);
+    myList3.insertAfter(node3, player4, &node7);
+    myList3.insertAfter(node7, player5, &node4);
+    myList3.insertAfter(node4, player6, &node5);
+    myList3.insertAfter(node5, player7, &node6);
 
-    AvlTree<PlayerData> playersTree;
+    AvlTree<RankPlayerData> playersTree;
     playersTree.insert(player1);
     playersTree.insert(player3);
     playersTree.insert(player2);
@@ -218,7 +223,6 @@ int main(){
     updateEmptyTree(tree1, myList3);
 
     AvlTree<RankPlayerData> rankTree;
-
 
 
     return 0;
