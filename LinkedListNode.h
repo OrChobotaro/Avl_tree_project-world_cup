@@ -25,9 +25,10 @@ public:
     void setPrevious(LinkedListNode<T>* previous);
 
 
+    T m_data;
 
 private:
-    T m_data;
+
     LinkedListNode<T>* m_next;
     LinkedListNode<T>* m_previous;
 //    Node<T>* m_ptrToRankTree;

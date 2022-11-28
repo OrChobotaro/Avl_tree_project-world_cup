@@ -8,6 +8,7 @@
 #include <assert.h>
 
 
+
 template<class T>
 void updateHeights(Node<T>* node);
 
@@ -26,6 +27,8 @@ public:
     StatusType remove (const T& key);
     Node<T>* removeFromBinaryTree (Node<T>* node);
     void removeNodeAux(Node<T>* node);
+    void removeAvlTree(Node<T>* node);
+
 
 
     //todo: check if needed!
@@ -67,8 +70,34 @@ AvlTree<T>::AvlTree(): m_root(nullptr){}
 
 template<class T>
 AvlTree<T>::~AvlTree(){
+    if (m_root) {
+        removeAvlTree(m_root);
+        delete m_root;
+    }
 
 }
+
+
+template<class T>
+void AvlTree<T>::removeAvlTree(Node<T> *node) {
+    if (node->isLeaf()) {
+        return;
+    }
+    if (node->getRight()) {
+        removeAvlTree(node->getRight());
+        //node->getRight()->setKey(NULL);
+        delete node->getRight();
+        node->setRight(nullptr);
+    }
+    if (node->getLeft()) {
+        removeAvlTree(node->getLeft());
+        //node->getLeft()->setKey(NULL);
+        delete node->getLeft();
+        node->setLeft(nullptr);
+    }
+}
+
+
 
 template<class T>
 Node<T>* AvlTree<T>::newNode(const T& key) {
