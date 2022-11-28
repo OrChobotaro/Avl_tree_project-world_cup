@@ -2,6 +2,7 @@
 #define DATA_STRUCTURES_EX1_NODE_H
 
 
+
 int max(int a, int b);
 
 

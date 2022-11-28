@@ -3,6 +3,8 @@
 
 #include "Node.h"
 
+
+
 template<class T>
 class LinkedListNode{
 public:
@@ -28,7 +30,8 @@ private:
     T m_data;
     LinkedListNode<T>* m_next;
     LinkedListNode<T>* m_previous;
-    Node<T>* m_ptrToRankTree;
+//    Node<T>* m_ptrToRankTree;
+    Node<int>* m_ptrPlayer;
     void setData(const T& newData);
 };
 
