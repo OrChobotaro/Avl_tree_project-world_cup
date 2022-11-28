@@ -129,6 +129,9 @@ LinkedList<RankPlayerData>* TeamData::getPtrRankLinkedList() {
     return m_ptrRankLinkedList;
 }
 
+void TeamData::setPtrRankTree(AvlTree<RankPlayerData>* other){
+    m_ptrRankTree = other;
+}
 
 
 PlayerData::PlayerData(int playerID, int teamID, int gamesPlayed, int goals, int cards, bool goalKeeper) :

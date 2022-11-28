@@ -5,14 +5,16 @@ world_cup_t::world_cup_t()
     //todo: initialize all
 
     RankPlayerData nullRank(-1, -1, -1, nullptr);
-    LinkedListNode<RankPlayerData> nodeStart(nullRank);
-    LinkedListNode<RankPlayerData> nodeEnd(nullRank);
 
-    m_allPlayersRankLinkedList.setStart(&nodeStart);
-    m_allPlayersRankLinkedList.setEnd(&nodeEnd);
+    LinkedListNode<RankPlayerData>* nodeStart = new LinkedListNode<RankPlayerData>(nullRank);
+    LinkedListNode<RankPlayerData>* nodeEnd = new LinkedListNode<RankPlayerData>(nullRank);
 
-    nodeStart.setNext(nodeEnd);
-    nodeEnd.setPrevious(nodeStart);
+    m_allPlayersRankLinkedList.setStart(nodeStart);
+    m_allPlayersRankLinkedList.setEnd(nodeEnd);
+
+    nodeStart->setNext(nodeEnd);
+    nodeEnd->setPrevious(nodeStart);
+
 
 }
 
@@ -24,23 +26,43 @@ world_cup_t::~world_cup_t()
 
 StatusType world_cup_t::add_team(int teamId, int points)
 {
+
+    if(teamId <= 0 || points <= 0)
+        return StatusType::INVALID_INPUT;
+
+    StatusType res;
 	TeamData teamToInsert(teamId, points);
-    teamsAVLTree.insert(teamToInsert);
+    res = m_teamsAVLTree.insert(teamToInsert);
 
+    //TODO: add team to linkedList
 
-	return StatusType::SUCCESS;
+    if(res == StatusType::SUCCESS){
+        // create tree of rank
+    }
+
+	return res;
+
 }
 
 StatusType world_cup_t::remove_team(int teamId)
 {
-	// TODO: Your code goes here
+
+    if(teamId <= 0){
+        return StatusType::INVALID_INPUT;
+    }
+
+//    m_teamsAVLTree.remove(teamId);
+
 	return StatusType::FAILURE;
 }
 
 StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
                                    int goals, int cards, bool goalKeeper)
 {
-	// TODO: Your code goes here
+
+	// TODO: when adding a player, check if tree of the team is exists. if not, create one.
+    // TODO: if exists, add player to tree.
+
 	return StatusType::SUCCESS;
 }
 
@@ -77,6 +99,7 @@ output_t<int> world_cup_t::get_team_points(int teamId)
 
 StatusType world_cup_t::unite_teams(int teamId1, int teamId2, int newTeamId)
 {
+	// TODO: Your code goes here
 
 	return StatusType::SUCCESS;
 }

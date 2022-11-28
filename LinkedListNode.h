@@ -14,7 +14,7 @@ public:
     LinkedListNode(const T& data);
     LinkedListNode(const LinkedListNode& otherNode) = default;
 
-    //LinkedListNode& operator=(const LinkedListNode& otherNode);
+    LinkedListNode& operator=(const LinkedListNode& otherNode) = default;
     ~LinkedListNode() = default;
 
     LinkedListNode<T>* getNext() const;
