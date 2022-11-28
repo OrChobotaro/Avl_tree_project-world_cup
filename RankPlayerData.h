@@ -15,10 +15,14 @@ public:
 
     int getPlayerID() const;
     Node<int>* getPlayerPtr() const;
+    Node<RankPlayerData>* getPtrRankPlayerTree() const;
+    LinkedListNode<RankPlayerData>* getPtrRankPlayerList() const;
 
     void setGoals(int goals);
     void setCards(int cards);
     void setPtrPlayer(Node<int>* ptrPlayer);
+    void setPtrRankPlayerTree(Node<RankPlayerData>* other);
+    void setPtrRankPlayerList(LinkedListNode<RankPlayerData>* other);
 
     bool operator<(const RankPlayerData& other) const;
     bool operator>(const RankPlayerData& other) const;

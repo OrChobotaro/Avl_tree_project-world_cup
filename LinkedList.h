@@ -9,12 +9,12 @@ template<class T>
 class LinkedList{
 public:
 
-    LinkedList() = delete;
+    LinkedList();
 
     LinkedList(const T& nullParam);
 
     LinkedList(const LinkedList<T>& otherList) = default;
-    LinkedList<T>& operator=(const LinkedList& otherList) = delete;
+    LinkedList<T>& operator=(const LinkedList& otherList) = default;
 
     LinkedListNode<T>* getStart();
     LinkedListNode<T>* getEnd();
@@ -57,7 +57,12 @@ StatusType uniteLists(LinkedListNode<T>* startList1, LinkedListNode<T>* startLis
                           LinkedListNode<T>* newStart, LinkedListNode<T>* newEnd);
 
 
-//todo:: check if works
+template<class T>
+LinkedList<T>::LinkedList() {
+    m_start = nullptr;
+    m_end = nullptr;
+}
+
 template<class T>
 LinkedList<T>::LinkedList(const T& nullParam) {
     m_start = newLinkedListNode(nullParam);
@@ -67,7 +72,11 @@ LinkedList<T>::LinkedList(const T& nullParam) {
     m_end->setPrevious(m_start);
 }
 
-
+//template<class T>
+//LinkedList<T>& LinkedList<T>::operator=(const LinkedList& otherList){
+//    m_start = otherList.m_start;
+//    m_end = otherList.m_end;
+//}
 
 template<class T>
 LinkedList<T>::~LinkedList() {

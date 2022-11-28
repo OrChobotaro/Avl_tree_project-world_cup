@@ -20,4 +20,6 @@ add_executable(Data_Structures_ex1
         LinkedListNode.h
         RankPlayerData.cpp
         RankPlayerData.h
-        main.cpp)
+        main.cpp
+        worldcup23a1.cpp
+        worldcup23a1.h)
