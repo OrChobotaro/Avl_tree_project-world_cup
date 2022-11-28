@@ -1,3 +1,4 @@
+/*
 
 #include "PlayerNode.h"
 
@@ -52,3 +53,4 @@ void PlayerNode::setCards(int cards) {
 void PlayerNode::setTeamPtr(TeamNode *teamPtr) {
     m_teamPtr = teamPtr;
 }
+*/

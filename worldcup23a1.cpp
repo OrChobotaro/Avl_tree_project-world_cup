@@ -5,6 +5,7 @@ world_cup_t::world_cup_t()
     //todo: initialize all
 
     RankPlayerData nullRank(-1, -1, -1, nullptr);
+
     LinkedListNode<RankPlayerData>* nodeStart = new LinkedListNode<RankPlayerData>(nullRank);
     LinkedListNode<RankPlayerData>* nodeEnd = new LinkedListNode<RankPlayerData>(nullRank);
 
@@ -13,6 +14,7 @@ world_cup_t::world_cup_t()
 
     nodeStart->setNext(nodeEnd);
     nodeEnd->setPrevious(nodeStart);
+
 
 }
 
@@ -24,6 +26,7 @@ world_cup_t::~world_cup_t()
 
 StatusType world_cup_t::add_team(int teamId, int points)
 {
+
     if(teamId <= 0 || points <= 0)
         return StatusType::INVALID_INPUT;
 
@@ -38,10 +41,12 @@ StatusType world_cup_t::add_team(int teamId, int points)
     }
 
 	return res;
+
 }
 
 StatusType world_cup_t::remove_team(int teamId)
 {
+
     if(teamId <= 0){
         return StatusType::INVALID_INPUT;
     }
@@ -54,8 +59,10 @@ StatusType world_cup_t::remove_team(int teamId)
 StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
                                    int goals, int cards, bool goalKeeper)
 {
+
 	// TODO: when adding a player, check if tree of the team is exists. if not, create one.
     // TODO: if exists, add player to tree.
+
 	return StatusType::SUCCESS;
 }
 
@@ -93,6 +100,7 @@ output_t<int> world_cup_t::get_team_points(int teamId)
 StatusType world_cup_t::unite_teams(int teamId1, int teamId2, int newTeamId)
 {
 	// TODO: Your code goes here
+
 	return StatusType::SUCCESS;
 }
 

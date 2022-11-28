@@ -224,7 +224,117 @@
 //    return 0;
 //}
 
+
 #include "worldcup23a1.h"
+=======
+//    LinkedListNode<int> *endNode = new LinkedListNode<int>(0);
+//    LinkedListNode<int> *startNode = new LinkedListNode<int>(0);
+//
+//    LinkedListNode<int> *node1 = new LinkedListNode<int>(4);
+//    LinkedListNode<int> *node2 = new LinkedListNode<int>(6);
+//    LinkedListNode<int> *node3 = new LinkedListNode<int>(7);
+//    LinkedListNode<int> *node4 = new LinkedListNode<int>(5);
+//    LinkedListNode<int> *node5 = new LinkedListNode<int>(3);
+//
+//    LinkedListNode<int> *node6 = new LinkedListNode<int>(4);
+//    LinkedListNode<int> *node7 = new LinkedListNode<int>(6);
+//    LinkedListNode<int> *node8 = new LinkedListNode<int>(7);
+//    LinkedListNode<int> *node9 = new LinkedListNode<int>(5);
+//    LinkedListNode<int> *node10 = new LinkedListNode<int>(3);
+
+
+
+//    LinkedList<int> myList(0);
+//    LinkedList<int> myList2(0);
+//    LinkedList<int> myListNew(0);
+
+
+//    myList.insertAfter(myList.getStart(), 2, &node1);
+//    myList.insertAfter(node1, 5, &node2);
+//    myList.insertAfter(node2, 8, &node3);
+
+//    myList.insertAfter(node4, 38, &node5);
+
+
+
+
+
+//    myList2.insertAfter(myList2.getStart(),3 , &node2);
+//    myList2.insertAfter(node2, 4, &node3);
+//    myList2.insertAfter(node3, 6, &node4);
+//    myList2.insertAfter(node4, 7, &node5);
+//    myList.insertAfter(node5, 10, &node6);
+//    myList.insertAfter(node6, 38, &node7);
+//    myList2.insertAfter(node7, 40, &node8);
+//    myList.insertAfter(node8, 56, &node9);
+//    myList.insertAfter(node9, 99, &node10);
+////    myList.insertAfter(node7, 101, &node8);
+////    myList.insertAfter(node8, 323, &node9);
+//
+//
+//    std::cout << "myList " << myList.countNodes() -2 << std::endl;
+//    std::cout << "myList2 " << myList2.countNodes() -2 << std::endl;
+//    uniteLists( myList2.getStart(), myList.getStart(),startNode, endNode);
+////    uniteLists(myList.getStart(), myList2.getStart(), startNode, endNode);
+//
+//    myListNew.setStart(startNode);
+//
+//    std::cout << "myListNew " << myListNew.countNodes() -2 << std::endl;
+
+//    myList.deleteNode(node1);
+//    myList.deleteNode(node2);
+//    myList.deleteNode(node3);
+//    myList.deleteNode(node4);
+//    myList.deleteNode(node5);
+
+
+/*
+    RankPlayerData player0(-1, 0, 0, 0);
+    RankPlayerData player1(1, 0, 0, 0);
+    RankPlayerData player2(2, 0, 0, 0);
+    RankPlayerData player3(3, 0, 0, 0);
+    RankPlayerData player4(4, 0, 0, 0);
+    RankPlayerData player5(5, 0, 0, 0);
+    RankPlayerData player6(6, 0, 0, 0);
+    RankPlayerData player7(7, 0, 0, 0);
+
+
+    LinkedList<RankPlayerData> myList3(player0);
+
+
+
+    AvlTree<RankPlayerData> tree1 = buildEmptyTree(6, player0);
+
+    TeamData team1(1, 4);
+
+    //LinkedListNode<RankPlayerData> *node1 = new LinkedListNode<PlayerData>(player1);
+    LinkedListNode<RankPlayerData> *node2 = new LinkedListNode<RankPlayerData>(player2);
+    LinkedListNode<RankPlayerData> *node3 = new LinkedListNode<RankPlayerData>(player3);
+    LinkedListNode<RankPlayerData> *node4 = new LinkedListNode<RankPlayerData>(player4);
+    LinkedListNode<RankPlayerData> *node5 = new LinkedListNode<RankPlayerData>(player5);
+    LinkedListNode<RankPlayerData> *node6 = new LinkedListNode<RankPlayerData>(player6);
+    LinkedListNode<RankPlayerData> *node7 = new LinkedListNode<RankPlayerData>(player7);
+
+
+    myList3.insertAfter(myList3.getStart(), player2, &node2);
+    myList3.insertAfter(node2, player3, &node3);
+    myList3.insertAfter(node3, player4, &node7);
+    myList3.insertAfter(node7, player5, &node4);
+    myList3.insertAfter(node4, player6, &node5);
+    myList3.insertAfter(node5, player7, &node6);
+
+    AvlTree<RankPlayerData> playersTree;
+    playersTree.insert(player1);
+    playersTree.insert(player3);
+    playersTree.insert(player2);
+    playersTree.insert(player4);
+    playersTree.insert(player5);
+    playersTree.insert(player6);
+
+    updateEmptyTree(tree1, myList3);
+
+    AvlTree<RankPlayerData> rankTree;
+*/
 
 int main(){
     world_cup_t wc1;

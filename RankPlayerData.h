@@ -23,6 +23,7 @@ public:
     Node<RankPlayerData>* getPtrRankPlayerTree() const;
     LinkedListNode<RankPlayerData>* getPtrRankPlayerList() const;
 
+
     void setGoals(int goals);
     void setCards(int cards);
     void setPtrPlayer(Node<PlayerData>* ptrPlayer);
