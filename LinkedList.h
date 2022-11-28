@@ -19,8 +19,8 @@ public:
     LinkedListNode<T>* getStart();
     LinkedListNode<T>* getEnd();
 
-    void setStart(LinkedListNode<T>* node);
-    void setEnd(LinkedListNode<T>* node);
+    void setStart(LinkedListNode<T>* node) const;
+    void setEnd(LinkedListNode<T>* node) const;
 
     LinkedListNode<T>* newLinkedListNode(const T& data);
 
@@ -94,12 +94,12 @@ LinkedListNode<T>* LinkedList<T>::getEnd() {
 }
 
 template<class T>
-void LinkedList<T>::setStart(LinkedListNode<T>* node) {
+void LinkedList<T>::setStart(LinkedListNode<T>* node) const {
     m_start = node;
 }
 
 template<class T>
-void LinkedList<T>::setEnd(LinkedListNode<T>* node) {
+void LinkedList<T>::setEnd(LinkedListNode<T>* node) const {
     m_end = node;
 }
 
