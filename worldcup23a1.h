@@ -16,13 +16,17 @@
 #define WORLDCUP23A1_H_
 
 #include "wet1util.h"
+#include "avlTree.h"
+#include "PlayerData.h"
+#include "TeamData.h"
 
 class world_cup_t {
 private:
-	//
-	// Here you may add anything you want
-	//
-	
+    AvlTree<PlayerData> m_playersAVLTree;
+    AvlTree<TeamData> m_teamsAVLTree;
+    AvlTree<RankPlayerData> m_allPlayersRankTree;
+    LinkedList<RankPlayerData> m_allPlayersRankLinkedList;
+
 public:
 	// <DO-NOT-MODIFY> {
 	
