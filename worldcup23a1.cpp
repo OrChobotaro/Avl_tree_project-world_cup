@@ -4,17 +4,33 @@ world_cup_t::world_cup_t()
 {
     //todo: initialize all
 
+    // creating players tree
+    std::shared_ptr<AvlTree<PlayerData>> playersTree(new AvlTree<PlayerData>);
+    m_playersAVLTree = playersTree;
+
+    // creating teams tree
+    std::shared_ptr<AvlTree<TeamData>> teamsTree(new AvlTree<TeamData>);
+    m_teamsAVLTree = teamsTree;
+
+    // creating all players rank tree
+    std::shared_ptr<AvlTree<RankPlayerData>> rankPlayersTree(new AvlTree<RankPlayerData>);
+    m_allPlayersRankTree = rankPlayersTree;
+
+    // creating null rank object to start and end of linked list
     RankPlayerData nullRank(-1, -1, -1, nullptr);
+
+    // creating all players linked list
+    std::shared_ptr<LinkedList<RankPlayerData>> rankPlayersList(new LinkedList<RankPlayerData>);
+    m_allPlayersRankLinkedList = rankPlayersList;
 
     LinkedListNode<RankPlayerData>* nodeStart = new LinkedListNode<RankPlayerData>(nullRank);
     LinkedListNode<RankPlayerData>* nodeEnd = new LinkedListNode<RankPlayerData>(nullRank);
 
-    m_allPlayersRankLinkedList.setStart(nodeStart);
-    m_allPlayersRankLinkedList.setEnd(nodeEnd);
+    m_allPlayersRankLinkedList->setStart(nodeStart);
+    m_allPlayersRankLinkedList->setEnd(nodeEnd);
 
     nodeStart->setNext(nodeEnd);
     nodeEnd->setPrevious(nodeStart);
-
 
 }
 
@@ -32,12 +48,20 @@ StatusType world_cup_t::add_team(int teamId, int points)
 
     StatusType res;
 	TeamData teamToInsert(teamId, points);
-    res = m_teamsAVLTree.insert(teamToInsert);
+    res = m_teamsAVLTree->insert(teamToInsert);
 
     //TODO: add team to linkedList
 
+    RankPlayerData nullRank(-1, -1, -1, nullptr);
     if(res == StatusType::SUCCESS){
-        // create tree of rank
+
+        // creates linked list for ranking players in team
+        std::shared_ptr<LinkedList<RankPlayerData>> newList(new LinkedList<RankPlayerData>(nullRank));
+        m_teamsAVLTree->find(teamToInsert)->m_key.setPtrRankList(newList);
+
+        // creates avl tree for ranking players in team
+        std::shared_ptr<AvlTree<RankPlayerData>> newTree(new AvlTree<RankPlayerData>);
+        m_teamsAVLTree->find(teamToInsert)->m_key.setPtrRankTree(newTree);
     }
 
 	return res;
@@ -46,24 +70,76 @@ StatusType world_cup_t::add_team(int teamId, int points)
 
 StatusType world_cup_t::remove_team(int teamId)
 {
-
     if(teamId <= 0){
         return StatusType::INVALID_INPUT;
     }
 
-//    m_teamsAVLTree.remove(teamId);
+    // creates object to find
+    TeamData obj(teamId, 0);
+    // find the object
+    Node<TeamData>* nodeToDelete = m_teamsAVLTree->find(obj);
 
-	return StatusType::FAILURE;
+    // todo: check if node exists
+
+
+    // if team is not empty
+    if(nodeToDelete->m_key.getNumPlayers() > 0){
+        return StatusType::FAILURE;
+    }
+
+//    //delete tree
+//    AvlTree<RankPlayerData>* treeToDelete = nodeToDelete->m_key.getPtrRankTree();
+//    delete treeToDelete;
+//
+//    //delete list
+//    LinkedList<RankPlayerData>* listToDelete = nodeToDelete->m_key.getPtrRankLinkedList();
+//    delete listToDelete;
+
+    //todo: check memory leak
+
+    StatusType res = m_teamsAVLTree->remove(obj);
+
+	return res;
 }
+
 
 StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
                                    int goals, int cards, bool goalKeeper)
 {
 
-	// TODO: when adding a player, check if tree of the team is exists. if not, create one.
-    // TODO: if exists, add player to tree.
+    // check if playerID invalid
+    if(playerId<=0 || teamId<=0 || gamesPlayed<=0 || goals<0 || cards <0){
+        return StatusType::INVALID_INPUT;
+    }
 
-	return StatusType::SUCCESS;
+    // create new player object
+    PlayerData newPlayer(playerId, teamId, gamesPlayed, goals, cards, goalKeeper);
+
+
+    // create team object to find
+    TeamData teamToFind(teamId, 0);
+    // find the team on teams' tree
+    Node<TeamData>* teamNode = m_teamsAVLTree->find(teamToFind);
+
+    if(!teamNode){ // find returns node if found and null if not
+        return StatusType::FAILURE;
+    }
+
+
+    //subtract team games played from individual's.
+    newPlayer.subtractIndividualGamesPlayed(teamNode->getKey().getNumPlayers());
+
+    // add team to tree
+    StatusType res = m_playersAVLTree->insert(newPlayer);
+
+    if(res == StatusType::SUCCESS){
+        // add 1 to num of players
+        teamNode->getKey().increaseNumPlayers();
+
+        // todo: update rest of the data
+    }
+
+    return res;
 }
 
 StatusType world_cup_t::remove_player(int playerId)

@@ -35,7 +35,7 @@ void buildEmptyTree(int requiredSize, const RankPlayerData& nullKey, AvlTree<Ran
 
 
 void buildCompleteEmptyTree(int requiredSize, const RankPlayerData& nullKey,
-                                               AvlTree<RankPlayerData>& tree) {
+                            AvlTree<RankPlayerData>& tree) {
     int height = calcEmptyTreeHeight(requiredSize);
     Node<RankPlayerData>* root = tree.newNode(nullKey);
     root->setHeight(height);

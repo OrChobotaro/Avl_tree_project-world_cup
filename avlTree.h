@@ -18,7 +18,7 @@ class AvlTree{
 public:
     AvlTree();
     AvlTree(const AvlTree<T>& otherTree) = default;
-    AvlTree<T>& operator=(const AvlTree<T>& otherTree) = delete;
+    AvlTree<T>& operator=(const AvlTree<T>& otherTree) = default;
     ~AvlTree();
 
     StatusType insert(const T& key);
@@ -418,7 +418,7 @@ void AvlTree<T>::removeNodeAux(Node<T> *node) {
 //    else{
 //        parent->setRight(nullptr);
 //    }
-    // if parent not exist: means the tree has two or less nodes: root and leaf.
+        // if parent not exist: means the tree has two or less nodes: root and leaf.
     else{
         if(left){
             m_root = left;
@@ -594,3 +594,4 @@ void AvlTree<T>::setRoot(Node<T> *node) {
 
 
 #endif //DATA_STRUCTURES_EX1_AvlTree_H
+
