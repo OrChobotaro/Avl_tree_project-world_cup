@@ -15,7 +15,7 @@ public:
     Node& operator=(const Node& otherNode) = delete;
     ~Node() = default;
 
-    T getKey() const;
+    T getKey();
     Node<T>* getParent() const;
     Node<T>* getLeft() const;
     Node<T>* getRight() const;
@@ -38,8 +38,8 @@ public:
 
 
 
-private:
     T m_key;
+private:
     Node<T>* m_right;
     Node<T>* m_left;
     Node<T>* m_parent;
@@ -57,7 +57,7 @@ Node<T>::Node(const T& key):
 
 
 template<class T>
-T Node<T>::getKey() const{
+T Node<T>::getKey(){
         return m_key;
 }
 

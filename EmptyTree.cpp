@@ -22,36 +22,33 @@ int exponent (int exponent) {
 }
 
 
-
-AvlTree<RankPlayerData> buildEmptyTree(int requiredSize, const RankPlayerData& nullKey) {
+void buildEmptyTree(int requiredSize, const RankPlayerData& nullKey, AvlTree<RankPlayerData>& tree) {
     int height = calcEmptyTreeHeight(requiredSize);
     int numNodesCompleteTree = exponent(height+1) - 1;
     int* numNodesToDelete = new int(numNodesCompleteTree - requiredSize);
-    AvlTree<RankPlayerData> tree = buildCompleteEmptyTree(requiredSize, nullKey);
+    buildCompleteEmptyTree(requiredSize, nullKey, tree);
     deleteNodesEmptyTreeAux(tree.getRoot(), numNodesToDelete, height);
-    return tree;
 }
 
 
 
 
 
-AvlTree<RankPlayerData> buildCompleteEmptyTree(int requiredSize, const RankPlayerData& nullKey) {
+void buildCompleteEmptyTree(int requiredSize, const RankPlayerData& nullKey,
+                            AvlTree<RankPlayerData>& tree) {
     int height = calcEmptyTreeHeight(requiredSize);
-    AvlTree<RankPlayerData> tree;
     Node<RankPlayerData>* root = tree.newNode(nullKey);
     root->setHeight(height);
     tree.setRoot(root);
     if (height > 0) {
         auxEmptyTree(tree, tree.getRoot(), height-1, nullKey);
     }
-    return tree;
-
 }
 
 
 
-void auxEmptyTree(AvlTree<RankPlayerData> tree, Node<RankPlayerData>* node, int height, const RankPlayerData& nullKey) {
+void auxEmptyTree(AvlTree<RankPlayerData>& tree, Node<RankPlayerData>* node, int height, const RankPlayerData&
+nullKey) {
     if (node == nullptr) {
         return;
     }
@@ -133,19 +130,10 @@ int calcDistFromRoot(Node<RankPlayerData>* node) {
 
 
 
-AvlTree<RankPlayerData> updateEmptyTree(const AvlTree<RankPlayerData>& emptyTree, LinkedList<RankPlayerData>& list) {
+void updateEmptyTree(AvlTree<RankPlayerData>& emptyTree, LinkedList<RankPlayerData>& list) {
     LinkedListNode<RankPlayerData>* temp = list.getStart()->getNext();
-//    LinkedListNode<RankPlayerData>* temp = new LinkedListNode<RankPlayerData>((list.getStart())->getNext()->getData());
-//    temp->setNext(list.getStart()->getNext()->getNext());
     Node<RankPlayerData>* root = emptyTree.getRoot();
     updateEmptyTreeAux(root, &temp);
-//    RankPlayerData nullKey(-1,0, 0, nullptr);
-//    temp->setNext(nullptr);
-//    temp->setData(nullKey);
-//    temp->setPrevious(nullptr);
-//    temp->setNext(nullptr);
-    //delete temp;
-    return emptyTree;
 }
 
 

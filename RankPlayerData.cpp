@@ -122,17 +122,24 @@ int TeamData::getGames() {
 }
 
 AvlTree<RankPlayerData>* TeamData::getPtrRankTree() {
-    return m_ptrRankTree;
+    return m_ptrRankTree.get();
 }
 
 LinkedList<RankPlayerData>* TeamData::getPtrRankLinkedList() {
-    return m_ptrRankLinkedList;
+    return m_ptrRankLinkedList.get();
 }
 
-void TeamData::setPtrRankTree(AvlTree<RankPlayerData>* other){
+void TeamData::increaseNumPlayers(){
+    m_numPlayers+=1;
+}
+
+void TeamData::setPtrRankTree(const std::shared_ptr<AvlTree<RankPlayerData>>& other){
     m_ptrRankTree = other;
 }
 
+void TeamData::setPtrRankList(const std::shared_ptr<LinkedList<RankPlayerData>>& other){
+    m_ptrRankLinkedList = other;
+}
 
 PlayerData::PlayerData(int playerID, int teamID, int gamesPlayed, int goals, int cards, bool goalKeeper) :
         m_playerID(playerID),m_teamID(teamID), m_individualGamesPlayed(gamesPlayed), m_goals(goals), m_cards(cards),
@@ -177,9 +184,9 @@ void PlayerData::setGoals(int goals) {
     m_goals = goals;
 }
 
-void PlayerData::setIndividualGamesPlayed(int individualGamesPlayed) {
-    m_individualGamesPlayed = individualGamesPlayed;
-}
+//void PlayerData::setIndividualGamesPlayed(int individualGamesPlayed) {
+//    m_individualGamesPlayed = individualGamesPlayed;
+//}
 
 void PlayerData::setPlayerID(int teamID) {
     m_playerID = m_playerID;
@@ -193,6 +200,9 @@ void PlayerData::setPtrTeam(Node<TeamData> *node) {
     m_ptrTeam = node;
 }
 
+void PlayerData::subtractIndividualGamesPlayed(int GamesPlayed){
+    m_individualGamesPlayed-= GamesPlayed;
+}
 
 bool PlayerData::operator<(const PlayerData &other) const {
     return m_playerID < other.m_playerID;

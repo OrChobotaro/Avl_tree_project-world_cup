@@ -19,13 +19,17 @@
 #include "avlTree.h"
 #include "PlayerData.h"
 #include "TeamData.h"
+#include <iostream>
+#include <memory>
+
+
 
 class world_cup_t {
 private:
-    AvlTree<PlayerData> m_playersAVLTree;
-    AvlTree<TeamData> m_teamsAVLTree;
-    AvlTree<RankPlayerData> m_allPlayersRankTree;
-    LinkedList<RankPlayerData> m_allPlayersRankLinkedList;
+    std::shared_ptr<AvlTree<PlayerData>> m_playersAVLTree;
+    std::shared_ptr<AvlTree<TeamData>> m_teamsAVLTree;
+    std::shared_ptr<AvlTree<RankPlayerData>> m_allPlayersRankTree;
+    std::shared_ptr<LinkedList<RankPlayerData>> m_allPlayersRankLinkedList;
 
 public:
 	// <DO-NOT-MODIFY> {

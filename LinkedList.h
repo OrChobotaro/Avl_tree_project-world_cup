@@ -19,8 +19,8 @@ public:
     LinkedListNode<T>* getStart();
     LinkedListNode<T>* getEnd();
 
-    void setStart(LinkedListNode<T>* node) const;
-    void setEnd(LinkedListNode<T>* node) const;
+    void setStart(LinkedListNode<T>* node) ;
+    void setEnd(LinkedListNode<T>* node) ;
 
     LinkedListNode<T>* newLinkedListNode(const T& data);
 
@@ -54,7 +54,7 @@ int LinkedList<T>::countNodes(){
 
 template<class T>
 StatusType uniteLists(LinkedListNode<T>* startList1, LinkedListNode<T>* startList2,
-                          LinkedListNode<T>* newStart, LinkedListNode<T>* newEnd);
+                      LinkedListNode<T>* newStart, LinkedListNode<T>* newEnd);
 
 
 template<class T>
@@ -94,12 +94,12 @@ LinkedListNode<T>* LinkedList<T>::getEnd() {
 }
 
 template<class T>
-void LinkedList<T>::setStart(LinkedListNode<T>* node) const {
+void LinkedList<T>::setStart(LinkedListNode<T>* node) {
     m_start = node;
 }
 
 template<class T>
-void LinkedList<T>::setEnd(LinkedListNode<T>* node) const {
+void LinkedList<T>::setEnd(LinkedListNode<T>* node) {
     m_end = node;
 }
 
@@ -158,7 +158,7 @@ StatusType LinkedList<T>::insertAfter(LinkedListNode<T> *node, const T& data, Li
     LinkedListNode<T>* nextNode = node->getNext();
     LinkedListNode<T>* newNodeMiddle;
     try{
-         newNodeMiddle = newLinkedListNode(data);
+        newNodeMiddle = newLinkedListNode(data);
 
     } catch (std::bad_alloc& e){
         return StatusType::ALLOCATION_ERROR;
