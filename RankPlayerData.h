@@ -6,6 +6,8 @@
 #include "LinkedList.h"
 #include "avlTree.h"
 #include "PlayerData.h"
+#include <iostream>
+#include <memory>
 
 class TeamData;
 class PlayerData;
@@ -67,7 +69,9 @@ public:
     AvlTree<RankPlayerData>* getPtrRankTree();
     LinkedList<RankPlayerData>* getPtrRankLinkedList();
 
-    void setPtrRankTree(AvlTree<RankPlayerData>* other);
+    void increaseNumPlayers();
+    void setPtrRankTree(const std::shared_ptr<AvlTree<RankPlayerData>>& other);
+    void setPtrRankList(const std::shared_ptr<LinkedList<RankPlayerData>>& other);
 
 
 private:
@@ -78,8 +82,8 @@ private:
     int m_goals;
     int m_cards;
     int m_gamesPlayed;
-    AvlTree<RankPlayerData>* m_ptrRankTree;
-    LinkedList<RankPlayerData>* m_ptrRankLinkedList;
+    std::shared_ptr<AvlTree<RankPlayerData>> m_ptrRankTree;
+    std::shared_ptr<LinkedList<RankPlayerData>> m_ptrRankLinkedList;
 };
 
 
@@ -105,12 +109,13 @@ public:
     Node<TeamData>* getPtrTeam() const;
 
     void setPlayerID(int teamID);
-    void setIndividualGamesPlayed(int individualGamesPlayed);
+//    void setIndividualGamesPlayed(int individualGamesPlayed);
     void setGoals(int goals);
     void setCards(int cards);
     void setPtrTeam(Node<TeamData>* node);
     void setPtrPlayerRank(Node<RankPlayerData>* node);
 
+    void subtractIndividualGamesPlayed(int GamesPlayed);
     bool operator<(const PlayerData& other) const;
     bool operator>(const PlayerData& other) const;
 

@@ -226,7 +226,7 @@
 
 
 #include "worldcup23a1.h"
-=======
+
 //    LinkedListNode<int> *endNode = new LinkedListNode<int>(0);
 //    LinkedListNode<int> *startNode = new LinkedListNode<int>(0);
 //
@@ -340,6 +340,11 @@ int main(){
     world_cup_t wc1;
 
     wc1.add_team(1, 100);
+
+    wc1.add_player(5,1,2,3,3,false);
+    wc1.add_player(-4,1,2,3,3,false);
+
+    wc1.remove_team(1);
 
     return 0;
 }
