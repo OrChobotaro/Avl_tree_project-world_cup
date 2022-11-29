@@ -20,6 +20,10 @@ world_cup_t::world_cup_t():m_numOfPlayers(0)
     std::shared_ptr<AvlTree<RankPlayerData>> rankPlayersTree(new AvlTree<RankPlayerData>);
     m_allPlayersRankTree = rankPlayersTree;
 
+    // creating valid teams - team with 11 players including a goalkeeper.
+    std::shared_ptr<AvlTree<TeamData>> validTeamsTree(new AvlTree<TeamData>);
+    m_validTeams = validTeamsTree;
+
     // creating null rank object to start and end of linked list
     RankPlayerData nullRank(-1, -1, -1, nullptr);
 
@@ -138,22 +142,34 @@ StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
 
 
     if(res == StatusType::SUCCESS){
-        // add 1 to num of players
+        m_numOfPlayers+=1;
+
+        // add 1 to num of team players
         teamNode->getKey().increaseNumPlayers();
 
-        // todo: update rest of the data
+        //todo: check if team is valid and add to the tree
+//        if(teamNode->getKey().getNumPlayers()==11 && teamNode->getKey().getNumGoalKeepers() > 0){
+//            m_validTeams->insert(teamNode->getKey());  //todo: class with id and ptr to the team in the teams' tree and points for knockout
+//        }
+
+
+        teamNode->getKey().addGoals(goals);
+        teamNode->getKey().addCards(cards);
+        if(newPlayer.isGoalKeeper()){
+            teamNode->getKey().increaseGoalKeeper();
+        }
 
 
 
-        //todo: add to all players rank tree
-        // find the node in the players tree
 
         // create rank node
         RankPlayerData playerRank(playerId, goals, cards, m_playersAVLTree->find(newPlayer));
-        // add to tree
+        // add to all players tree
         m_allPlayersRankTree->insert(playerRank);
 
-        //todo: add to team rank tree
+        //add to team rank tree
+        teamNode->getKey().getPtrRankTree()->insert(playerRank);
+
 
 
         try {
@@ -163,9 +179,9 @@ StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
             m_allPlayersRankTree->find(playerRank)->m_key.setPtrRankPlayerList(nodeToInsertAllPlayersList);
 
             // insert node to team's list
-//            LinkedListNode<RankPlayerData>* nodeToInsertTeamList = new LinkedListNode<RankPlayerData>(playerRank);
-//            addToRankLinkedList(playerRank, teamNode->getKey().getPtrRankLinkedList(), teamNode->getKey().getPtrRankTree(), nodeToInsertTeamList);
-//            m_allPlayersRankTree->find(playerRank)->m_key.setPtrRankPlayerTree(nodeToInsertTeamList);
+            LinkedListNode<RankPlayerData>* nodeToInsertTeamList = new LinkedListNode<RankPlayerData>(playerRank);
+            addToRankLinkedList(playerRank, teamNode->getKey().getPtrRankLinkedList(), teamNode->getKey().getPtrRankTree(), nodeToInsertTeamList);
+            teamNode->getKey().getPtrRankTree()->find(playerRank)->m_key.setPtrRankPlayerList(nodeToInsertTeamList);
 
         }
         catch(std::bad_alloc& e){

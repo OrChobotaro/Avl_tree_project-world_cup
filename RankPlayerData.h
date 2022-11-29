@@ -77,6 +77,10 @@ public:
     void setNumGoals(int numGoals);
     void setNumCards(int numCards);
 
+    void addGoals(int goalsToAdd);
+    void addCards(int cardsToAdd);
+    void increaseGoalKeeper();
+
 
 
 private:

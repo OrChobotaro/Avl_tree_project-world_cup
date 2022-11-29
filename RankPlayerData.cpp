@@ -171,6 +171,19 @@ void TeamData::setNumGoals(int numGoals) {
 }
 
 
+void TeamData::addGoals(int goalsToAdd){
+    m_goals+=goalsToAdd;
+}
+
+void TeamData::addCards(int cardsToAdd){
+    m_cards+=cardsToAdd;
+}
+
+void TeamData::increaseGoalKeeper(){
+    m_numGoalKeepers+=1;
+}
+
+
 
 
 
@@ -224,6 +237,10 @@ void PlayerData::setGoals(int goals) {
     m_goals = goals;
 }
 
+bool PlayerData::isGoalKeeper() const{
+    return m_isGoalKeeper;
+}
+
 //void PlayerData::setIndividualGamesPlayed(int individualGamesPlayed) {
 //    m_individualGamesPlayed = individualGamesPlayed;
 //}
@@ -244,6 +261,8 @@ void PlayerData::setPtrRankTeamPlayerTree(Node<RankPlayerData> *node) {
 void PlayerData::setPtrTeam(Node<TeamData> *node) {
     m_ptrTeam = node;
 }
+
+
 
 void PlayerData::subtractIndividualGamesPlayed(int gamesPlayed){
     m_individualGamesPlayed-= gamesPlayed;
