@@ -31,6 +31,7 @@ private:
     std::shared_ptr<AvlTree<TeamData>> m_teamsAVLTree;
     std::shared_ptr<AvlTree<RankPlayerData>> m_allPlayersRankTree;
     std::shared_ptr<LinkedList<RankPlayerData>> m_allPlayersRankLinkedList;
+    std::shared_ptr<AvlTree<TeamData>> m_validTeams; // todo: change the type, create class
     int m_numOfPlayers;
 
     StatusType addToRankLinkedList(const RankPlayerData& playerRank, LinkedList<RankPlayerData>* rankList, AvlTree<RankPlayerData>* rankTree, LinkedListNode<RankPlayerData>* nodeToInsert);

@@ -343,7 +343,7 @@ int main(){
 
     wc1.add_player(2,21,2,3,3,false);
     wc1.add_player(3,21,2,3,3,false);
-    wc1.add_player(4, 21, 2, 3, 3, true);
+    wc1.add_player(4, 21, 2, 1, 3, true);
     wc1.add_player(5, 21, 2, 3, 3, false);
 
     wc1.add_team(22, 100);
