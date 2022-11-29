@@ -1,8 +1,12 @@
 #include "worldcup23a1.h"
 
-world_cup_t::world_cup_t()
+
+
+
+world_cup_t::world_cup_t():m_numOfPlayers(0)
 {
     //todo: initialize all
+
 
     // creating players tree
     std::shared_ptr<AvlTree<PlayerData>> playersTree(new AvlTree<PlayerData>);
@@ -132,15 +136,81 @@ StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
     // add team to tree
     StatusType res = m_playersAVLTree->insert(newPlayer);
 
+
     if(res == StatusType::SUCCESS){
         // add 1 to num of players
         teamNode->getKey().increaseNumPlayers();
 
         // todo: update rest of the data
+
+
+
+        //todo: add to all players rank tree
+        // find the node in the players tree
+
+        // create rank node
+        RankPlayerData playerRank(playerId, goals, cards, m_playersAVLTree->find(newPlayer));
+        // add to tree
+        m_allPlayersRankTree->insert(playerRank);
+
+        //todo: add to team rank tree
+
+
+        try {
+            // insert node to all players list
+            LinkedListNode<RankPlayerData>* nodeToInsertAllPlayersList = new LinkedListNode<RankPlayerData>(playerRank);
+            addToRankLinkedList(playerRank, m_allPlayersRankLinkedList.get(), m_allPlayersRankTree.get(), nodeToInsertAllPlayersList);
+            m_allPlayersRankTree->find(playerRank)->m_key.setPtrRankPlayerList(nodeToInsertAllPlayersList);
+
+            // insert node to team's list
+//            LinkedListNode<RankPlayerData>* nodeToInsertTeamList = new LinkedListNode<RankPlayerData>(playerRank);
+//            addToRankLinkedList(playerRank, teamNode->getKey().getPtrRankLinkedList(), teamNode->getKey().getPtrRankTree(), nodeToInsertTeamList);
+//            m_allPlayersRankTree->find(playerRank)->m_key.setPtrRankPlayerTree(nodeToInsertTeamList);
+
+        }
+        catch(std::bad_alloc& e){
+
+            //todo: reverse all actions if fails
+
+            return StatusType::ALLOCATION_ERROR;
+        }
+
     }
+
 
     return res;
 }
+
+
+StatusType world_cup_t::addToRankLinkedList(const RankPlayerData& playerRank, LinkedList<RankPlayerData>* rankList, AvlTree<RankPlayerData>* rankTree, LinkedListNode<RankPlayerData>* nodeToInsert) {
+    //find the node and check if player is left son or right
+    bool isPlayerLeft = false;
+    Node<RankPlayerData>* rankNode = rankTree->find(playerRank);
+    Node<RankPlayerData>* parent = rankNode->getParent();
+
+
+    if(parent) {
+        isPlayerLeft = rankNode->isLeftNew(parent);
+    }
+//    else{
+//        LinkedListNode<RankPlayerData>* parent = rankList->getStart();
+//    }
+
+
+//    LinkedListNode<RankPlayerData> nodeInsertToList(playerRank);
+    if(isPlayerLeft && parent) {
+        rankList->insertBefore(parent->getKey().getPtrRankPlayerList(), nodeToInsert);
+    }
+    else if(!(isPlayerLeft) && parent){
+        rankList->insertAfter(parent->getKey().getPtrRankPlayerList(), nodeToInsert);
+    }
+    else {
+        rankList->insertAfter(rankList->getStart(), nodeToInsert);
+    }
+
+    return StatusType::SUCCESS;
+}
+
 
 StatusType world_cup_t::remove_player(int playerId)
 {
