@@ -24,8 +24,8 @@ public:
 
     LinkedListNode<T>* newLinkedListNode(const T& data);
 
-    StatusType insertBefore(LinkedListNode<T>* node, const T& data, LinkedListNode<T>** ptrSave);
-    StatusType insertAfter(LinkedListNode<T>* node, const T& data, LinkedListNode<T>** ptrSave);
+    StatusType insertBefore(LinkedListNode<T> *nodeToInsertBefore, LinkedListNode<T>* nodeToInsert);
+    StatusType insertAfter(LinkedListNode<T> *nodeToInsertAfter, LinkedListNode<T>* nodeToInsert);
     StatusType deleteNode(LinkedListNode<T>* nodeToRemove);
 
 //    StatusType uniteListsNew(LinkedList<T>* List2, LinkedList<T>* newList);
@@ -122,54 +122,54 @@ void LinkedList<T>::clearList(LinkedListNode<T>* start, LinkedListNode<T>* end){
 }
 
 template<class T>
-StatusType LinkedList<T>::insertBefore(LinkedListNode<T>* node, const T& data, LinkedListNode<T>** ptrSave) {
-    assert(node);
-    assert(data);
-    assert(ptrSave);
+StatusType LinkedList<T>::insertBefore(LinkedListNode<T> *nodeToInsertBefore, LinkedListNode<T>* nodeToInsert) {
+    //assert(node);
+    //assert(data);
+    //assert(ptrSave);
 
-    LinkedListNode<T>* previousNode = node->getPrevious();
-    LinkedListNode<T>* newNodeMiddle;
+    LinkedListNode<T>* previousNode = nodeToInsertBefore->getPrevious();
+//    LinkedListNode<T>* newNodeMiddle;
 
-    try{
-        newNodeMiddle = newLinkedListNode(data);
-    }
-    catch (std::bad_alloc& e){
-        return StatusType::ALLOCATION_ERROR;
-    }
+//    try{
+//        newNodeMiddle = newLinkedListNode(data);
+//    }
+//    catch (std::bad_alloc& e){
+//        return StatusType::ALLOCATION_ERROR;
+//    }
 
-    previousNode->setNext(newNodeMiddle);
-    newNodeMiddle->setPrevious(previousNode);
-    newNodeMiddle->setNext(node);
-    node->setPrevious(newNodeMiddle);
+    previousNode->setNext(nodeToInsert);
+    nodeToInsert->setPrevious(previousNode);
+    nodeToInsert->setNext(nodeToInsertBefore);
+    nodeToInsertBefore->setPrevious(nodeToInsert);
 
-    *ptrSave = newNodeMiddle;
+//    *ptrSave = newNodeMiddle;
 
     return StatusType::SUCCESS;
 }
 
 template<class T>
-StatusType LinkedList<T>::insertAfter(LinkedListNode<T> *node, const T& data, LinkedListNode<T>** ptrSave) {
+StatusType LinkedList<T>::insertAfter(LinkedListNode<T> *nodeToInsertAfter, LinkedListNode<T>* nodeToInsert) {
 
     //assert(node);
     //assert(data);
     //assert(ptrSave);
 
 
-    LinkedListNode<T>* nextNode = node->getNext();
-    LinkedListNode<T>* newNodeMiddle;
-    try{
-        newNodeMiddle = newLinkedListNode(data);
+    LinkedListNode<T>* nextNode = nodeToInsertAfter->getNext();
+//    LinkedListNode<T>* newNodeMiddle;
+//    try{
+//        newNodeMiddle = newLinkedListNode(data);
+//
+//    } catch (std::bad_alloc& e){
+//        return StatusType::ALLOCATION_ERROR;
+//    }
 
-    } catch (std::bad_alloc& e){
-        return StatusType::ALLOCATION_ERROR;
-    }
+    nodeToInsertAfter->setNext(nodeToInsert);
+    nodeToInsert->setPrevious(nodeToInsertAfter);
+    nodeToInsert->setNext(nextNode);
+    nextNode->setPrevious(nodeToInsert);
 
-    node->setNext(newNodeMiddle);
-    newNodeMiddle->setPrevious(node);
-    newNodeMiddle->setNext(nextNode);
-    nextNode->setPrevious(newNodeMiddle);
-
-    *ptrSave = newNodeMiddle;
+//    *ptrSave = newNodeMiddle;
 
     return StatusType::SUCCESS;
 }

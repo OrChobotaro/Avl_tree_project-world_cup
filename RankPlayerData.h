@@ -36,12 +36,12 @@ public:
     bool operator>(const RankPlayerData& other) const;
 
 
+    LinkedListNode<RankPlayerData>* m_ptrLinkedList;
 private:
     int m_playerID;
     int m_goals;
     int m_cards;
     Node<PlayerData>* m_ptrPlayer; // pointer to players' tree
-    LinkedListNode<RankPlayerData>* m_ptrLinkedList;
     Node<RankPlayerData>* m_ptrRankTree;
 };
 
@@ -105,7 +105,8 @@ public:
     bool isGoalKeeper() const;
     //suppose to be a link to the linkedLint in the TreeRank
     //LinkedListNode<RankPlayerDataLinkedList>* getPtrPlayerList() const;
-    Node<RankPlayerData>* getPtrPlayerRankTree() const;
+    Node<RankPlayerData>* getPtrRankTeamPlayerTree() const;
+    Node<RankPlayerData>* getPtrRankAllPlayersTree() const;
     Node<TeamData>* getPtrTeam() const;
 
     void setPlayerID(int teamID);
@@ -113,13 +114,17 @@ public:
     void setGoals(int goals);
     void setCards(int cards);
     void setPtrTeam(Node<TeamData>* node);
-    void setPtrPlayerRank(Node<RankPlayerData>* node);
+    void setPtrRankAllPlayersTree(Node<RankPlayerData>* node);
+    void setPtrRankTeamPlayerTree(Node<RankPlayerData>* node);
+
 
     void subtractIndividualGamesPlayed(int GamesPlayed);
     bool operator<(const PlayerData& other) const;
     bool operator>(const PlayerData& other) const;
 
 
+    Node<RankPlayerData>* m_PtrRankAllPlayersTree;
+    Node<RankPlayerData>* m_PtrRankTeamPlayerTree;
 private:
     int m_playerID;
     int m_teamID;
@@ -128,7 +133,6 @@ private:
     int m_cards;
     bool m_isGoalKeeper;
     Node<TeamData>* m_ptrTeam;
-    Node<RankPlayerData>* m_PtrRankPlayer;
 };
 
 

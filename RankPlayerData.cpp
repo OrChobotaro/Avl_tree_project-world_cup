@@ -65,7 +65,20 @@ bool RankPlayerData::operator<(const RankPlayerData &other) const{
 
 
 bool RankPlayerData::operator>(const RankPlayerData &other) const{
-    return !(*this < other);
+    if (m_goals > other.m_goals) {
+        return true;
+    }
+    else if (m_goals == other.m_goals) {
+        if (m_cards < other.m_cards) {
+            return true;
+        }
+        else if (m_cards == other.m_cards) {
+            if (m_playerID > other.m_playerID) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 
@@ -143,7 +156,7 @@ void TeamData::setPtrRankList(const std::shared_ptr<LinkedList<RankPlayerData>>&
 
 PlayerData::PlayerData(int playerID, int teamID, int gamesPlayed, int goals, int cards, bool goalKeeper) :
         m_playerID(playerID),m_teamID(teamID), m_individualGamesPlayed(gamesPlayed), m_goals(goals), m_cards(cards),
-        m_isGoalKeeper(goalKeeper), m_ptrTeam(nullptr) ,m_PtrRankPlayer(nullptr) {}
+        m_isGoalKeeper(goalKeeper), m_ptrTeam(nullptr) ,m_PtrRankAllPlayersTree(nullptr), m_PtrRankTeamPlayerTree(nullptr){}
 
 
 
@@ -171,10 +184,13 @@ Node<TeamData>* PlayerData::getPtrTeam() const {
     return m_ptrTeam;
 }
 
-Node<RankPlayerData>* PlayerData::getPtrPlayerRankTree() const {
-    return m_PtrRankPlayer;
+Node<RankPlayerData>* PlayerData::getPtrRankTeamPlayerTree() const {
+    return m_PtrRankTeamPlayerTree;
 }
 
+Node<RankPlayerData>* PlayerData::getPtrRankAllPlayersTree() const {
+    return m_PtrRankAllPlayersTree;
+}
 
 void PlayerData::setCards(int cards) {
     m_cards = cards;
@@ -192,8 +208,13 @@ void PlayerData::setPlayerID(int teamID) {
     m_playerID = m_playerID;
 }
 
-void PlayerData::setPtrPlayerRank(Node<RankPlayerData> *node) {
-    m_PtrRankPlayer = node;
+void PlayerData::setPtrRankAllPlayersTree(Node<RankPlayerData> *node) {
+    m_PtrRankAllPlayersTree = node;
+}
+
+
+void PlayerData::setPtrRankTeamPlayerTree(Node<RankPlayerData> *node) {
+    m_PtrRankTeamPlayerTree = node;
 }
 
 void PlayerData::setPtrTeam(Node<TeamData> *node) {
@@ -209,6 +230,6 @@ bool PlayerData::operator<(const PlayerData &other) const {
 }
 
 bool PlayerData::operator>(const PlayerData &other) const {
-    return !(*this < other);
+    return m_playerID > other.m_playerID;
 }
 
