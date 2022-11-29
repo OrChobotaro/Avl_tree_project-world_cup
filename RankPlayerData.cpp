@@ -281,3 +281,46 @@ bool PlayerData::operator>(const PlayerData &other) const {
     return m_playerID > other.m_playerID;
 }
 
+
+
+
+
+////----------------------------------------------------------------------
+
+
+Node<PlayerData>* findPlayer(int playerID, Node<PlayerData>* root){
+    Node<PlayerData>* temp = root;
+    while (temp) {
+        int tempID = temp->getKey().getPlayerID();
+        if (tempID < playerID) {
+            temp = temp->getRight();
+        }
+        else if (tempID > playerID) {
+            temp = temp->getLeft();
+        }
+        else if (tempID == playerID) {
+            return temp;
+        }
+    }
+    return nullptr;
+}
+
+
+
+Node<TeamData>* findTeam(int teamID, Node<TeamData>* root) {
+    Node<TeamData>* temp = root;
+    while (temp) {
+        int tempID = temp->getKey().getTeamID();
+        if (tempID < teamID) {
+            temp = temp->getRight();
+        }
+        else if (tempID > teamID) {
+            temp = temp->getLeft();
+        }
+        else if (tempID == teamID) {
+            return temp;
+        }
+    }
+    return nullptr;
+}
+

@@ -355,7 +355,8 @@ int main(){
 
     wc1.unite_teams(21, 22, 23);
 
-    //wc1.remove_team(1);
+    wc1.remove_team(1);
+
 
     return 0;
 }

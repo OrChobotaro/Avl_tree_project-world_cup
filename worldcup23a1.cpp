@@ -87,6 +87,7 @@ StatusType world_cup_t::remove_team(int teamId)
     // find the object
     Node<TeamData>* nodeToDelete = m_teamsAVLTree->find(obj);
 
+
     // todo: check if node exists
 
 
@@ -236,6 +237,9 @@ StatusType world_cup_t::remove_player(int playerId)
 
 StatusType world_cup_t::update_player_stats(int playerId, int gamesPlayed, int scoredGoals, int cardsReceived)
 {
+    if (playerId <= 0 || gamesPlayed < 0 || scoredGoals < 0 || cardsReceived < 0) {
+        return StatusType::INVALID_INPUT;
+    }
 
 	// TODO: Your code goes here
 	return StatusType::SUCCESS;

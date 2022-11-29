@@ -148,6 +148,10 @@ private:
 
 
 
+Node<PlayerData>* findPlayer(int playerID, Node<PlayerData>* root);
+
+Node<TeamData>* findTeam(int teamID, Node<TeamData>* root);
+
 
 
 
