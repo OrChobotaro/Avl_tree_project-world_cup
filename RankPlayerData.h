@@ -72,6 +72,11 @@ public:
     void increaseNumPlayers();
     void setPtrRankTree(const std::shared_ptr<AvlTree<RankPlayerData>>& other);
     void setPtrRankList(const std::shared_ptr<LinkedList<RankPlayerData>>& other);
+    void setNumPlayers(int numPlayers);
+    void setNumGoalKeepers(int numGoalKeepers);
+    void setNumGoals(int numGoals);
+    void setNumCards(int numCards);
+
 
 
 private:
@@ -112,10 +117,12 @@ public:
 //    void setIndividualGamesPlayed(int individualGamesPlayed);
     void setGoals(int goals);
     void setCards(int cards);
+    void setTeamID(int teamID);
     void setPtrTeam(Node<TeamData>* node);
     void setPtrPlayerRank(Node<RankPlayerData>* node);
 
-    void subtractIndividualGamesPlayed(int GamesPlayed);
+    void subtractIndividualGamesPlayed(int gamesPlayed);
+    void increaseIndividualGamesPlayer(int gamesPlayed);
     bool operator<(const PlayerData& other) const;
     bool operator>(const PlayerData& other) const;
 

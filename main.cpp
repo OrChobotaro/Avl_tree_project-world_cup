@@ -339,12 +339,23 @@
 int main(){
     world_cup_t wc1;
 
-    wc1.add_team(1, 100);
+    wc1.add_team(21, 100);
 
-    wc1.add_player(5,1,2,3,3,false);
-    wc1.add_player(-4,1,2,3,3,false);
+    wc1.add_player(2,21,2,3,3,false);
+    wc1.add_player(3,21,2,3,3,false);
+    wc1.add_player(4, 21, 2, 3, 3, true);
+    wc1.add_player(5, 21, 2, 3, 3, false);
 
-    wc1.remove_team(1);
+    wc1.add_team(22, 100);
+
+    wc1.add_player(6,22,2,3,3,false);
+    wc1.add_player(7,22,2,3,3,false);
+    wc1.add_player(8, 22, 2, 3, 3, true);
+    wc1.add_player(9, 22, 2, 3, 3, true);
+
+    wc1.unite_teams(21, 22, 23);
+
+    //wc1.remove_team(1);
 
     return 0;
 }
