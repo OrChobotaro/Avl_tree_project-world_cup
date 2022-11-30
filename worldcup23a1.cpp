@@ -21,7 +21,7 @@ world_cup_t::world_cup_t():m_numOfPlayers(0)
     m_allPlayersRankTree = rankPlayersTree;
 
     // creating valid teams - team with 11 players including a goalkeeper.
-    std::shared_ptr<AvlTree<TeamData>> validTeamsTree(new AvlTree<TeamData>);
+    std::shared_ptr<AvlTree<ValidTeams>> validTeamsTree(new AvlTree<ValidTeams>);
     m_validTeams = validTeamsTree;
 
     // creating null rank object to start and end of linked list
@@ -124,42 +124,42 @@ StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
     PlayerData newPlayer(playerId, teamId, gamesPlayed, goals, cards, goalKeeper);
 
 
-    // create team object to find
-    TeamData teamToFind(teamId, 0);
     // find the team on teams' tree
-    Node<TeamData>* teamNode = m_teamsAVLTree->find(teamToFind);
+    Node<TeamData>* teamNode = findTeam(teamId, m_teamsAVLTree->getRoot());
 
     if(!teamNode){ // find returns node if found and null if not
         return StatusType::FAILURE;
     }
 
-
     //subtract team games played from individual's.
     newPlayer.subtractIndividualGamesPlayed(teamNode->getKey().getGames());
 
-    // add team to tree
+    //set ptr of the team
+    newPlayer.setPtrTeam(teamNode);
+
+    // add player to tree
     StatusType res = m_playersAVLTree->insert(newPlayer);
 
 
     if(res == StatusType::SUCCESS){
+
         m_numOfPlayers+=1;
 
         // add 1 to num of team players
-        teamNode->getKey().increaseNumPlayers();
+        teamNode->m_key.increaseNumPlayers();
 
         //todo: check if team is valid and add to the tree
-//        if(teamNode->getKey().getNumPlayers()==11 && teamNode->getKey().getNumGoalKeepers() > 0){
-//            m_validTeams->insert(teamNode->getKey());  //todo: class with id and ptr to the team in the teams' tree and points for knockout
-//        }
-
-
-        teamNode->getKey().addGoals(goals);
-        teamNode->getKey().addCards(cards);
-        if(newPlayer.isGoalKeeper()){
-            teamNode->getKey().increaseGoalKeeper();
+        if(teamNode->getKey().getNumPlayers()==11 && teamNode->m_key.getNumGoalKeepers() > 0){
+            ValidTeams validTeamObj(teamId, findTeam(teamId, m_teamsAVLTree->getRoot()));
+            m_validTeams->insert(validTeamObj);  //todo: class with id and ptr to the team in the teams' tree and points for knockout
         }
 
 
+        teamNode->m_key.addGoals(goals);
+        teamNode->m_key.addCards(cards);
+        if(newPlayer.isGoalKeeper()){
+            teamNode->m_key.increaseGoalKeeper();
+        }
 
 
         // create rank node
@@ -168,7 +168,7 @@ StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
         m_allPlayersRankTree->insert(playerRank);
 
         //add to team rank tree
-        teamNode->getKey().getPtrRankTree()->insert(playerRank);
+        teamNode->m_key.getPtrRankTree()->insert(playerRank);
 
 
 
@@ -230,7 +230,45 @@ StatusType world_cup_t::addToRankLinkedList(const RankPlayerData& playerRank, Li
 
 StatusType world_cup_t::remove_player(int playerId)
 {
-	// TODO: Your code goes here
+	//find player in players' tree
+    Node<PlayerData>* playerToRemove = findPlayer(playerId, m_playersAVLTree->getRoot());
+
+    if(!playerToRemove){
+        return StatusType::FAILURE;
+    }
+
+    //find team in from pointer in player
+    Node<TeamData>* teamOfPlayer = playerToRemove->m_key.getPtrTeam();
+
+    //decrease number of goalkeepers
+    if(playerToRemove->m_key.isGoalKeeper()){
+        teamOfPlayer->m_key.decreaseGoalKeeper();
+    }
+
+    //decrease number of card
+    teamOfPlayer->m_key.subtractCards(playerToRemove->getKey().getCards());
+
+    //decrease number of goals
+    teamOfPlayer->m_key.subtractGoals(playerToRemove->getKey().getGoals());
+
+    //remove player from team's rank tree
+    //todo: save linked list node address and assign to null before deleting
+    RankPlayerData rankPlayerToRemove(playerId, 0, 0, nullptr);
+    teamOfPlayer->m_key.m_ptrRankTree->remove(rankPlayerToRemove);
+
+    //remove player from team's rank list
+
+    //remove player from all rank tree
+
+    //remove player from all rank list
+
+    //remove player from all players tree
+
+    //check if team still valid, if not - remove
+
+    //is success, remove 1 from total players
+
+    //todo: if not success, reverse all (keep the data of the player and add it again)
 	return StatusType::SUCCESS;
 }
 

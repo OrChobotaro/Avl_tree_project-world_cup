@@ -166,7 +166,7 @@ void TeamData::setNumGoalKeepers(int numGoalKeepers){
 void TeamData::setNumGoals(int numGoals) {
     m_goals = numGoals;
 }
- void TeamData::setNumCards(int numCards) {
+void TeamData::setNumCards(int numCards) {
     m_cards = numCards;
 }
 
@@ -175,12 +175,24 @@ void TeamData::addGoals(int goalsToAdd){
     m_goals+=goalsToAdd;
 }
 
+void TeamData::subtractGoals(int goalsToSubtract){
+    m_goals-=goalsToSubtract;
+}
+
 void TeamData::addCards(int cardsToAdd){
     m_cards+=cardsToAdd;
 }
 
+void TeamData::subtractCards(int cardsToSubtract){
+    m_cards-=cardsToSubtract;
+}
+
 void TeamData::increaseGoalKeeper(){
     m_numGoalKeepers+=1;
+}
+
+void TeamData::decreaseGoalKeeper(){
+    m_numGoalKeepers-=1;
 }
 
 
@@ -281,3 +293,65 @@ bool PlayerData::operator>(const PlayerData &other) const {
     return m_playerID > other.m_playerID;
 }
 
+
+
+
+
+////----------------------------------------------------------------------
+
+
+Node<PlayerData>* findPlayer(int playerID, Node<PlayerData>* root){
+    Node<PlayerData>* temp = root;
+    while (temp) {
+        int tempID = temp->getKey().getPlayerID();
+        if (tempID < playerID) {
+            temp = temp->getRight();
+        }
+        else if (tempID > playerID) {
+            temp = temp->getLeft();
+        }
+        else if (tempID == playerID) {
+            return temp;
+        }
+    }
+    return nullptr;
+}
+
+
+
+Node<TeamData>* findTeam(int teamID, Node<TeamData>* root) {
+    Node<TeamData>* temp = root;
+    while (temp) {
+        int tempID = temp->getKey().getTeamID();
+        if (tempID < teamID) {
+            temp = temp->getRight();
+        }
+        else if (tempID > teamID) {
+            temp = temp->getLeft();
+        }
+        else if (tempID == teamID) {
+            return temp;
+        }
+    }
+    return nullptr;
+}
+
+
+////---------------------------------
+
+
+#include "validTeams.h"
+
+
+ValidTeams::ValidTeams(int teamID, Node<TeamData>* ptrTeamData) :
+        m_teamID(teamID), m_ptrTeamData(ptrTeamData), m_points(0){};
+
+
+
+bool ValidTeams::operator<(const ValidTeams& other) const{
+    return this->m_teamID < other.m_teamID;
+}
+
+bool ValidTeams::operator>(const ValidTeams& other) const{
+    return this->m_teamID > other.m_teamID;
+}
