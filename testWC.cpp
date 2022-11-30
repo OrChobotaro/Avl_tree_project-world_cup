@@ -123,6 +123,7 @@ bool test_add_player_till_valid_team(){
 
 
 // idea: add to players with same id to different teams
+// test if when removing, all trees and lists updating
 
 
 
