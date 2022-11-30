@@ -43,9 +43,9 @@ private:
 
 template<class T>
 int LinkedList<T>::countNodes(){
-    LinkedListNode<T>* node = this->m_start;
+    LinkedListNode<T>* node = this->m_start->getNext();
     int counter = 0;
-    while(node){
+    while(node->getNext()){
         counter++;
         node = node->getNext();
     }

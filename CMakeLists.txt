@@ -22,4 +22,5 @@ add_executable(Data_Structures_ex1
         RankPlayerData.h
         main.cpp
         worldcup23a1.cpp
-        worldcup23a1.h)
+        worldcup23a1.h
+        testWC.cpp)
