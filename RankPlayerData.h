@@ -78,11 +78,15 @@ public:
     void setNumCards(int numCards);
 
     void addGoals(int goalsToAdd);
+    void subtractGoals(int goalsToSubtract);
     void addCards(int cardsToAdd);
+    void subtractCards(int cardsToSubtract);
     void increaseGoalKeeper();
+    void decreaseGoalKeeper();
 
 
 
+    std::shared_ptr<AvlTree<RankPlayerData>> m_ptrRankTree;
 private:
     int m_teamID;
     int m_points;
@@ -91,7 +95,6 @@ private:
     int m_goals;
     int m_cards;
     int m_gamesPlayed;
-    std::shared_ptr<AvlTree<RankPlayerData>> m_ptrRankTree;
     std::shared_ptr<LinkedList<RankPlayerData>> m_ptrRankLinkedList;
 };
 
@@ -145,6 +148,28 @@ private:
     bool m_isGoalKeeper;
     Node<TeamData>* m_ptrTeam;
 };
+
+
+
+class ValidTeams{
+public:
+
+    ValidTeams(int teamID, Node<TeamData>* ptrTeamData);
+    ValidTeams(const ValidTeams& other) = default;
+    ValidTeams& operator=(const ValidTeams& other) = default;
+    ~ValidTeams() = default;
+
+    bool operator<(const ValidTeams& other) const;
+    bool operator>(const ValidTeams& other) const;
+
+
+private:
+    int m_teamID;
+    Node<TeamData>* m_ptrTeamData; // pointer to node in teams' tree
+    int m_points;
+};
+
+
 
 
 

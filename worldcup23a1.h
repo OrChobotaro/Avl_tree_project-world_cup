@@ -22,21 +22,22 @@
 #include <iostream>
 #include <memory>
 #include "EmptyTree.h"
-
+#include "validTeams.h"
 
 
 class world_cup_t {
 private:
+public:
     std::shared_ptr<AvlTree<PlayerData>> m_playersAVLTree;
     std::shared_ptr<AvlTree<TeamData>> m_teamsAVLTree;
     std::shared_ptr<AvlTree<RankPlayerData>> m_allPlayersRankTree;
     std::shared_ptr<LinkedList<RankPlayerData>> m_allPlayersRankLinkedList;
-    std::shared_ptr<AvlTree<TeamData>> m_validTeams; // todo: change the type, create class
+    std::shared_ptr<AvlTree<ValidTeams>> m_validTeams;
     int m_numOfPlayers;
 
     StatusType addToRankLinkedList(const RankPlayerData& playerRank, LinkedList<RankPlayerData>* rankList, AvlTree<RankPlayerData>* rankTree, LinkedListNode<RankPlayerData>* nodeToInsert);
 
-public:
+
 	// <DO-NOT-MODIFY> {
 
 	world_cup_t();

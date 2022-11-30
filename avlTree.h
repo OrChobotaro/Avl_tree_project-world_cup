@@ -55,7 +55,7 @@ public:
 
     Node<T>* newNode(const T& key); //todo: לבדוק אם צריך לקבל גם אב
 
-
+    int getHeight();
 
 private:
     Node<T>* m_root;
@@ -287,81 +287,6 @@ Node<T>* AvlTree<T>::removeFromBinaryTree(Node<T> *node) {
 
 
 
-//
-//
-//template<class T>
-//void AvlTree<T>::switchNodes(Node<T> *node1, Node<T> *node2) {
-//
-//    if(node1->isNextTo(node2)){
-//        node1->switchCloseNodes(node2);
-//        return;
-//    }
-//
-//    if (m_root == node1) {
-//        m_root = node2;
-//    }
-//    else if (m_root == node2) {
-//        m_root = node1;
-//    }
-//    Node<T>* leftNode1 = node1->getLeft();
-//    Node<T>* rightNode1 = node1->getRight();
-//    Node<T>* parentNode1 = node1->getParent();
-//    bool isLeftNode1;
-//    if (parentNode1) {
-//        isLeftNode1 = isLeft(parentNode1, node1);
-//    }
-//
-//    Node<T>* leftNode2 = node2->getLeft();
-//    Node<T>* rightNode2 = node2->getRight();
-//    Node<T>* parentNode2 = node2->getParent();
-//    bool isLeftNode2;
-//    if (parentNode2) {
-//        isLeftNode2 = isLeft(parentNode2, node2);
-//    }
-//
-//    node2->setLeft(leftNode1);
-//    if (leftNode1) {
-//        leftNode1->setParent(node2);
-//    }
-//    node2->setRight(rightNode1);
-//    if (rightNode1) {
-//        rightNode1->setParent(node2);
-//    }
-//    node2->setParent(parentNode1);
-//    if (parentNode1) {
-//        if (isLeftNode1) {
-//            parentNode1->setLeft(node2);
-//        }
-//        else {
-//            parentNode1->setRight(node2);
-//        }
-//    }
-//
-//    node1->setLeft(leftNode2);
-//    if (leftNode2) {
-//        leftNode2->setParent(node1);
-//    }
-//    node1->setRight(rightNode2);
-//    if (rightNode2) {
-//        rightNode2->setParent(node1);
-//    }
-//    node1->setParent(parentNode2);
-//    if (parentNode2) {
-//        if (isLeftNode2) {
-//            parentNode2->setLeft(node1);
-//        }
-//        else {
-//            parentNode2->setRight(node1);
-//        }
-//    }
-//
-//    int heightNode2 = node2->getHeight();
-//    node2->setHeight(node1->getHeight());
-//    node1->setHeight(heightNode2);
-//}
-
-
-
 // remove node when has one or less sons.
 template<class T>
 void AvlTree<T>::removeNodeAux(Node<T> *node) {
@@ -410,15 +335,6 @@ void AvlTree<T>::removeNodeAux(Node<T> *node) {
         }
     }
 
-
-//    bool isLeft = node->isLeftNew(parent);
-//    if(isLeft){
-//        parent->setLeft(nullptr);
-//    }
-//    else{
-//        parent->setRight(nullptr);
-//    }
-        // if parent not exist: means the tree has two or less nodes: root and leaf.
     else{
         if(left){
             m_root = left;
@@ -575,22 +491,26 @@ Node<T>* AvlTree<T>::findFollowNode(Node<T>* node){
     return followingNode;
 }
 
-//template<class T>
-//bool AvlTree<T>::isLeft(Node<T>* parent, Node<T>* node){
-//    bool isLeft = false;
-//    if(parent->getLeft() == node){
-//        isLeft = true;
-//    }
-//    return isLeft;
-//}
-
 
 template<class T>
 void AvlTree<T>::setRoot(Node<T> *node) {
     m_root = node;
 }
 
+template<class T>
+int AvlTree<T>::getHeight(){
+    if(m_root == nullptr){
+        return 0;
+    }
+    return m_root->getHeight();
+}
 
+template<class T>
+int numOfNodes(Node<T>* curr) {
+    if (curr == NULL)
+        return 0;
+    return 1+ numOfNodes(curr->getLeft()) + numOfNodes(curr->getRight());
+}
 
 
 #endif //DATA_STRUCTURES_EX1_AvlTree_H
