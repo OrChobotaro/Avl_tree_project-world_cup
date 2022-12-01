@@ -11,6 +11,7 @@
 
 class TeamData;
 class PlayerData;
+class PlayerID;
 
 
 class RankPlayerData {
@@ -71,10 +72,12 @@ public:
     int getGames();
     AvlTree<RankPlayerData>* getPtrRankTree();
     LinkedList<RankPlayerData>* getPtrRankLinkedList();
+    AvlTree<PlayerID>* getPtrIDTree();
 
     void increaseNumPlayers();
     void setPtrRankTree(const std::shared_ptr<AvlTree<RankPlayerData>>& other);
     void setPtrRankList(const std::shared_ptr<LinkedList<RankPlayerData>>& other);
+    void setPtrIDTree(const std::shared_ptr<AvlTree<PlayerID>>& other);
     void setNumPlayers(int numPlayers);
     void setNumGoalKeepers(int numGoalKeepers);
     void setNumGoals(int numGoals);
@@ -100,6 +103,7 @@ private:
     int m_goals;
     int m_cards;
     std::shared_ptr<LinkedList<RankPlayerData>> m_ptrRankLinkedList;
+    std::shared_ptr<AvlTree<PlayerID>> m_ptrIDTree;
 };
 
 
@@ -177,11 +181,41 @@ private:
 
 
 
+class PlayerID {
+public:
+    PlayerID(int playerID, Node<PlayerData>* ptrPlayer);
+    PlayerID(const PlayerID& other) = default;
+    PlayerID& operator=(const PlayerID& other) = default;
+    ~PlayerID() = default;
+
+    bool operator<(const PlayerID& other) const;
+    bool operator>(const PlayerID& other) const;
+
+    Node<PlayerData>* getPtrPlayer() const;
+    int getPlayerID() const;
+
+    void setPtrPlayer(Node<PlayerData>* ptrPlayer);
+
+private:
+    int m_playerId;
+    Node<PlayerData>* m_ptrPlayer;
+};
+
+
 
 
 Node<PlayerData>* findPlayer(int playerID, Node<PlayerData>* root);
+PlayerData findPlayerKey(int playerID, Node<PlayerData>* root);
 
 Node<TeamData>* findTeam(int teamID, Node<TeamData>* root);
+TeamData findTeamKey(int teamID, Node<TeamData>* root);
+
+Node<ValidTeams>* findValidTeam(int teamID, Node<ValidTeams>* root);
+ValidTeams findValidTeamKey(int teamID, Node<ValidTeams>* root);
+
+Node<PlayerID>* findIDPlayer(int playerID, Node<PlayerID>* root);
+PlayerID findIDPlayerKey(int playerID, Node<PlayerID>* root);
+
 
 LinkedListNode<RankPlayerData>* insertNode(const RankPlayerData& rankPlayer, AvlTree<RankPlayerData>* tree,
                                            LinkedList<RankPlayerData>* list);

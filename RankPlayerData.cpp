@@ -101,7 +101,7 @@ bool RankPlayerData::operator>(const RankPlayerData &other) const{
 
 TeamData::TeamData(int TeamID, int points):
         m_teamID(TeamID), m_points(points), m_numPlayers(0), m_numGoalKeepers(0), m_goals(0), m_cards(0),
-        m_gamesPlayed(0), m_ptrRankTree(nullptr), m_ptrRankLinkedList(nullptr){}
+        m_gamesPlayed(0), m_ptrRankTree(nullptr), m_ptrRankLinkedList(nullptr), m_ptrIDTree(nullptr){}
 //todo: add to initialization list highestRankPlayer, ptr to linked list
 
 bool TeamData::operator<(const TeamData& other) const{
@@ -152,6 +152,11 @@ LinkedList<RankPlayerData>* TeamData::getPtrRankLinkedList() {
     return m_ptrRankLinkedList.get();
 }
 
+AvlTree<PlayerID>* TeamData::getPtrIDTree() {
+    return m_ptrIDTree.get();
+}
+
+
 void TeamData::increaseNumPlayers(){
     m_numPlayers+=1;
 }
@@ -162,6 +167,10 @@ void TeamData::setPtrRankTree(const std::shared_ptr<AvlTree<RankPlayerData>>& ot
 
 void TeamData::setPtrRankList(const std::shared_ptr<LinkedList<RankPlayerData>>& other){
     m_ptrRankLinkedList = other;
+}
+
+void TeamData::setPtrIDTree(const std::shared_ptr<AvlTree<PlayerID>> &other) {
+    m_ptrIDTree = other;
 }
 
 void TeamData::addPoints(int pointsToAdd) {
@@ -339,6 +348,12 @@ Node<PlayerData>* findPlayer(int playerID, Node<PlayerData>* root){
 }
 
 
+PlayerData findPlayerKey(int playerID, Node<PlayerData>* root) {
+    Node<PlayerData>* playerNode = findPlayer(playerID, root);
+    return playerNode->getKey();
+}
+
+
 
 Node<TeamData>* findTeam(int teamID, Node<TeamData>* root) {
     Node<TeamData>* temp = root;
@@ -357,9 +372,14 @@ Node<TeamData>* findTeam(int teamID, Node<TeamData>* root) {
     return nullptr;
 }
 
+TeamData findTeamKey(int teamID, Node<TeamData>* root) {
+    Node<TeamData>* team = findTeam(teamID, root);
+    return team->getKey();
+}
 
 
-Node<ValidTeams>* findTeam(int teamID, Node<ValidTeams>* root) {
+
+Node<ValidTeams>* findValidTeam(int teamID, Node<ValidTeams>* root) {
     Node<ValidTeams>* temp = root;
     while (temp) {
         int tempID = temp->getKey().getTeamId();
@@ -374,6 +394,36 @@ Node<ValidTeams>* findTeam(int teamID, Node<ValidTeams>* root) {
         }
     }
     return nullptr;
+}
+
+
+ValidTeams findValidTeamKey(int teamID, Node<ValidTeams>* root) {
+    Node<ValidTeams>* team = findValidTeam(teamID, root);
+    return team->getKey();
+}
+
+
+
+Node<PlayerID>* findIDPlayer(int playerID, Node<PlayerID>* root) {
+    Node<PlayerID>* temp = root;
+    while (temp) {
+        int tempID = temp->getKey().getPlayerID();
+        if (tempID < playerID) {
+            temp = temp->getRight();
+        }
+        else if (tempID > playerID) {
+            temp = temp->getLeft();
+        }
+        else if (tempID == playerID) {
+            return temp;
+        }
+    }
+    return nullptr;
+}
+
+PlayerID findIDPlayerKey(int playerID, Node<PlayerID>* root) {
+    Node<PlayerID>* playerIDNode = findIDPlayer(playerID, root);
+    return playerIDNode->getKey();
 }
 
 
@@ -426,4 +476,32 @@ bool ValidTeams::operator>(const ValidTeams& other) const{
 
 int ValidTeams::getTeamId() const {
     return m_teamID;
+}
+
+
+
+
+
+//////////--------------------------------------------------------
+
+PlayerID::PlayerID(int playerID, Node<PlayerData> *ptrPlayer) : m_playerId(playerID), m_ptrPlayer(ptrPlayer) {};
+
+Node<PlayerData>* PlayerID::getPtrPlayer() const {
+    return m_ptrPlayer;
+}
+
+int PlayerID::getPlayerID() const {
+    return m_playerId;
+}
+
+void PlayerID::setPtrPlayer(Node<PlayerData> *ptrPlayer) {
+    m_ptrPlayer = ptrPlayer;
+}
+
+bool PlayerID::operator<(const PlayerID &other) const {
+    return m_playerId < other.m_playerId;
+}
+
+bool PlayerID::operator>(const PlayerID &other) const {
+    return !(*this < other);
 }

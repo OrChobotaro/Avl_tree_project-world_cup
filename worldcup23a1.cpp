@@ -166,7 +166,6 @@ StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
 
         // create rank node
         RankPlayerData playerRank(playerId, goals, cards, m_playersAVLTree->find(newPlayer));
-
         // add to all players tree
         m_allPlayersRankTree->insert(playerRank);
         // update rank node in player's node
@@ -178,27 +177,16 @@ StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
 
 
 
-
         try {
             // insert node to all players list
-            //LinkedListNode<RankPlayerData>* nodeToInsertAllPlayersList = new LinkedListNode<RankPlayerData>
-                    (playerRank);
-            LinkedListNode<RankPlayerData>* nodeToInsertAllPlayersList = addToRankLinkedList(playerRank, m_allPlayersRankLinkedList.get(),
-                                                           m_allPlayersRankTree.get());
-            LinkedListNode<RankPlayerData>* nodeToInsertTeamList = addToRankLinkedList(playerRank, teamNode->getKey().getPtrRankLinkedList(),
-                                                                                       teamNode->getKey().getPtrRankTree());
-            // add to all players tree
-            m_allPlayersRankTree->insert(playerRank);
-
-            //add to team rank tree
-            teamNode->m_key.getPtrRankTree()->insert(playerRank);
+            LinkedListNode<RankPlayerData>* nodeToInsertAllPlayersList = addToRankLinkedList(playerRank, m_allPlayersRankLinkedList.get(), m_allPlayersRankTree.get());
             m_allPlayersRankTree->find(playerRank)->m_key.setPtrRankPlayerList(nodeToInsertAllPlayersList);
 
 
 
             // insert node to team's list
-            //LinkedListNode<RankPlayerData>* nodeToInsertTeamList = new LinkedListNode<RankPlayerData>(playerRank);
-
+            LinkedListNode<RankPlayerData>* nodeToInsertTeamList = addToRankLinkedList(playerRank,
+                                                                                           teamNode->getKey().getPtrRankLinkedList(), teamNode->getKey().getPtrRankTree());
             teamNode->getKey().getPtrRankTree()->find(playerRank)->m_key.setPtrRankPlayerList(nodeToInsertTeamList);
 
         }
@@ -215,13 +203,15 @@ StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
 }
 
 
+
+
 LinkedListNode<RankPlayerData>* world_cup_t::addToRankLinkedList(const RankPlayerData& playerRank, LinkedList<RankPlayerData>* rankList,
                                    AvlTree<RankPlayerData>* rankTree) {
     LinkedListNode<RankPlayerData>* nodeToInsert = new LinkedListNode<RankPlayerData>(playerRank);
     //find the node and check if player is left son or right
     bool isPlayerLeft = false;
     Node<RankPlayerData>* rankNode = rankTree->find(playerRank);
-    Node<RankPlayerData>* parent = rankTree->find(playerRank);
+    Node<RankPlayerData>* parent = rankTree->findParentBeforeInsert(playerRank);
 
 
     if(parent) {
@@ -242,6 +232,8 @@ LinkedListNode<RankPlayerData>* world_cup_t::addToRankLinkedList(const RankPlaye
 
     return nodeToInsert;
 }
+
+
 
 
 StatusType world_cup_t::remove_player(int playerId)
@@ -269,6 +261,10 @@ StatusType world_cup_t::remove_player(int playerId)
     playerToRemove->m_key.setPtrRankAllPlayersTree(nullptr);
     m_allPlayersRankTree->remove(rankPlayer);
 
+    PlayerID playerID = findIDPlayerKey(playerId, playerTeam->getKey().getPtrIDTree()->getRoot());
+    playerTeam->getKey().getPtrIDTree()->remove(playerID);
+
+
     int newNumGoals = playerTeam->getKey().getGoals() - playerToRemove->getKey().getGoals();
     playerTeam->m_key.setNumGoals(newNumGoals);
 
@@ -281,7 +277,18 @@ StatusType world_cup_t::remove_player(int playerId)
     int newNumGoalKeepers = playerTeam->getKey().getNumGoalKeepers() - playerToRemove->getKey().isGoalKeeper();
     playerTeam->m_key.setNumGoals(newNumGoalKeepers);
 
-    m_numOfPlayers += 1;
+    m_numOfPlayers -= 1;
+
+    if (newNumPlayersInTeam < 11 || newNumGoalKeepers <= 0 ) {
+        ValidTeams team = findValidTeamKey(playerTeam->getKey().getTeamID(), m_validTeams.get()->getRoot());
+        m_validTeams.get()->remove(team);
+        ///////todo:check that the TeamData doesn't have a PTR to ValidTeamPtr
+    }
+
+
+
+    playerToRemove->m_key.setPtrTeam(nullptr);
+    m_playersAVLTree->remove(findPlayerKey(playerId, m_playersAVLTree->getRoot()));
 
 
 
@@ -659,6 +666,79 @@ void listToArr(LinkedList<RankPlayerData>* list, int *const output){
 
 output_t<int> world_cup_t::get_closest_player(int playerId, int teamId)
 {
+    if(playerId <= 0 || teamId <= 0) {
+        return StatusType::INVALID_INPUT;
+    }
+
+    Node<TeamData>* teamNode = findTeam(teamId, m_teamsAVLTree->getRoot());
+    if (!teamNode) {
+        return StatusType::FAILURE;
+    }
+    Node<PlayerID>* playerIDNode = findIDPlayer(playerId, teamNode->getKey().getPtrIDTree()->getRoot());
+    if (!playerIDNode) {
+        return StatusType::FAILURE;
+    }
+
+    Node<PlayerData>* playerNode = playerIDNode->getKey().getPtrPlayer();
+    LinkedListNode<RankPlayerData>* playerLinkedList = playerNode->getKey().getPtrRankAllPlayersTree()->getKey().getPtrRankPlayerList();
+
+    int playerGoals = playerLinkedList->getData().getGoals();
+    int playerCards = playerLinkedList->getData().getCards();
+
+    LinkedListNode<RankPlayerData>* playerBefore = playerLinkedList->getPrevious();
+    int playerBeforeGoals = playerBefore->getData().getGoals();
+    int playerBeforeCards = playerBefore->getData().getCards();
+    int playerBeforeID = playerBefore->getData().getPlayerID();
+
+    LinkedListNode<RankPlayerData>* playerAfter = playerLinkedList->getNext();
+    int playerAfterGoals = playerAfter->getData().getGoals();
+    int playerAfterCards = playerAfter->getData().getCards();
+    int playerAfterID = playerAfter->getData().getPlayerID();
+
+    if (playerBefore == m_allPlayersRankLinkedList->getStart() || playerAfter != m_allPlayersRankLinkedList->getEnd()) {
+        return playerAfter->getData().getPlayerID();
+    }
+    else if (playerBefore != m_allPlayersRankLinkedList->getStart() || playerAfter ==
+    m_allPlayersRankLinkedList->getEnd()) {
+        return playerBefore->getData().getPlayerID();
+    }
+
+    if ((playerAfterGoals - playerGoals) > (playerGoals - playerBeforeGoals)) {
+        return playerBefore->getData().getPlayerID();
+    }
+    else if ((playerAfterGoals - playerGoals) < (playerGoals - playerBeforeGoals)) {
+        return playerAfter->getData().getPlayerID();
+    }
+    else {
+        if ((playerAfterCards - playerCards) > (playerCards - playerBeforeCards)) {
+            return playerBefore->getData().getPlayerID();
+        }
+        else if ((playerAfterCards - playerCards) < (playerCards - playerBeforeCards)) {
+            return playerAfter->getData().getPlayerID();
+        }
+        else {
+            if ((playerAfterID - playerId) > (playerId - playerBeforeID)) {
+                return playerBefore->getData().getPlayerID();
+            }
+            else if ((playerAfterID - playerId) < (playerId - playerBeforeID)) {
+                return playerAfter->getData().getPlayerID();
+            }
+            else {
+                if (playerBeforeID < playerAfterID) {
+                    return playerAfter->getData().getPlayerID();
+                }
+                else if (playerBeforeID > playerAfterID) {
+                    return playerBefore->getData().getPlayerID();
+                }
+                else {
+                    return StatusType::FAILURE;
+                }
+            }
+        }
+    }
+
+
+
 	// TODO: Your code goes here
 	return 1006;
 }

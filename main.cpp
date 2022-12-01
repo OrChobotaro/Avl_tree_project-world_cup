@@ -379,7 +379,11 @@ int main(){
     wc1.add_player(105, 22, 2, 3, 3, true);
     wc1.add_player(106, 22, 2, 3, 3, true);
 
-    wc1.remove_team(21);
+    output_t<int> closestTO5 = wc1.get_closest_player(5, 21);
+
+    wc1.add_team(24, 78);
+
+    wc1.remove_team(24);
 
     wc1.play_match(21, 22);
     wc1.get_num_played_games(3);
@@ -394,7 +398,7 @@ int main(){
     output_t<int> numPlayers = wc1.get_all_players_count(-5);
 
 
-    RankPlayerData rankPlayer(3, 4, 2, findPlayer(3, wc1.m_playersAVLTree.get()->getRoot()));
+    //RankPlayerData rankPlayer(3, 4, 2, findPlayer(3, wc1.m_playersAVLTree.get()->getRoot()));
     //insertNode(rankPlayer, wc1.m_allPlayersRankTree.get(), wc1.m_allPlayersRankLinkedList.get());
 
     return 0;
