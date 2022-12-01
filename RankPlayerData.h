@@ -40,12 +40,12 @@ public:
 
 
     LinkedListNode<RankPlayerData>* m_ptrLinkedList;
+    Node<RankPlayerData>* m_ptrRankTree;
 private:
     int m_playerID;
     int m_goals;
     int m_cards;
     Node<PlayerData>* m_ptrPlayer; // pointer to players' tree
-    Node<RankPlayerData>* m_ptrRankTree;
 };
 
 
@@ -86,18 +86,19 @@ public:
     void subtractCards(int cardsToSubtract);
     void increaseGoalKeeper();
     void decreaseGoalKeeper();
+    void addPoints(int pointsToAdd);
 
 
 
+    int m_points;
+    int m_gamesPlayed;
     std::shared_ptr<AvlTree<RankPlayerData>> m_ptrRankTree;
 private:
     int m_teamID;
-    int m_points;
     int m_numPlayers;
     int m_numGoalKeepers;
     int m_goals;
     int m_cards;
-    int m_gamesPlayed;
     std::shared_ptr<LinkedList<RankPlayerData>> m_ptrRankLinkedList;
 };
 

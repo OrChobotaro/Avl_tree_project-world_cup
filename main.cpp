@@ -341,29 +341,58 @@ bool isWorking;
 int main(){
     world_cup_t wc1;
 
-    wc1.add_team(21, 100);
+    wc1.add_team(21, 78);
 
     StatusType s1 = wc1.add_player(2,21,2,3,3,false);
     wc1.add_player(3,21,9,3,8,false);
     wc1.add_player(4, 21, 2, 1, 3, true);
     wc1.add_player(5, 21, 5, 4, 3, false);
-/*    wc1.add_player(8, 21, 2, 60, 3, true);
+    wc1.add_player(8, 21, 2, 60, 3, true);
     wc1.add_player(1, 21, 30, 3, 3, true);
     wc1.add_player(10, 21, 5, 3, 17, false);
-    wc1.add_player(10, 21, 5, 3, 17, false);
-    wc1.add_player(-1, 21, 5, 3, 17, false);*/
+    wc1.add_player(200, 21, 5, 3, 17, false);
+    wc1.add_player(201, 21, 5, 3, 17, false);
+    wc1.add_player(202, 21, 5, 3, 17, false);
+    wc1.add_player(203, 21, 5, 3, 17, false);
+    wc1.add_player(204, 21, 5, 3, 17, false);
 
-    wc1.add_team(22, 100);
+
+    wc1.add_team(22, 45);
 
     wc1.add_player(6,22,2,3,17,false);
     wc1.add_player(7,22,2,5,3,false);
     wc1.add_player(20, 22, 2, 3, 3, true);
     wc1.add_player(9, 22, 2, 3, 3, true);
 
+
     //wc1.remove_player(20);
     //wc1.unite_teams(21, 22, 23);
     //wc1.update_player_stats(3, 5, 2, 1);
     //wc1.remove_team(1);
+
+    wc1.add_player(30, 22, 2, 3, 3, true);
+    wc1.add_player(100, 22, 2, 100, 3, true);
+    wc1.add_player(101, 22, 2, 3, 3, true);
+    wc1.add_player(102, 22, 2, 3, 3, true);
+    wc1.add_player(103, 22, 2, 3, 3, true);
+    wc1.add_player(104, 22, 2, 3, 3, true);
+    wc1.add_player(105, 22, 2, 3, 3, true);
+    wc1.add_player(106, 22, 2, 3, 3, true);
+
+    wc1.remove_team(21);
+
+    wc1.play_match(21, 22);
+    wc1.get_num_played_games(3);
+    output_t<int> team22points = wc1.get_team_points(22);
+    output_t<int> team21points = wc1.get_team_points(21);
+
+    output_t<int> topScorer = wc1.get_top_scorer(-3);
+    output_t<int> topScorerTeam21 = wc1.get_top_scorer(21);
+
+    output_t<int> numPlayersTeam21 = wc1.get_all_players_count(21);
+    output_t<int> numPlayersTeam22 = wc1.get_all_players_count(22);
+    output_t<int> numPlayers = wc1.get_all_players_count(-5);
+
 
     RankPlayerData rankPlayer(3, 4, 2, findPlayer(3, wc1.m_playersAVLTree.get()->getRoot()));
     //insertNode(rankPlayer, wc1.m_allPlayersRankTree.get(), wc1.m_allPlayersRankLinkedList.get());
