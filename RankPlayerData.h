@@ -83,18 +83,19 @@ public:
     void subtractCards(int cardsToSubtract);
     void increaseGoalKeeper();
     void decreaseGoalKeeper();
+    void addPoints(int pointsToAdd);
 
 
 
+    int m_points;
+    int m_gamesPlayed;
     std::shared_ptr<AvlTree<RankPlayerData>> m_ptrRankTree;
 private:
     int m_teamID;
-    int m_points;
     int m_numPlayers;
     int m_numGoalKeepers;
     int m_goals;
     int m_cards;
-    int m_gamesPlayed;
     std::shared_ptr<LinkedList<RankPlayerData>> m_ptrRankLinkedList;
 };
 
