@@ -1,6 +1,7 @@
 #include "RankPlayerData.h"
 
 
+
 RankPlayerData::RankPlayerData(int playerID, int goals, int cards, Node<PlayerData>* m_ptrPlayer):
         m_playerID(playerID), m_goals(goals), m_cards(cards), m_ptrPlayer(m_ptrPlayer), m_ptrLinkedList(nullptr),
         m_ptrRankTree(nullptr) {}
@@ -8,6 +9,15 @@ RankPlayerData::RankPlayerData(int playerID, int goals, int cards, Node<PlayerDa
 
 int RankPlayerData::getPlayerID() const {
     return m_playerID;
+}
+
+int RankPlayerData::getGoals() const {
+    return m_goals;
+}
+
+
+int RankPlayerData::getCards() const {
+    return m_cards;
 }
 
 
@@ -111,7 +121,7 @@ int TeamData::getTeamID() {
 }
 
 int TeamData::getTeamPoints() {
-    return this->m_teamID;
+    return this->m_points;
 }
 
 int TeamData::getNumPlayers() {
@@ -263,9 +273,14 @@ bool PlayerData::isGoalKeeper() const{
 //    m_individualGamesPlayed = individualGamesPlayed;
 //}
 
-void PlayerData::setPlayerID(int teamID) {
-    m_playerID = m_playerID;
+void PlayerData::setPlayerID(int playerID) {
+    m_playerID = playerID;
 }
+
+void PlayerData::setIndividualGamesPlayed(int individualGamesPlayed) {
+    m_individualGamesPlayed = individualGamesPlayed;
+}
+
 
 void PlayerData::setPtrRankAllPlayersTree(Node<RankPlayerData> *node) {
     m_PtrRankAllPlayersTree = node;
@@ -343,10 +358,57 @@ Node<TeamData>* findTeam(int teamID, Node<TeamData>* root) {
 }
 
 
+
+Node<ValidTeams>* findTeam(int teamID, Node<ValidTeams>* root) {
+    Node<ValidTeams>* temp = root;
+    while (temp) {
+        int tempID = temp->getKey().getTeamId();
+        if (tempID < teamID) {
+            temp = temp->getRight();
+        }
+        else if (tempID > teamID) {
+            temp = temp->getLeft();
+        }
+        else if (tempID == teamID) {
+            return temp;
+        }
+    }
+    return nullptr;
+}
+
+
+/*/////can insert a node to a list only after the node exists in the tree
+LinkedListNode<RankPlayerData>* insertNode(const RankPlayerData& rankPlayer, AvlTree<RankPlayerData>* tree,
+                                           LinkedList<RankPlayerData>* list) {
+    Node<RankPlayerData>* playerTreeNode = tree->find(rankPlayer);
+    Node<RankPlayerData>* parentTreeNode = playerTreeNode->getParent();
+    LinkedListNode<RankPlayerData>* playerListNode = new LinkedListNode<RankPlayerData>(rankPlayer);
+
+    if (parentTreeNode) {
+        bool isLeft = playerTreeNode->isLeftNew(parentTreeNode);
+        LinkedListNode<RankPlayerData>* parentListNode = parentTreeNode->getKey().getPtrRankPlayerList();
+        if (isLeft) {
+            list->insertBefore(parentListNode, playerListNode);
+        }
+        else {
+            list->insertAfter(parentListNode, playerListNode);
+        }
+    }
+
+    else {
+        Node<RankPlayerData>* rightSonTree = playerTreeNode->getRight();
+        LinkedListNode<RankPlayerData>* rightSonList = rightSonTree->getKey().getPtrRankPlayerList();
+        list->insertBefore(playerListNode, rightSonList);
+    }
+    return playerListNode;
+}*/
+
+
+
 ////---------------------------------
 
 
-#include "validTeams.h"
+
 
 
 ValidTeams::ValidTeams(int teamID, Node<TeamData>* ptrTeamData) :
@@ -360,4 +422,8 @@ bool ValidTeams::operator<(const ValidTeams& other) const{
 
 bool ValidTeams::operator>(const ValidTeams& other) const{
     return this->m_teamID > other.m_teamID;
+}
+
+int ValidTeams::getTeamId() const {
+    return m_teamID;
 }

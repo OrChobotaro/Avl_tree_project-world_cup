@@ -29,6 +29,8 @@ public:
     void removeNodeAux(Node<T>* node);
     void removeAvlTree(Node<T>* node);
 
+    Node<T>* findParentBeforeInsert(const T& key);
+
 
 
     //todo: check if needed!
@@ -511,6 +513,28 @@ int numOfNodes(Node<T>* curr) {
         return 0;
     return 1+ numOfNodes(curr->getLeft()) + numOfNodes(curr->getRight());
 }
+
+
+
+template<class T>
+Node<T>* AvlTree<T>::findParentBeforeInsert(const T &key) {
+    Node<T>* temp = m_root;
+    Node<T>* parent = nullptr;
+    while (temp != nullptr) {
+        parent = temp;
+        if (key < temp->getKey()) {
+            temp = temp->getLeft();
+        }
+        else if (key > temp->getKey()) {
+            temp = temp->getRight();
+        }
+        else {
+            return nullptr;
+        }
+    }
+    return parent;
+}
+
 
 
 #endif //DATA_STRUCTURES_EX1_AvlTree_H
