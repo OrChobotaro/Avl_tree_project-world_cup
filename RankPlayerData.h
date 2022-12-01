@@ -21,6 +21,9 @@ public:
     ~RankPlayerData() = default;
 
     int getPlayerID() const;
+    int getGoals() const;
+    int getCards() const;
+
     Node<PlayerData>* getPlayerPtr() const;
     Node<RankPlayerData>* getPtrRankPlayerTree() const;
     LinkedListNode<RankPlayerData>* getPtrRankPlayerList() const;
@@ -121,8 +124,8 @@ public:
     Node<RankPlayerData>* getPtrRankAllPlayersTree() const;
     Node<TeamData>* getPtrTeam() const;
 
-    void setPlayerID(int teamID);
-//    void setIndividualGamesPlayed(int individualGamesPlayed);
+    void setPlayerID(int playerID);
+    void setIndividualGamesPlayed(int individualGamesPlayed);
     void setGoals(int goals);
     void setCards(int cards);
     void setTeamID(int teamID);
@@ -159,6 +162,8 @@ public:
     ValidTeams& operator=(const ValidTeams& other) = default;
     ~ValidTeams() = default;
 
+    int getTeamId() const;
+
     bool operator<(const ValidTeams& other) const;
     bool operator>(const ValidTeams& other) const;
 
@@ -176,6 +181,10 @@ private:
 Node<PlayerData>* findPlayer(int playerID, Node<PlayerData>* root);
 
 Node<TeamData>* findTeam(int teamID, Node<TeamData>* root);
+
+LinkedListNode<RankPlayerData>* insertNode(const RankPlayerData& rankPlayer, AvlTree<RankPlayerData>* tree,
+                                           LinkedList<RankPlayerData>* list);
+
 
 
 

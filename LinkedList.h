@@ -272,4 +272,7 @@ StatusType uniteLists(LinkedListNode<T>* startList1, LinkedListNode<T>* startLis
 
 
 
+
+
+
 #endif //DATA_STRUCTURES_EX1_LINKEDLIST_H

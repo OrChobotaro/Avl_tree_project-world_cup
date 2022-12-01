@@ -35,7 +35,8 @@ public:
     std::shared_ptr<AvlTree<ValidTeams>> m_validTeams;
     int m_numOfPlayers;
 
-    StatusType addToRankLinkedList(const RankPlayerData& playerRank, LinkedList<RankPlayerData>* rankList, AvlTree<RankPlayerData>* rankTree, LinkedListNode<RankPlayerData>* nodeToInsert);
+    LinkedListNode<RankPlayerData>* addToRankLinkedList(const RankPlayerData& playerRank,LinkedList<RankPlayerData>* rankList,
+                                                        AvlTree<RankPlayerData>* rankTree);
 
 
 	// <DO-NOT-MODIFY> {

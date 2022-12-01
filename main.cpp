@@ -346,25 +346,27 @@ int main(){
     StatusType s1 = wc1.add_player(2,21,2,3,3,false);
     wc1.add_player(3,21,9,3,8,false);
     wc1.add_player(4, 21, 2, 1, 3, true);
-    wc1.add_player(5, 21, 5, 3, 3, false);
-    wc1.add_player(8, 21, 2, 60, 3, true);
+    wc1.add_player(5, 21, 5, 4, 3, false);
+/*    wc1.add_player(8, 21, 2, 60, 3, true);
     wc1.add_player(1, 21, 30, 3, 3, true);
     wc1.add_player(10, 21, 5, 3, 17, false);
     wc1.add_player(10, 21, 5, 3, 17, false);
-    wc1.add_player(-1, 21, 5, 3, 17, false);
+    wc1.add_player(-1, 21, 5, 3, 17, false);*/
 
     wc1.add_team(22, 100);
 
-    wc1.add_player(6,22,2,3,3,false);
-    wc1.add_player(7,22,2,3,3,false);
+    wc1.add_player(6,22,2,3,17,false);
+    wc1.add_player(7,22,2,5,3,false);
     wc1.add_player(20, 22, 2, 3, 3, true);
     wc1.add_player(9, 22, 2, 3, 3, true);
 
-    wc1.remove_player(20);
-//    wc1.unite_teams(21, 22, 23);
+    //wc1.remove_player(20);
+    //wc1.unite_teams(21, 22, 23);
+    //wc1.update_player_stats(3, 5, 2, 1);
+    //wc1.remove_team(1);
 
-    wc1.remove_team(1);
-
+    RankPlayerData rankPlayer(3, 4, 2, findPlayer(3, wc1.m_playersAVLTree.get()->getRoot()));
+    //insertNode(rankPlayer, wc1.m_allPlayersRankTree.get(), wc1.m_allPlayersRankLinkedList.get());
 
     return 0;
 }

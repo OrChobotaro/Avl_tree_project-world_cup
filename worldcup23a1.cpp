@@ -165,23 +165,28 @@ StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
 
         // create rank node
         RankPlayerData playerRank(playerId, goals, cards, m_playersAVLTree->find(newPlayer));
-        // add to all players tree
-        m_allPlayersRankTree->insert(playerRank);
 
-        //add to team rank tree
-        teamNode->m_key.getPtrRankTree()->insert(playerRank);
 
 
 
         try {
             // insert node to all players list
-            LinkedListNode<RankPlayerData>* nodeToInsertAllPlayersList = new LinkedListNode<RankPlayerData>(playerRank);
-            addToRankLinkedList(playerRank, m_allPlayersRankLinkedList.get(), m_allPlayersRankTree.get(), nodeToInsertAllPlayersList);
+            //LinkedListNode<RankPlayerData>* nodeToInsertAllPlayersList = new LinkedListNode<RankPlayerData>
+                    (playerRank);
+            LinkedListNode<RankPlayerData>* nodeToInsertAllPlayersList = addToRankLinkedList(playerRank, m_allPlayersRankLinkedList.get(),
+                                                           m_allPlayersRankTree.get());
+            LinkedListNode<RankPlayerData>* nodeToInsertTeamList = addToRankLinkedList(playerRank, teamNode->getKey().getPtrRankLinkedList(),
+                                                                                       teamNode->getKey().getPtrRankTree());
+            // add to all players tree
+            m_allPlayersRankTree->insert(playerRank);
+
+            //add to team rank tree
+            teamNode->m_key.getPtrRankTree()->insert(playerRank);
             m_allPlayersRankTree->find(playerRank)->m_key.setPtrRankPlayerList(nodeToInsertAllPlayersList);
 
             // insert node to team's list
-            LinkedListNode<RankPlayerData>* nodeToInsertTeamList = new LinkedListNode<RankPlayerData>(playerRank);
-            addToRankLinkedList(playerRank, teamNode->getKey().getPtrRankLinkedList(), teamNode->getKey().getPtrRankTree(), nodeToInsertTeamList);
+            //LinkedListNode<RankPlayerData>* nodeToInsertTeamList = new LinkedListNode<RankPlayerData>(playerRank);
+
             teamNode->getKey().getPtrRankTree()->find(playerRank)->m_key.setPtrRankPlayerList(nodeToInsertTeamList);
 
         }
@@ -199,11 +204,13 @@ StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
 }
 
 
-StatusType world_cup_t::addToRankLinkedList(const RankPlayerData& playerRank, LinkedList<RankPlayerData>* rankList, AvlTree<RankPlayerData>* rankTree, LinkedListNode<RankPlayerData>* nodeToInsert) {
+LinkedListNode<RankPlayerData>* world_cup_t::addToRankLinkedList(const RankPlayerData& playerRank, LinkedList<RankPlayerData>* rankList,
+                                   AvlTree<RankPlayerData>* rankTree) {
+    LinkedListNode<RankPlayerData>* nodeToInsert = new LinkedListNode<RankPlayerData>(playerRank);
     //find the node and check if player is left son or right
     bool isPlayerLeft = false;
     Node<RankPlayerData>* rankNode = rankTree->find(playerRank);
-    Node<RankPlayerData>* parent = rankNode->getParent();
+    Node<RankPlayerData>* parent = rankTree->find(playerRank);
 
 
     if(parent) {
@@ -225,13 +232,52 @@ StatusType world_cup_t::addToRankLinkedList(const RankPlayerData& playerRank, Li
         rankList->insertAfter(rankList->getStart(), nodeToInsert);
     }
 
-    return StatusType::SUCCESS;
+    return nodeToInsert;
 }
 
 
 StatusType world_cup_t::remove_player(int playerId)
 {
-	//find player in players' tree
+    Node<PlayerData>* playerToRemove = findPlayer(playerId, m_playersAVLTree->getRoot());
+    Node<TeamData>* playerTeam = playerToRemove->getKey().getPtrTeam();
+    RankPlayerData rankPlayer = playerToRemove->getKey().getPtrRankTeamPlayerTree()->getKey();
+
+    LinkedListNode<RankPlayerData>* nodeToDeleteLinkedListTeam = playerToRemove->getKey().getPtrRankTeamPlayerTree()
+            ->getKey().getPtrRankPlayerList();
+    playerToRemove->getKey().getPtrRankTeamPlayerTree()->m_key.setPtrRankPlayerList(nullptr);
+    playerTeam->getKey().getPtrRankLinkedList()->deleteNode(nodeToDeleteLinkedListTeam);
+
+    Node<RankPlayerData>* nodeToDeleteRankTreeTeam = playerToRemove->getKey().getPtrRankTeamPlayerTree();
+    playerToRemove->m_key.setPtrRankTeamPlayerTree(nullptr);
+    playerTeam->getKey().getPtrRankTree()->remove(rankPlayer);
+
+    LinkedListNode<RankPlayerData>* nodeToDeleteLinkedListAllPlayers = playerToRemove->getKey()
+            .getPtrRankAllPlayersTree()->getKey().getPtrRankPlayerList();
+    playerToRemove->getKey().getPtrRankAllPlayersTree()->m_key.setPtrRankPlayerList(nullptr);
+    m_allPlayersRankLinkedList->deleteNode(nodeToDeleteLinkedListAllPlayers);
+
+    Node<RankPlayerData>* nodeToDeleteRankTreeAllPlayers = playerToRemove->getKey().getPtrRankAllPlayersTree();
+    playerToRemove->m_key.setPtrRankAllPlayersTree(nullptr);
+    m_allPlayersRankTree->remove(rankPlayer);
+
+    int newNumGoals = playerTeam->getKey().getGoals() - playerToRemove->getKey().getGoals();
+    playerTeam->m_key.setNumGoals(newNumGoals);
+
+    int newNumCards = playerTeam->getKey().getCard() - playerToRemove->getKey().getCards();
+    playerTeam->m_key.setNumCards(newNumCards);
+
+    int newNumPlayersInTeam = playerTeam->getKey().getNumPlayers() - 1;
+    playerTeam->m_key.setNumPlayers(newNumPlayersInTeam);
+
+    int newNumGoalKeepers = playerTeam->getKey().getNumGoalKeepers() - playerToRemove->getKey().isGoalKeeper();
+    playerTeam->m_key.setNumGoals(newNumGoalKeepers);
+
+    m_numOfPlayers += 1;
+
+
+
+
+/*	//find player in players' tree
     Node<PlayerData>* playerToRemove = findPlayer(playerId, m_playersAVLTree->getRoot());
 
     if(!playerToRemove){
@@ -255,7 +301,7 @@ StatusType world_cup_t::remove_player(int playerId)
     //remove player from team's rank tree
     //todo: save linked list node address and assign to null before deleting
     RankPlayerData rankPlayerToRemove(playerId, 0, 0, nullptr);
-    teamOfPlayer->m_key.m_ptrRankTree->remove(rankPlayerToRemove);
+    teamOfPlayer->m_key.m_ptrRankTree->remove(rankPlayerToRemove);*/
 
     //remove player from team's rank list
 
@@ -273,13 +319,79 @@ StatusType world_cup_t::remove_player(int playerId)
 	return StatusType::SUCCESS;
 }
 
+
+
 StatusType world_cup_t::update_player_stats(int playerId, int gamesPlayed, int scoredGoals, int cardsReceived)
 {
     if (playerId <= 0 || gamesPlayed < 0 || scoredGoals < 0 || cardsReceived < 0) {
         return StatusType::INVALID_INPUT;
     }
+    Node<PlayerData>* playerNode = findPlayer(playerId, m_playersAVLTree->getRoot());
+    Node<TeamData>* teamNode = findTeam(playerNode->getKey().getTeamID(), m_teamsAVLTree->getRoot());
+    RankPlayerData oldRankPlayerData = playerNode->getKey().getPtrRankTeamPlayerTree()->getKey();
+    int oldIndividualGames = playerNode->getKey().getIndividualGamesPlayed();
 
-	// TODO: Your code goes here
+    teamNode->getKey().getPtrRankTree()->remove(oldRankPlayerData);
+    m_allPlayersRankTree->remove(oldRankPlayerData);
+    teamNode->getKey().getPtrRankLinkedList()->deleteNode(playerNode->m_key.getPtrRankTeamPlayerTree()->getKey()
+    .getPtrRankPlayerList());
+    m_allPlayersRankLinkedList->deleteNode(playerNode->m_key.getPtrRankAllPlayersTree()->getKey()
+    .getPtrRankPlayerList());
+
+
+
+    int newGamesPlayed = oldIndividualGames + gamesPlayed;
+    playerNode->m_key.setIndividualGamesPlayed(newGamesPlayed);
+    int newGoals = oldRankPlayerData.getGoals() + scoredGoals;
+    playerNode->m_key.setGoals(newGoals);
+    int newCards = oldRankPlayerData.getCards() + cardsReceived;
+    playerNode->m_key.setCards(newCards);
+
+    RankPlayerData newRankData(playerId, newGoals, newCards, oldRankPlayerData.getPlayerPtr());
+
+    try {
+        teamNode->m_key.getPtrRankTree()->insert(newRankData);
+        Node<RankPlayerData>* newNodeTeamTree = teamNode->m_key.getPtrRankTree()->find(newRankData);
+        playerNode->m_key.setPtrRankTeamPlayerTree(newNodeTeamTree);
+
+        m_allPlayersRankTree->insert(newRankData);
+        Node<RankPlayerData>* newNodeAllPlayersTree = m_allPlayersRankTree->find(newRankData);
+        playerNode->m_key.setPtrRankAllPlayersTree(newNodeAllPlayersTree);
+
+
+        LinkedListNode<RankPlayerData>* newNodeTeamList = addToRankLinkedList(newRankData, teamNode->getKey()
+        .getPtrRankLinkedList(), teamNode->getKey().getPtrRankTree());
+        LinkedListNode<RankPlayerData>* newNodeAllPlayersList = addToRankLinkedList(newRankData, teamNode->getKey()
+        .getPtrRankLinkedList(), teamNode->getKey().getPtrRankTree());
+
+        newNodeTeamTree->m_key.setPtrRankPlayerList(newNodeTeamList);
+        newNodeAllPlayersTree->m_key.setPtrRankPlayerList(newNodeAllPlayersList);
+
+        newNodeTeamList->m_data.setPtrRankPlayerTree(newNodeTeamTree);
+        newNodeAllPlayersList->m_data.setPtrRankPlayerTree(newNodeAllPlayersTree);
+    }
+    catch (const std::bad_alloc& e) {
+        ////////////////////////////todo
+        return StatusType::FAILURE;
+    }
+
+    int newTotGoals = teamNode->getKey().getGoals() + scoredGoals;
+    teamNode->m_key.setNumGoals(newTotGoals);
+
+    int newTotCards = teamNode->getKey().getCard() +cardsReceived;
+    teamNode->m_key.setNumCards(newTotCards);
+
+/*    RankPlayerData newRankDataForTeamTree(newRankData);
+    newRankDataForTeamTree.setPtrRankPlayerList(playerNode->getKey().getPtrRankTeamPlayerTree()->getKey()
+                                                        .getPtrRankPlayerList());
+
+    RankPlayerData newRankDataForAllPlayersTree(newRankData);
+    newRankDataForAllPlayersTree.setPtrRankPlayerList(playerNode->getKey().getPtrRankAllPlayersTree()->getKey()
+                                                              .getPtrRankPlayerList());
+
+    RankPlayerData newRankDataForTeamLinkedList(newRankData);
+    newRankDataForTeamLinkedList.setPtrRankPlayerTree(playerNode->get)*/
+
 	return StatusType::SUCCESS;
 }
 
@@ -306,46 +418,35 @@ StatusType world_cup_t::unite_teams(int teamId1, int teamId2, int newTeamId)
     if (teamId1 <= 0 || teamId2 <= 0 || newTeamId <= 0 || teamId1 == teamId2) {
         return StatusType::INVALID_INPUT;
     }
-    // creates object to find
-    TeamData team1(teamId1, 0);
-    // find the object
-    Node<TeamData>* nodeTeam1 = m_teamsAVLTree->find(team1);
+    Node<TeamData>* nodeTeam1 = findTeam(teamId1, m_teamsAVLTree->getRoot());
     if (nodeTeam1 == nullptr) {
         return StatusType::FAILURE;
     }
 
-    TeamData team2(teamId2, 0);
-    Node<TeamData>* nodeTeam2 = m_teamsAVLTree->find(team2);
+    Node<TeamData>* nodeTeam2 = findTeam(teamId2, m_teamsAVLTree->getRoot());
     if (nodeTeam2 == nullptr) {
         return StatusType::FAILURE;
     }
 
-    TeamData newTeam(newTeamId, 0);
     if (newTeamId != teamId1 || newTeamId != teamId2) {
-        Node<TeamData>* nodeNewTeam = m_teamsAVLTree->find(newTeam);
+        Node<TeamData>* nodeNewTeam = findTeam(newTeamId, m_teamsAVLTree->getRoot());
         if (nodeNewTeam) {
             return StatusType::FAILURE;
         }
     }
 
     int newTeamPoints = nodeTeam1->getKey().getTeamPoints() + nodeTeam2->getKey().getTeamPoints();
+    int newTeamSize = nodeTeam1->getKey().getNumPlayers() + nodeTeam2->getKey().getNumPlayers();
+    int newTeamGoalKeepers = nodeTeam1->getKey().getNumGoalKeepers() + nodeTeam2->getKey().getNumGoalKeepers();
+    int newTeamGoals = nodeTeam1->getKey().getGoals() + nodeTeam2->getKey().getGoals();
+    int newTeamCards = nodeTeam1->getKey().getCard() + nodeTeam2->getKey().getCard();
+
     StatusType result = add_team(newTeamId, newTeamPoints);
     if (result != StatusType::SUCCESS) {
         return result;
     }
-    Node<TeamData>* nodeNewTeam = m_teamsAVLTree->find(newTeam);
 
-    int newTeamSize = nodeTeam1->getKey().getNumPlayers() + nodeTeam2->getKey().getNumPlayers();
-    nodeNewTeam->m_key.setNumPlayers(newTeamSize);
-
-    int newTeamGoalKeepers = nodeTeam1->getKey().getNumGoalKeepers() + nodeTeam2->getKey().getNumGoalKeepers();
-    nodeNewTeam->m_key.setNumGoalKeepers(newTeamGoalKeepers);
-
-    int newTeamGoals = nodeTeam1->getKey().getGoals() + nodeTeam2->getKey().getGoals();
-    nodeNewTeam->m_key.setNumGoals(newTeamGoals);
-
-    int newTeamCards = nodeTeam1->getKey().getCard() + nodeTeam2->getKey().getCard();
-    nodeNewTeam->m_key.setNumCards(newTeamCards);
+    Node<TeamData>* nodeNewTeam = findTeam(newTeamId, m_teamsAVLTree->getRoot());
 
     LinkedList<RankPlayerData>* playersTeam1 = nodeTeam1->getKey().getPtrRankLinkedList();
     LinkedListNode<RankPlayerData>* playerTeam1 = playersTeam1->getStart()->getNext();
@@ -354,6 +455,7 @@ StatusType world_cup_t::unite_teams(int teamId1, int teamId2, int newTeamId)
         playerTeam1->getData().getPlayerPtr()->m_key.increaseIndividualGamesPlayer(gamesPlayed);
         playerTeam1->getData().getPlayerPtr()->m_key.setTeamID(newTeamId);
         playerTeam1->getData().getPlayerPtr()->m_key.setPtrTeam(nodeNewTeam);
+        playerTeam1 = playerTeam1->getNext();
     }
     playerTeam1 = nullptr;
 
@@ -364,9 +466,9 @@ StatusType world_cup_t::unite_teams(int teamId1, int teamId2, int newTeamId)
         playerTeam2->getData().getPlayerPtr()->m_key.increaseIndividualGamesPlayer(gamesPlayed);
         playerTeam2->getData().getPlayerPtr()->m_key.setTeamID(newTeamId);
         playerTeam2->getData().getPlayerPtr()->m_key.setPtrTeam(nodeNewTeam);
+        playerTeam2 = playerTeam2->getNext();
     }
     playerTeam2 = nullptr;
-
 
 
     uniteLists(nodeTeam1->getKey().getPtrRankLinkedList()->getStart(),
@@ -374,13 +476,43 @@ StatusType world_cup_t::unite_teams(int teamId1, int teamId2, int newTeamId)
                nodeNewTeam->getKey().getPtrRankLinkedList()->getStart(),
                 nodeNewTeam->getKey().getPtrRankLinkedList()->getEnd());
 
+
+    nodeTeam1->m_key.setNumPlayers(0);
+    nodeTeam2->m_key.setNumPlayers(0);
+
+    ////////////////////////////////////todo: the tree & LinkedList are sharedPtr, suppose to be deleted
+    nodeTeam1->m_key.setPtrRankTree(nullptr);
+    nodeTeam2->m_key.setPtrRankTree(nullptr);
+    nodeTeam1->m_key.setPtrRankList(nullptr);
+    nodeTeam1->m_key.setPtrRankList(nullptr);
+
+    StatusType removeTeam1 = remove_team(teamId1);
+    StatusType removeTeam2 = remove_team(teamId2);
+    if (removeTeam1 != StatusType::SUCCESS || removeTeam2 != StatusType::SUCCESS) {
+        /////////// The UniteTeam suppose to split, and the players will return to their old teams
+        /////////The Problem: we already merged the lists...
+        return StatusType::FAILURE;
+    }
+
+    nodeNewTeam->m_key.setNumPlayers(newTeamSize);
+    nodeNewTeam->m_key.setNumGoalKeepers(newTeamGoalKeepers);
+    nodeNewTeam->m_key.setNumGoals(newTeamGoals);
+    nodeNewTeam->m_key.setNumCards(newTeamCards);
+
     if (nodeNewTeam->getKey().getPtrRankLinkedList()->countNodes() != newTeamSize) {
         return StatusType::FAILURE;
     }
 
     RankPlayerData nullRank(-1, -1, -1, nullptr);
-    buildEmptyTree(newTeamSize, nullRank, *nodeNewTeam->m_key.getPtrRankTree());
-    updateEmptyTree(*nodeNewTeam->m_key.getPtrRankTree(), *nodeNewTeam->m_key.getPtrRankLinkedList());
+    try {
+        buildEmptyTree(newTeamSize, nullRank, *nodeNewTeam->m_key.getPtrRankTree());
+        updateEmptyTree(*nodeNewTeam->m_key.getPtrRankTree(), *nodeNewTeam->m_key.getPtrRankLinkedList());
+    }
+    catch (std::bad_alloc& e) {
+        /////////// The UniteTeam suppose to split, and the players will return to their old teams
+        /////////The Problem: we already merged the lists...
+        return StatusType::ALLOCATION_ERROR;
+    }
 
     return StatusType::SUCCESS;
 }
