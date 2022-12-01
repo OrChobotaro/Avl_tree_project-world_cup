@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.20)
-project(Data_Structures_ex1)
+project(DS_WET1)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(Data_Structures_ex1
+add_executable(DS_WET1
         Node.cpp
         Node.h
         avlTree.cpp

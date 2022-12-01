@@ -1,3 +1,4 @@
+/*
 #include <iostream>
 using namespace std;
 
@@ -115,8 +116,12 @@ bool test_add_player_till_valid_team(){
     StatusType s9 = wc.add_player(25, 5, 6, 9, 5, false);
     StatusType s10 = wc.add_player(16, 5, 7, 7, 1, true);
     StatusType s11 = wc.add_player(26, 5, 6, 9, 5, false);
-    return s0 == StatusType::SUCCESS && s1 == StatusType::SUCCESS && s2 == StatusType::SUCCESS && s3 == StatusType::SUCCESS /*&&
-           wc.m_playersAVLTree->getHeight() == 1*/ && numOfNodes(wc.m_playersAVLTree->getRoot()) == 11 /*&& wc.m_allPlayersRankTree->getHeight() == 1*/ &&
+    return s0 == StatusType::SUCCESS && s1 == StatusType::SUCCESS && s2 == StatusType::SUCCESS && s3 == StatusType::SUCCESS */
+/*&&
+           wc.m_playersAVLTree->getHeight() == 1*//*
+ && numOfNodes(wc.m_playersAVLTree->getRoot()) == 11 */
+/*&& wc.m_allPlayersRankTree->getHeight() == 1*//*
+ &&
            numOfNodes(wc.m_allPlayersRankTree->getRoot()) == 11 && wc.m_allPlayersRankLinkedList.get()->countNodes() == 11 &&
            findTeam(5, wc.m_teamsAVLTree->getRoot())->getKey().getNumGoalKeepers() == 5 && numOfNodes(wc.m_validTeams->getRoot()) == 1;
 }
@@ -137,4 +142,4 @@ int main2() {
     RUN_TEST(test_add_player);
     RUN_TEST(test_add_player_till_valid_team);
     return 0;
-}
+}*/

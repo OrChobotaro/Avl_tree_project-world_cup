@@ -154,6 +154,12 @@ void TeamData::setPtrRankList(const std::shared_ptr<LinkedList<RankPlayerData>>&
     m_ptrRankLinkedList = other;
 }
 
+void TeamData::addPoints(int pointsToAdd) {
+    m_points += pointsToAdd;
+}
+
+
+
 
 
 void TeamData::setNumPlayers(int numPlayers) {

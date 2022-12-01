@@ -48,6 +48,7 @@ world_cup_t::~world_cup_t()
 }
 
 
+// todo: create new tree
 StatusType world_cup_t::add_team(int teamId, int points)
 {
 
@@ -110,7 +111,7 @@ StatusType world_cup_t::remove_team(int teamId)
 	return res;
 }
 
-// todo: check the parent before rotations
+// todo: add player to new tree
 StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
                                    int goals, int cards, bool goalKeeper)
 {
@@ -231,48 +232,7 @@ StatusType world_cup_t::addToRankLinkedList(const RankPlayerData& playerRank, Li
 
 StatusType world_cup_t::remove_player(int playerId)
 {
-	//find player in players' tree
-    Node<PlayerData>* playerToRemove = findPlayer(playerId, m_playersAVLTree->getRoot());
 
-    if(!playerToRemove){
-        return StatusType::FAILURE;
-    }
-
-    //find team in from pointer in player
-    Node<TeamData>* teamOfPlayer = playerToRemove->m_key.getPtrTeam();
-
-    //decrease number of goalkeepers
-    if(playerToRemove->m_key.isGoalKeeper()){
-        teamOfPlayer->m_key.decreaseGoalKeeper();
-    }
-
-    //decrease number of card
-    teamOfPlayer->m_key.subtractCards(playerToRemove->getKey().getCards());
-
-    //decrease number of goals
-    teamOfPlayer->m_key.subtractGoals(playerToRemove->getKey().getGoals());
-
-    //remove player from team's rank tree
-    //todo: save linked list node address and assign to null before deleting
-    RankPlayerData rankPlayerToRemove(playerId, playerToRemove->getKey().getGoals(), playerToRemove->getKey().getCards(), nullptr);
-    teamOfPlayer->m_key.m_ptrRankTree->remove(rankPlayerToRemove);
-
-    //remove player from team's rank list
-//     find the node in the list: player -> team rank tree -> team rank list
-    LinkedListNode<RankPlayerData>* listNodeToRemove = playerToRemove->m_key.getPtrRankTeamPlayerTree()->m_key.getPtrRankPlayerList(); // todo: check if pointer of team's list saved
-    teamOfPlayer->m_key.getPtrRankLinkedList()->deleteNode(listNodeToRemove);
-
-    //remove player from all rank tree
-
-    //remove player from all rank list
-
-    //remove player from all players tree
-
-    //check if team still valid, if not - remove
-
-    //is success, remove 1 from total players
-
-    //todo: if not success, reverse all (keep the data of the player and add it again)
 	return StatusType::SUCCESS;
 }
 
@@ -285,20 +245,71 @@ StatusType world_cup_t::update_player_stats(int playerId, int gamesPlayed, int s
 
 StatusType world_cup_t::play_match(int teamId1, int teamId2)
 {
-	// TODO: Your code goes here
-	return StatusType::SUCCESS;
+    if (teamId1 <= 0 || teamId2 <= 0 || teamId1 == teamId2) {
+        return StatusType::INVALID_INPUT;
+    }
+    // Save both teams
+    Node<TeamData>* team1 = findTeam(teamId1, m_teamsAVLTree->getRoot());
+    if (!team1) {
+        return StatusType::FAILURE;
+    }
+    Node<TeamData>* team2 = findTeam(teamId2, m_teamsAVLTree->getRoot());
+    if (!team2) {
+        return  StatusType::FAILURE;
+    }
+
+    if (team1->m_key.getNumPlayers() < 11 || team1->m_key.getNumGoalKeepers() == 0 ||
+        team2->m_key.getNumPlayers() < 11 || team2->m_key.getNumGoalKeepers() == 0) {
+        return StatusType::FAILURE;
+    }
+
+    int team1Score = team1->getKey().getTeamPoints() + team1->getKey().getGoals() - team1->getKey().getCard();
+    int team2Score = team2->getKey().getTeamPoints() + team2->getKey().getGoals() - team2->getKey().getCard();
+
+    if (team1Score > team2Score) {
+        team1->m_key.m_points+=3;
+    }
+    else if (team2Score > team1Score) {
+        team2->m_key.m_points+=3;
+    }
+    else {
+        team1->m_key.m_points+=1;
+        team2->m_key.m_points+=1;
+    }
+
+    team1->m_key.m_gamesPlayed++;
+    team2->m_key.m_gamesPlayed++;
+
+    return StatusType::SUCCESS;
 }
 
 output_t<int> world_cup_t::get_num_played_games(int playerId)
 {
-	// TODO: Your code goes here
-	return 22;
+    if (playerId <= 0) {
+        return StatusType::INVALID_INPUT;
+    }
+
+    Node<PlayerData>* player = findPlayer(playerId, m_playersAVLTree->getRoot());
+    if (!player) {
+        return StatusType::FAILURE;
+    }
+
+    int playerGames = player->getKey().getIndividualGamesPlayed();
+    int teamGames = player->m_key.getPtrTeam()->getKey().getGames();
+
+    return playerGames + teamGames;
 }
 
 output_t<int> world_cup_t::get_team_points(int teamId)
 {
-	// TODO: Your code goes here
-	return 30003;
+	if(teamId<=0){
+        return StatusType::INVALID_INPUT;
+    }
+    Node<TeamData>* team = findTeam(teamId, m_teamsAVLTree->getRoot());
+    if(!team){
+        return StatusType::FAILURE;
+    }
+	return team->getKey().m_points;
 }
 
 
@@ -390,23 +401,77 @@ StatusType world_cup_t::unite_teams(int teamId1, int teamId2, int newTeamId)
 
 output_t<int> world_cup_t::get_top_scorer(int teamId)
 {
-	// TODO: Your code goes here
-	return 2008;
+	if(teamId==0){
+        return StatusType::INVALID_INPUT;
+
+    } else if(teamId < 0){
+        // find the last node in all players' rank list
+        LinkedListNode<RankPlayerData>* topScorer = m_allPlayersRankLinkedList->getEnd()->getPrevious();
+        return topScorer->getData().getPlayerID();
+    }
+
+    Node<TeamData>* team = findTeam(teamId, m_teamsAVLTree->getRoot());
+    if(!team || team->getKey().getNumPlayers() == 0){
+        return StatusType::FAILURE;
+    }
+
+    // return top scorer of the team
+    // find the last node in the team's rank list
+   LinkedListNode<RankPlayerData>* teamTopScorer = team->getKey().getPtrRankLinkedList()->getEnd()->getPrevious();
+   return teamTopScorer->getData().getPlayerID();
+
 }
 
 output_t<int> world_cup_t::get_all_players_count(int teamId)
 {
-	// TODO: Your code goes here
-    static int i = 0;
-    return (i++==0) ? 11 : 2;
+
+    if(teamId == 0){
+        return StatusType::INVALID_INPUT;
+    }
+
+    // return total num of players
+    else if(teamId<0){
+        return m_numOfPlayers;
+    }
+
+    // return num of players in team
+    Node<TeamData>* team = findTeam(teamId, m_teamsAVLTree->getRoot());
+    if(!team){
+        return StatusType::FAILURE;
+    }
+    return team->getKey().getNumPlayers();
+
 }
 
 StatusType world_cup_t::get_all_players(int teamId, int *const output)
 {
-	// TODO: Your code goes here
-    output[0] = 4001;
-    output[1] = 4002;
+
+    if(!output || teamId == 0){
+        return StatusType::INVALID_INPUT;
+    }
+
+    else if(teamId < 0){
+        if(m_numOfPlayers == 0){
+            return StatusType::FAILURE;
+        }
+
+    }
+
+    else{
+        Node<TeamData>* team = findTeam(teamId, m_teamsAVLTree->getRoot());
+        if(!team || team->m_key.getNumPlayers() == 0){
+            return StatusType::FAILURE;
+        }
+
+    }
+
 	return StatusType::SUCCESS;
+}
+
+
+// todo: create function
+void listToArr(LinkedList<RankPlayerData>* list, int *const output){
+
 }
 
 output_t<int> world_cup_t::get_closest_player(int playerId, int teamId)
