@@ -555,22 +555,8 @@ StatusType world_cup_t::unite_teams(int teamId1, int teamId2, int newTeamId)
                 nodeNewTeam->getKey().getPtrRankLinkedList()->getEnd());
 
 
-    nodeTeam1->m_key.setNumPlayers(0);
-    nodeTeam2->m_key.setNumPlayers(0);
 
-    ////////////////////////////////////todo: the tree & LinkedList are sharedPtr, suppose to be deleted
-    nodeTeam1->m_key.setPtrRankTree(nullptr);
-    nodeTeam2->m_key.setPtrRankTree(nullptr);
-    nodeTeam1->m_key.setPtrRankList(nullptr);
-    nodeTeam1->m_key.setPtrRankList(nullptr);
 
-    StatusType removeTeam1 = remove_team(teamId1);
-    StatusType removeTeam2 = remove_team(teamId2);
-    if (removeTeam1 != StatusType::SUCCESS || removeTeam2 != StatusType::SUCCESS) {
-        /////////// The UniteTeam suppose to split, and the players will return to their old teams
-        /////////The Problem: we already merged the lists...
-        return StatusType::FAILURE;
-    }
 
     nodeNewTeam->m_key.setNumPlayers(newTeamSize);
     nodeNewTeam->m_key.setNumGoalKeepers(newTeamGoalKeepers);
@@ -590,6 +576,26 @@ StatusType world_cup_t::unite_teams(int teamId1, int teamId2, int newTeamId)
         /////////// The UniteTeam suppose to split, and the players will return to their old teams
         /////////The Problem: we already merged the lists...
         return StatusType::ALLOCATION_ERROR;
+    }
+
+
+    nodeTeam1->m_key.setNumPlayers(0);
+    nodeTeam2->m_key.setNumPlayers(0);
+
+    ////////////////////////////////////todo: the tree & LinkedList are sharedPtr, suppose to be deleted
+/*    nodeTeam1->m_key.setPtrRankTree(nullptr);
+    nodeTeam2->m_key.setPtrRankTree(nullptr);
+    nodeTeam1->m_key.setPtrRankList(nullptr);
+    nodeTeam2->m_key.setPtrRankList(nullptr);
+    nodeTeam1->m_key.setPtrIDTree(nullptr);
+    nodeTeam2->m_key.setPtrIDTree(nullptr);*/
+
+    StatusType removeTeam1 = remove_team(teamId1);
+    StatusType removeTeam2 = remove_team(teamId2);
+    if (removeTeam1 != StatusType::SUCCESS || removeTeam2 != StatusType::SUCCESS) {
+        /////////// The UniteTeam suppose to split, and the players will return to their old teams
+        /////////The Problem: we already merged the lists...
+        return StatusType::FAILURE;
     }
 
     return StatusType::SUCCESS;

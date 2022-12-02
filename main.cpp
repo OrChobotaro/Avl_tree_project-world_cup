@@ -347,32 +347,35 @@ int main(){
     wc1.add_player(3,21,9,3,8,false);
     wc1.add_player(4, 21, 2, 1, 3, true);
     wc1.add_player(5, 21, 5, 4, 3, false);
-    wc1.add_player(8, 21, 2, 60, 3, true);
-    wc1.add_player(1, 21, 30, 3, 3, true);
+    wc1.add_player(8, 21, 2, 60, 20, true);
+    wc1.add_player(1, 21, 30, 3, 3, true);/*
     wc1.add_player(10, 21, 5, 3, 17, false);
-    wc1.add_player(200, 21, 5, 3, 17, false);
+    wc1.add_player(200, 21, 5, 7, 1, false);
     wc1.add_player(201, 21, 5, 3, 17, false);
     wc1.add_player(202, 21, 5, 3, 17, false);
     wc1.add_player(203, 21, 5, 3, 17, false);
-    wc1.add_player(204, 21, 5, 3, 17, false);
+    wc1.add_player(204, 21, 5, 3, 17, false);*/
 
 
     wc1.add_team(22, 45);
 
-    wc1.add_player(6,22,2,400,17,false);
+    wc1.add_player(6,22,2,40,17,false);
     wc1.add_player(7,22,2,5,3,false);
-    wc1.add_player(20, 22, 2, 3, 3, true);
+    wc1.add_player(20, 22, 2, 2, 3, true);
     wc1.add_player(9, 22, 2, 5, 5, true);
-    wc1.add_player(30, 22, 2, 3, 50, true);
-    wc1.add_player(106, 22, 2, 3, 3, true);
+    wc1.add_player(30, 22, 2, 7, 50, true);
+/*    wc1.add_player(106, 22, 2, 3, 3, true);
     wc1.add_player(100, 22, 2, 100, 3, true);
     wc1.add_player(101, 22, 2, 3, 3, true);
     wc1.add_player(102, 22, 2, 3, 3, true);
     wc1.add_player(103, 22, 2, 3, 3, true);
     wc1.add_player(104, 22, 2, 300, 3, true);
-    wc1.add_player(105, 22, 2, 3, 3, true);
+    wc1.add_player(105, 22, 2, 3, 3, true);*/
 
-//    output_t<int> closestTO5 = wc1.get_closest_player(5, 21);
+
+    //output_t<int> closestTO5 = wc1.get_closest_player(5, 21);
+    //wc1.remove_player(5);
+    wc1.unite_teams(21, 22, 23);
 
     wc1.add_team(24, 78);
 
