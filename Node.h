@@ -13,7 +13,7 @@ public:
     Node(const T& key);
     Node(const Node& otherNode) = default;
     Node& operator=(const Node& otherNode) = delete;
-    ~Node() = default;
+    virtual ~Node() = default;
 
     T getKey();
     Node<T>* getParent() const;
@@ -53,7 +53,7 @@ private:
 
 template<class T>
 Node<T>::Node(const T& key):
-    m_key(key), m_parent(nullptr), m_height(0), m_left(nullptr), m_right(nullptr){};
+    m_key(key), m_right(nullptr), m_left(nullptr), m_parent(nullptr), m_height(0){};
 
 
 template<class T>

@@ -96,6 +96,7 @@ public:
     int m_points;
     int m_gamesPlayed;
     std::shared_ptr<AvlTree<RankPlayerData>> m_ptrRankTree;
+    std::shared_ptr<AvlTree<PlayerID>> m_ptrIDTree;
 private:
     int m_teamID;
     int m_numPlayers;
@@ -103,7 +104,6 @@ private:
     int m_goals;
     int m_cards;
     std::shared_ptr<LinkedList<RankPlayerData>> m_ptrRankLinkedList;
-    std::shared_ptr<AvlTree<PlayerID>> m_ptrIDTree;
 };
 
 

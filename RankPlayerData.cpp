@@ -3,8 +3,8 @@
 
 
 RankPlayerData::RankPlayerData(int playerID, int goals, int cards, Node<PlayerData>* m_ptrPlayer):
-        m_playerID(playerID), m_goals(goals), m_cards(cards), m_ptrPlayer(m_ptrPlayer), m_ptrLinkedList(nullptr),
-        m_ptrRankTree(nullptr) {}
+        m_ptrLinkedList(nullptr), m_ptrRankTree(nullptr), m_playerID(playerID), m_goals(goals), m_cards(cards),
+        m_ptrPlayer(m_ptrPlayer){}
 
 
 int RankPlayerData::getPlayerID() const {
@@ -100,8 +100,8 @@ bool RankPlayerData::operator>(const RankPlayerData &other) const{
 
 
 TeamData::TeamData(int TeamID, int points):
-        m_teamID(TeamID), m_points(points), m_numPlayers(0), m_numGoalKeepers(0), m_goals(0), m_cards(0),
-        m_gamesPlayed(0), m_ptrRankTree(nullptr), m_ptrRankLinkedList(nullptr), m_ptrIDTree(nullptr){}
+        m_points(points), m_gamesPlayed(0), m_ptrRankTree(nullptr), m_ptrIDTree(nullptr), m_teamID(TeamID),
+        m_numPlayers(0), m_numGoalKeepers(0), m_goals(0), m_cards(0), m_ptrRankLinkedList(nullptr){}
 //todo: add to initialization list highestRankPlayer, ptr to linked list
 
 bool TeamData::operator<(const TeamData& other) const{
@@ -225,8 +225,8 @@ void TeamData::decreaseGoalKeeper(){
 
 
 PlayerData::PlayerData(int playerID, int teamID, int gamesPlayed, int goals, int cards, bool goalKeeper) :
-        m_playerID(playerID),m_teamID(teamID), m_individualGamesPlayed(gamesPlayed), m_goals(goals), m_cards(cards),
-        m_isGoalKeeper(goalKeeper), m_ptrTeam(nullptr) ,m_PtrRankAllPlayersTree(nullptr), m_PtrRankTeamPlayerTree(nullptr){}
+        m_playerID(playerID),m_teamID(teamID), m_individualGamesPlayed(gamesPlayed),
+        m_goals(goals), m_cards(cards), m_isGoalKeeper(goalKeeper), m_ptrTeam(nullptr) ,m_PtrRankTeamPlayerTree(nullptr), m_PtrRankAllPlayersTree(nullptr){}
 
 
 
@@ -503,5 +503,5 @@ bool PlayerID::operator<(const PlayerID &other) const {
 }
 
 bool PlayerID::operator>(const PlayerID &other) const {
-    return !(*this < other);
+    return m_playerId > other.m_playerId;
 }
