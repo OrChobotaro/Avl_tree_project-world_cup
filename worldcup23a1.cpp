@@ -571,9 +571,6 @@ StatusType world_cup_t::unite_teams(int teamId1, int teamId2, int newTeamId)
                 nodeNewTeam->getKey().getPtrRankLinkedList()->getEnd());
 
 
-
-
-
     nodeNewTeam->m_key.setNumPlayers(newTeamSize);
     nodeNewTeam->m_key.setNumGoalKeepers(newTeamGoalKeepers);
     nodeNewTeam->m_key.setNumGoals(newTeamGoals);
@@ -587,6 +584,38 @@ StatusType world_cup_t::unite_teams(int teamId1, int teamId2, int newTeamId)
     try {
         buildEmptyTree(newTeamSize, nullRank, *nodeNewTeam->m_key.getPtrRankTree());
         updateEmptyTree(*nodeNewTeam->m_key.getPtrRankTree(), *nodeNewTeam->m_key.getPtrRankLinkedList());
+    }
+    catch (std::bad_alloc& e) {
+        /////////// The UniteTeam suppose to split, and the players will return to their old teams
+        /////////The Problem: we already merged the lists...
+        return StatusType::ALLOCATION_ERROR;
+    }
+
+    PlayerID nullPlayerID(-1, nullptr);
+    std::shared_ptr<LinkedList<PlayerID>> listTeam1 = AVLTreeToLinkedListPlayerID(nodeTeam1->getKey().getPtrIDTree(),
+                                                              nullPlayerID, nodeTeam1->getKey().getNumPlayers());
+    LinkedListNode<PlayerID>* startNodeList1 = listTeam1->getStart();
+    LinkedListNode<PlayerID>* endNodeList1 = listTeam1->getStart();
+    std::shared_ptr<LinkedList<PlayerID>> listTeam2 = AVLTreeToLinkedListPlayerID(nodeTeam2->getKey().getPtrIDTree(),
+                                                              nullPlayerID, nodeTeam2->getKey().getNumPlayers());
+    LinkedListNode<PlayerID>* startNodeList2 = listTeam2->getStart();
+    LinkedListNode<PlayerID>* endNodeList2 = listTeam2->getStart();
+
+    std::shared_ptr<LinkedList<PlayerID>> listNewTeam(new LinkedList<PlayerID>);
+    LinkedListNode<PlayerID>* nodeStart = new LinkedListNode<PlayerID>(nullPlayerID);
+    LinkedListNode<PlayerID>* nodeEnd = new LinkedListNode<PlayerID>(nullPlayerID);
+    nodeStart->setNext(nodeEnd);
+    nodeEnd->setPrevious(nodeStart);
+    listNewTeam->setStart(nodeStart);
+    listNewTeam->setEnd(nodeEnd);
+
+
+    uniteLists(listTeam1.get()->getStart(), listTeam2.get()->getStart(), nodeStart, nodeEnd);
+
+
+    try {
+        buildEmptyTreePlayerID(newTeamSize, nullPlayerID, *nodeNewTeam->m_key.getPtrIDTree());
+        updateEmptyTreePlayerID(*nodeNewTeam->m_key.getPtrIDTree(), *listNewTeam.get());
     }
     catch (std::bad_alloc& e) {
         /////////// The UniteTeam suppose to split, and the players will return to their old teams

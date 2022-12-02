@@ -38,5 +38,33 @@ void updateEmptyTree(AvlTree<RankPlayerData>& emptyTree, LinkedList<RankPlayerDa
 
 
 
+void buildEmptyTreePlayerID(int requiredSize, const PlayerID& nullKey, AvlTree<PlayerID>& tree);
+
+void buildCompleteEmptyTreePlayerID(int requiredSize, const PlayerID& nullKey, AvlTree<PlayerID>& tree);
+
+void auxEmptyTreePlayerID(AvlTree<PlayerID>& tree, Node<PlayerID>* node, int height, const PlayerID& nullKey);
+
+void deleteNodesEmptyTreeAuxPlayerID(Node<PlayerID>* node, int* numNodesToDelete, int height);
+
+void removeLeafPlayerID(Node<PlayerID>* node);
+
+int calcDistFromRootPlayerID(Node<PlayerID>* node);
+
+void updateEmptyTreePlayerID(AvlTree<PlayerID>& emptyTree, LinkedList<PlayerID>& list);
+
+void updateEmptyTreeAuxPlayerID(Node<PlayerID>* treeNode, LinkedListNode<PlayerID>** listNode);
+
+
+
+
+
+std::shared_ptr<LinkedList<PlayerID>> AVLTreeToLinkedListPlayerID(AvlTree<PlayerID>* tree, const PlayerID& nullParam, int treeSize);
+void AVLTreeToLinkedListPlayerIDAux(Node<PlayerID>* nodeTree, LinkedListNode<PlayerID>** nodeList);
+
+void AVLTreeToLinkedListValidTeamsAux(Node<ValidTeams>* nodeTree, LinkedListNode<ValidTeams>** nodeList);
+std::shared_ptr<LinkedList<ValidTeams>> AVLTreeToLinkedListValidTeams(AvlTree<ValidTeams>* tree, const ValidTeams& nullParam,
+                                                                      int treeSize);
+
+
 
 #endif //DATA_STRUCTURES_EX1_EMPTYTREE_H
