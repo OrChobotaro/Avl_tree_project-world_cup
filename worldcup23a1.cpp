@@ -179,8 +179,6 @@ StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
             LinkedListNode<RankPlayerData>* nodeToInsertAllPlayersList = addToRankLinkedList(playerRank, m_allPlayersRankLinkedList.get(), m_allPlayersRankTree.get());
 
 
-
-
             // insert node to team's list
             LinkedListNode<RankPlayerData>* nodeToInsertTeamList = addToRankLinkedList(playerRank,
                                                                                            teamNode->getKey().getPtrRankLinkedList(), teamNode->getKey().getPtrRankTree());
@@ -266,7 +264,7 @@ StatusType world_cup_t::remove_player(int playerId)
     playerToRemove->getKey().getPtrRankTeamPlayerTree()->m_key.setPtrRankPlayerList(nullptr);
     playerTeam->getKey().getPtrRankLinkedList()->deleteNode(nodeToDeleteLinkedListTeam);
 
-    Node<RankPlayerData>* nodeToDeleteRankTreeTeam = playerToRemove->getKey().getPtrRankTeamPlayerTree();
+//    Node<RankPlayerData>* nodeToDeleteRankTreeTeam = playerToRemove->getKey().getPtrRankTeamPlayerTree();
     playerToRemove->m_key.setPtrRankTeamPlayerTree(nullptr);
     playerTeam->getKey().getPtrRankTree()->remove(rankPlayer);
 
@@ -275,12 +273,12 @@ StatusType world_cup_t::remove_player(int playerId)
     playerToRemove->getKey().getPtrRankAllPlayersTree()->m_key.setPtrRankPlayerList(nullptr);
     m_allPlayersRankLinkedList->deleteNode(nodeToDeleteLinkedListAllPlayers);
 
-    Node<RankPlayerData>* nodeToDeleteRankTreeAllPlayers = playerToRemove->getKey().getPtrRankAllPlayersTree();
+//    Node<RankPlayerData>* nodeToDeleteRankTreeAllPlayers = playerToRemove->getKey().getPtrRankAllPlayersTree();
     playerToRemove->m_key.setPtrRankAllPlayersTree(nullptr);
     m_allPlayersRankTree->remove(rankPlayer);
 
     PlayerID playerID = findIDPlayerKey(playerId, playerTeam->getKey().getPtrIDTree()->getRoot());
-    playerTeam->getKey().getPtrIDTree()->remove(playerID);
+    playerTeam->m_key.m_ptrIDTree->remove(playerID);
 
 
     int newNumGoals = playerTeam->getKey().getGoals() - playerToRemove->getKey().getGoals();
@@ -371,12 +369,17 @@ StatusType world_cup_t::update_player_stats(int playerId, int gamesPlayed, int s
     RankPlayerData oldRankPlayerData = playerNode->getKey().getPtrRankTeamPlayerTree()->getKey();
     int oldIndividualGames = playerNode->getKey().getIndividualGamesPlayed();
 
+
+    LinkedListNode<RankPlayerData>* listTeamNode = playerNode->m_key.getPtrRankTeamPlayerTree()->getKey().getPtrRankPlayerList();
+    LinkedList<RankPlayerData>* teamList = teamNode->getKey().getPtrRankLinkedList();
+
     teamNode->getKey().getPtrRankTree()->remove(oldRankPlayerData);
+    LinkedListNode<RankPlayerData>* listNode = playerNode->m_key.getPtrRankAllPlayersTree()->getKey().getPtrRankPlayerList();
+    m_allPlayersRankLinkedList->deleteNode(listNode);
     m_allPlayersRankTree->remove(oldRankPlayerData);
-    teamNode->getKey().getPtrRankLinkedList()->deleteNode(playerNode->m_key.getPtrRankTeamPlayerTree()->getKey()
-    .getPtrRankPlayerList());
-    m_allPlayersRankLinkedList->deleteNode(playerNode->m_key.getPtrRankAllPlayersTree()->getKey()
-    .getPtrRankPlayerList());
+    teamList->deleteNode(listTeamNode);
+
+
 
 
 

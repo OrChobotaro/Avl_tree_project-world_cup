@@ -1,3 +1,4 @@
+/*
 #include <iostream>
 using namespace std;
 
@@ -116,13 +117,18 @@ bool test_add_player_till_valid_team(){
     StatusType s10 = wc.add_player(16, 5, 7, 7, 1, true);
     StatusType s11 = wc.add_player(26, 5, 6, 9, 5, false);
     return s0 == StatusType::SUCCESS && s1 == StatusType::SUCCESS && s2 == StatusType::SUCCESS && s3 == StatusType::SUCCESS
+*/
 /*&&
-           wc.m_playersAVLTree->getHeight() == 1*/
+           wc.m_playersAVLTree->getHeight() == 1*//*
+
  && numOfNodes(wc.m_playersAVLTree->getRoot()) == 11
-/*&& wc.m_allPlayersRankTree->getHeight() == 1*/
+*/
+/*&& wc.m_allPlayersRankTree->getHeight() == 1*//*
+
  &&
            numOfNodes(wc.m_allPlayersRankTree->getRoot()) == 11 && wc.m_allPlayersRankLinkedList.get()->countNodes() == 11 &&
-           findTeam(5, wc.m_teamsAVLTree->getRoot())->getKey().getNumGoalKeepers() == 5 && numOfNodes(wc.m_validTeams->getRoot()) == 1;
+           findTeam(5, wc.m_teamsAVLTree->getRoot())->getKey().getNumGoalKeepers() == 5 && numOfNodes(wc.m_validTeams->getRoot()) == 1 &&
+           numOfNodes(findTeam(5,wc.m_teamsAVLTree->getRoot())->getKey().getPtrIDTree()->getRoot()) == 11;
 }
 
 
@@ -168,8 +174,9 @@ bool test_remove_from_valid_teams(){
     StatusType s11 = wc.add_player(26, 5, 6, 9, 5, false);
 
     StatusType s12 = wc.remove_player(9);
-
-    return s12== StatusType::SUCCESS && numOfNodes(wc.m_validTeams->getRoot()) == 0 && wc.m_validTeams->getHeight() == -1;
+    int numNodes = numOfNodes(findTeam(5,wc.m_teamsAVLTree->getRoot())->getKey().getPtrIDTree()->getRoot());
+    return s12== StatusType::SUCCESS && numOfNodes(wc.m_validTeams->getRoot()) == 0 && wc.m_validTeams->getHeight() == -1 &&
+    numOfNodes(findTeam(5,wc.m_teamsAVLTree->getRoot())->getKey().getPtrIDTree()->getRoot()) == 10;
 }
 
 bool test_remove_2_times_same_player(){
@@ -185,6 +192,63 @@ bool test_remove_2_times_same_player(){
     && numOfNodes(wc.m_playersAVLTree->getRoot()) == 1 && numOfNodes(findTeam(5,wc.m_teamsAVLTree->getRoot())) == 1;
 }
 
+bool test_remove_from_empty_tree(){
+    world_cup_t wc;
+    StatusType s0 = wc.add_team(5, 70);
+    StatusType s12 = wc.remove_player(9);
+
+    return s0 == StatusType::SUCCESS && s12 == StatusType::FAILURE;
+}
+
+bool test_playerID_insert(){
+    world_cup_t wc;
+    StatusType s0 = wc.add_team(5, 70);
+    StatusType s1 = wc.add_player(9, 5, 6, 7, 5, false);
+    StatusType s2 = wc.add_player(6, 5, 7, 7, 1, true);
+
+    return s0 == StatusType::SUCCESS && s1 == StatusType::SUCCESS && s2 == StatusType::SUCCESS && numOfNodes(findTeam(5,wc.m_teamsAVLTree->getRoot())->m_key.getPtrIDTree()->getRoot()) == 2
+        && findTeam(5,wc.m_teamsAVLTree->getRoot())->m_key.getPtrIDTree()->getHeight() == 1;
+}
+
+bool test_update_stats(){
+    world_cup_t wc;
+    StatusType s0 = wc.add_team(5, 70);
+    StatusType s1 = wc.add_player(9, 5, 6, 7, 5, false);
+    StatusType s2 = wc.update_player_stats(9, 5, 80, 60);
+
+    Node<PlayerData>* player = findPlayer(9, wc.m_playersAVLTree->getRoot());
+    Node<TeamData>* team = findTeam(5, wc.m_teamsAVLTree->getRoot());
+
+    int numCards = team->getKey().getCard();
+
+    return s0 == StatusType::SUCCESS && s1 ==StatusType::SUCCESS && s2 == StatusType::SUCCESS && player->getKey().getGoals() == 87 && player->getKey().getCards() == 65
+        && player->getKey().getIndividualGamesPlayed() == 11 && team->getKey().getGoals() == 87 && team->getKey().getCard() == 65 && team->getKey().getTeamPoints() == 70 &&
+        team->getKey().getGames() == 0;
+}
+
+bool test_update_stats_wrong_cards(){
+    world_cup_t wc;
+    StatusType s0 = wc.add_team(5, 70);
+    StatusType s1 = wc.add_player(9, 5, 6, 7, 5, false);
+    StatusType s2 = wc.update_player_stats(9, 5, 80, -60);
+
+    Node<PlayerData>* player = findPlayer(9, wc.m_playersAVLTree->getRoot());
+
+    return s0 == StatusType::SUCCESS && s1 ==StatusType::SUCCESS && s2 == StatusType::INVALID_INPUT && player->getKey().getGoals() == 7 && player->getKey().getCards() == 5
+           && player->getKey().getIndividualGamesPlayed() == 6;
+}
+
+bool test_update_stats_no_games_added(){
+    world_cup_t wc;
+    StatusType s0 = wc.add_team(5, 70);
+    StatusType s1 = wc.add_player(9, 5, 6, 7, 5, false);
+    StatusType s2 = wc.update_player_stats(9, 0, 80, 60);
+
+    Node<PlayerData>* player = findPlayer(9, wc.m_playersAVLTree->getRoot());
+
+    return s0 == StatusType::SUCCESS && s1 ==StatusType::SUCCESS && s2 == StatusType::SUCCESS && player->getKey().getGoals() == 87 && player->getKey().getCards() == 65
+           && player->getKey().getIndividualGamesPlayed() == 6;
+}
 
 
 
@@ -201,5 +265,11 @@ int main2() {
     RUN_TEST(test_remove_player);
     RUN_TEST(test_remove_from_valid_teams);
     RUN_TEST(test_remove_2_times_same_player);
+    RUN_TEST(test_playerID_insert);
+    RUN_TEST(test_remove_from_empty_tree);
+    RUN_TEST(test_update_stats);
+    RUN_TEST(test_update_stats_wrong_cards);
+    RUN_TEST(test_update_stats_no_games_added);
     return 0;
 }
+*/

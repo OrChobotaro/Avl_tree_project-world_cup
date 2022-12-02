@@ -10,10 +10,6 @@ add_executable(DS_WET1
         avlTree.h
         EmptyTree.cpp
         EmptyTree.h
-        PlayerNode.cpp
-        PlayerNode.h
-        TeamNode.cpp
-        TeamNode.h
         LinkedList.cpp
         LinkedList.h
         LinkedListNode.cpp
