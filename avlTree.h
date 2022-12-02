@@ -9,6 +9,7 @@
 
 
 
+
 template<class T>
 void updateHeights(Node<T>* node);
 
@@ -534,6 +535,9 @@ Node<T>* AvlTree<T>::findParentBeforeInsert(const T &key) {
     }
     return parent;
 }
+
+
+
 
 
 
