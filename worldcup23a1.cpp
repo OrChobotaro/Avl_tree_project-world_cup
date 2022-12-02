@@ -166,30 +166,34 @@ StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
 
         // create rank node
         RankPlayerData playerRank(playerId, goals, cards, m_playersAVLTree->find(newPlayer));
-        // add to all players tree
-        m_allPlayersRankTree->insert(playerRank);
-        // update rank node in player's node
-        m_playersAVLTree->find(newPlayer)->m_key.m_PtrRankAllPlayersTree =  m_allPlayersRankTree->find(playerRank);
-
-        //add to team rank tree
-        teamNode->m_key.getPtrRankTree()->insert(playerRank);
-        m_playersAVLTree->find(newPlayer)->m_key.m_PtrRankTeamPlayerTree = teamNode->getKey().getPtrRankTree()->find(playerRank);
-
 
 
         try {
             // insert node to all players list
             LinkedListNode<RankPlayerData>* nodeToInsertAllPlayersList = addToRankLinkedList(playerRank, m_allPlayersRankLinkedList.get(), m_allPlayersRankTree.get());
-            m_allPlayersRankTree->find(playerRank)->m_key.setPtrRankPlayerList(nodeToInsertAllPlayersList);
+
 
 
 
             // insert node to team's list
             LinkedListNode<RankPlayerData>* nodeToInsertTeamList = addToRankLinkedList(playerRank,
                                                                                            teamNode->getKey().getPtrRankLinkedList(), teamNode->getKey().getPtrRankTree());
-            teamNode->getKey().getPtrRankTree()->find(playerRank)->m_key.setPtrRankPlayerList(nodeToInsertTeamList);
 
+
+            // add to all players tree
+            m_allPlayersRankTree->insert(playerRank);
+            // update rank node in player's node
+            m_playersAVLTree->find(newPlayer)->m_key.m_PtrRankAllPlayersTree =  m_allPlayersRankTree->find(playerRank);
+
+            //add to team rank tree
+            teamNode->m_key.getPtrRankTree()->insert(playerRank);
+            m_playersAVLTree->find(newPlayer)->m_key.m_PtrRankTeamPlayerTree = teamNode->getKey().getPtrRankTree()->find(playerRank);
+
+            m_allPlayersRankTree->find(playerRank)->m_key.setPtrRankPlayerList(nodeToInsertAllPlayersList);
+            teamNode->getKey().getPtrRankTree()->find(playerRank)->m_key.setPtrRankPlayerList(nodeToInsertTeamList);
         }
+
+
         catch(std::bad_alloc& e){
 
             //todo: reverse all actions if fails
@@ -210,12 +214,14 @@ LinkedListNode<RankPlayerData>* world_cup_t::addToRankLinkedList(const RankPlaye
     LinkedListNode<RankPlayerData>* nodeToInsert = new LinkedListNode<RankPlayerData>(playerRank);
     //find the node and check if player is left son or right
     bool isPlayerLeft = false;
-    Node<RankPlayerData>* rankNode = rankTree->find(playerRank);
+//    Node<RankPlayerData>* rankNode = rankTree->find(playerRank);
     Node<RankPlayerData>* parent = rankTree->findParentBeforeInsert(playerRank);
 
 
     if(parent) {
-        isPlayerLeft = rankNode->isLeftNew(parent);
+        if(parent->getKey() > playerRank){
+            isPlayerLeft = true;
+        }
     }
 
 
@@ -644,7 +650,7 @@ StatusType world_cup_t::get_all_players(int teamId, int *const output)
         if(m_numOfPlayers == 0){
             return StatusType::FAILURE;
         }
-
+        listToArr(m_allPlayersRankLinkedList.get(), m_numOfPlayers, output);
     }
 
     else{
@@ -652,7 +658,8 @@ StatusType world_cup_t::get_all_players(int teamId, int *const output)
         if(!team || team->m_key.getNumPlayers() == 0){
             return StatusType::FAILURE;
         }
-
+        LinkedList<RankPlayerData>* list = team->m_key.getPtrRankLinkedList();
+        listToArr(list, team->m_key.getNumPlayers(), output);
     }
 
 	return StatusType::SUCCESS;
@@ -660,8 +667,13 @@ StatusType world_cup_t::get_all_players(int teamId, int *const output)
 
 
 // todo: create function
-void listToArr(LinkedList<RankPlayerData>* list, int *const output){
+void world_cup_t::listToArr(LinkedList<RankPlayerData>* list, int size ,int *output){
+    LinkedListNode<RankPlayerData>* node = list->getStart()->getNext();
 
+    for(int i=0; i<size; i++){
+        output[i] = node->m_data.getPlayerID();
+        node = node->getNext();
+    }
 }
 
 output_t<int> world_cup_t::get_closest_player(int playerId, int teamId)
