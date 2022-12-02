@@ -502,7 +502,7 @@ void AvlTree<T>::setRoot(Node<T> *node) {
 template<class T>
 int AvlTree<T>::getHeight(){
     if(m_root == nullptr){
-        return 0;
+        return -1;
     }
     return m_root->getHeight();
 }

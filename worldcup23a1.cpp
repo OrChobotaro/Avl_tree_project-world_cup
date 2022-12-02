@@ -48,7 +48,7 @@ world_cup_t::~world_cup_t()
 }
 
 
-// todo: create new tree
+
 StatusType world_cup_t::add_team(int teamId, int points)
 {
 
@@ -58,8 +58,6 @@ StatusType world_cup_t::add_team(int teamId, int points)
     StatusType res;
 	TeamData teamToInsert(teamId, points);
     res = m_teamsAVLTree->insert(teamToInsert);
-
-    //TODO: add team to linkedList
 
     RankPlayerData nullRank(-1, -1, -1, nullptr);
     if(res == StatusType::SUCCESS){
@@ -71,6 +69,10 @@ StatusType world_cup_t::add_team(int teamId, int points)
         // creates avl tree for ranking players in team
         std::shared_ptr<AvlTree<RankPlayerData>> newTree(new AvlTree<RankPlayerData>);
         m_teamsAVLTree->find(teamToInsert)->m_key.setPtrRankTree(newTree);
+
+        // creates avl tree for saving the id of players
+        std::shared_ptr<AvlTree<PlayerID>> newIDTree(new AvlTree<PlayerID>);
+        m_teamsAVLTree->find(teamToInsert)->m_key.setPtrIDTree(newIDTree);
     }
 
 	return res;
@@ -112,7 +114,7 @@ StatusType world_cup_t::remove_team(int teamId)
 	return res;
 }
 
-// todo: add player to new tree
+
 StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
                                    int goals, int cards, bool goalKeeper)
 {
@@ -163,6 +165,10 @@ StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
             teamNode->m_key.increaseGoalKeeper();
         }
 
+
+        // create playerID node
+        PlayerID playerIDObj(playerId, m_playersAVLTree->find(newPlayer));
+        teamNode->m_key.getPtrIDTree()->insert(playerIDObj);
 
         // create rank node
         RankPlayerData playerRank(playerId, goals, cards, m_playersAVLTree->find(newPlayer));
@@ -245,7 +251,13 @@ LinkedListNode<RankPlayerData>* world_cup_t::addToRankLinkedList(const RankPlaye
 StatusType world_cup_t::remove_player(int playerId)
 {
 
+    if(playerId <=0){
+        return StatusType::INVALID_INPUT;
+    }
     Node<PlayerData>* playerToRemove = findPlayer(playerId, m_playersAVLTree->getRoot());
+    if(!playerToRemove){
+        return StatusType::FAILURE;
+    }
     Node<TeamData>* playerTeam = playerToRemove->getKey().getPtrTeam();
     RankPlayerData rankPlayer = playerToRemove->getKey().getPtrRankTeamPlayerTree()->getKey();
 
@@ -285,10 +297,14 @@ StatusType world_cup_t::remove_player(int playerId)
 
     m_numOfPlayers -= 1;
 
-    if (newNumPlayersInTeam < 11 || newNumGoalKeepers <= 0 ) {
-        ValidTeams team = findValidTeamKey(playerTeam->getKey().getTeamID(), m_validTeams.get()->getRoot());
-        m_validTeams.get()->remove(team);
-        ///////todo:check that the TeamData doesn't have a PTR to ValidTeamPtr
+    // find the team on the valid team
+    Node<ValidTeams>* team = findValidTeam(playerTeam->getKey().getTeamID(), m_validTeams.get()->getRoot());
+    if(team){
+        // if team exist in the valid teams tree, remove if not valid anymore.
+        if (newNumPlayersInTeam < 11 || newNumGoalKeepers <= 0 ) {
+            m_validTeams->remove(team->getKey());
+            ///////todo:check that the TeamData doesn't have a PTR to ValidTeamPtr
+        }
     }
 
 
@@ -763,7 +779,7 @@ output_t<int> world_cup_t::get_closest_player(int playerId, int teamId)
 
 output_t<int> world_cup_t::knockout_winner(int minTeamId, int maxTeamId)
 {
-	// TODO: Your code goes here
+
 	return 2;
 }
 
