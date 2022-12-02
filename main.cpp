@@ -359,27 +359,20 @@ int main(){
 
     wc1.add_team(22, 45);
 
-    wc1.add_player(6,22,2,3,17,false);
+    wc1.add_player(6,22,2,400,17,false);
     wc1.add_player(7,22,2,5,3,false);
     wc1.add_player(20, 22, 2, 3, 3, true);
-    wc1.add_player(9, 22, 2, 3, 3, true);
-
-
-    //wc1.remove_player(20);
-    //wc1.unite_teams(21, 22, 23);
-    //wc1.update_player_stats(3, 5, 2, 1);
-    //wc1.remove_team(1);
-
-    wc1.add_player(30, 22, 2, 3, 3, true);
+    wc1.add_player(9, 22, 2, 5, 5, true);
+    wc1.add_player(30, 22, 2, 3, 50, true);
+    wc1.add_player(106, 22, 2, 3, 3, true);
     wc1.add_player(100, 22, 2, 100, 3, true);
     wc1.add_player(101, 22, 2, 3, 3, true);
     wc1.add_player(102, 22, 2, 3, 3, true);
     wc1.add_player(103, 22, 2, 3, 3, true);
-    wc1.add_player(104, 22, 2, 3, 3, true);
+    wc1.add_player(104, 22, 2, 300, 3, true);
     wc1.add_player(105, 22, 2, 3, 3, true);
-    wc1.add_player(106, 22, 2, 3, 3, true);
 
-    output_t<int> closestTO5 = wc1.get_closest_player(5, 21);
+//    output_t<int> closestTO5 = wc1.get_closest_player(5, 21);
 
     wc1.add_team(24, 78);
 
@@ -397,9 +390,17 @@ int main(){
     output_t<int> numPlayersTeam22 = wc1.get_all_players_count(22);
     output_t<int> numPlayers = wc1.get_all_players_count(-5);
 
+    int *output = new int[12];
+
+
+    wc1.get_all_players(22, output);
 
     //RankPlayerData rankPlayer(3, 4, 2, findPlayer(3, wc1.m_playersAVLTree.get()->getRoot()));
     //insertNode(rankPlayer, wc1.m_allPlayersRankTree.get(), wc1.m_allPlayersRankLinkedList.get());
+
+    for(int i = 0; i< 12; i++){
+        std::cout << output[i] << std::endl;
+    }
 
     return 0;
 }
