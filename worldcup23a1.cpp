@@ -809,14 +809,115 @@ output_t<int> world_cup_t::get_closest_player(int playerId, int teamId)
 output_t<int> world_cup_t::knockout_winner(int minTeamId, int maxTeamId)
 {
 
+    ValidTeams minObjToSearch(minTeamId, nullptr);
+    ValidTeams maxObjToSearch(maxTeamId, nullptr);
+    LinkedListNode<ValidTeams>* minNode = m_validTeams->find(minObjToSearch)->m_key.getPtrLinkedList();
+    LinkedListNode<ValidTeams>* maxNode = m_validTeams->find(maxObjToSearch)->m_key.getPtrLinkedList();
+    LinkedListNode<ValidTeams>* endNode;
+    std::shared_ptr<LinkedList<ValidTeams>> knockoutList;
 
+    try {
+        knockoutList = copyList(minNode, maxNode);
+        endNode = knockoutList->getEnd();
+    }     catch (std::bad_alloc& e){
+    return StatusType::ALLOCATION_ERROR;
+}
 
+        while(knockoutList->countNodes() > 1){
+            LinkedListNode<ValidTeams>* currNode = knockoutList->getStart()->getNext();
+            while(currNode!= endNode){
+                if(currNode->getNext()->getData().getTeamId() == knockoutList->getEnd()->getData().getTeamId()){
+                    break;
+                }
+                LinkedListNode<ValidTeams>* firstTeam = currNode;
+                currNode = currNode->getNext();
+                LinkedListNode<ValidTeams>* secondTeam = currNode;
+                currNode = currNode->getNext();
+                int firstTeamRank = firstTeam->getData().getTotalRank();
+                int secondTeamRank = secondTeam->getData().getTotalRank();
 
-	return 2;
+                if(firstTeamRank > secondTeamRank){
+                    firstTeam->m_data.setTotalRank(secondTeamRank);
+                    firstTeam->m_data.setTotalRank(3);
+                    m_validTeamsLinkedList->deleteNode(secondTeam);
+
+                } else if (firstTeamRank < secondTeamRank){
+                    secondTeam->m_data.setTotalRank(firstTeamRank);
+                    secondTeam->m_data.setTotalRank(3);
+                    m_validTeamsLinkedList->deleteNode(firstTeam);
+
+                }else {
+                    if(firstTeam->getData().getTeamId() > secondTeam->getData().getTeamId()){
+                        firstTeam->m_data.setTotalRank(secondTeamRank);
+                        firstTeam->m_data.setTotalRank(3);
+                        m_validTeamsLinkedList->deleteNode(secondTeam);
+
+                    } else {
+                        secondTeam->m_data.setTotalRank(firstTeamRank);
+                        secondTeam->m_data.setTotalRank(3);
+                        m_validTeamsLinkedList->deleteNode(firstTeam);
+
+                    }
+                }
+            }
+        }
+
+	return knockoutList->getStart()->getNext()->getData().getTeamId();
 }
 
 
 
+std::shared_ptr<LinkedList<ValidTeams>> world_cup_t::copyList(LinkedListNode<ValidTeams>* minNode, LinkedListNode<ValidTeams>* maxNode){
+    LinkedListNode<ValidTeams>* currNodeOriginalList = minNode;
+
+    // create new start and end nodes
+    ValidTeams nullNode(-1, nullptr);
+    LinkedListNode<ValidTeams>* newStart;
+    LinkedListNode<ValidTeams>* newEnd;
+
+    try{
+        newStart = new LinkedListNode<ValidTeams>(nullNode);
+        newEnd = new LinkedListNode<ValidTeams>(nullNode);
+
+    } catch (std::bad_alloc& e){
+        throw e;
+    }
+
+    // create copied list
+    // try block?
+    std::shared_ptr<LinkedList<ValidTeams>> knockOutList(new LinkedList<ValidTeams>);
+
+    knockOutList->setStart(newStart);
+
+    LinkedListNode<ValidTeams>* currNodeNewList = knockOutList->getStart();
+
+    // coping ID, total rank, else nullptr.
+    while(currNodeOriginalList->getPrevious() != maxNode){
+        LinkedListNode<ValidTeams>* newNode;
+        try{
+            newNode = new LinkedListNode<ValidTeams>(nullNode);
+        } catch(std::bad_alloc& e){
+//            knockOutList->clearList(knockOutList->getStart(), currNodeNewList);
+            knockOutList->setEnd(newEnd);
+            currNodeNewList->setNext(newEnd);
+            newEnd->setPrevious(currNodeNewList);
+            throw e;
+        }
+        currNodeNewList->setNext(newNode);
+        newNode->setPrevious(currNodeNewList);
+        currNodeNewList = currNodeNewList->getNext();
+        currNodeNewList->m_data.setTeamID(currNodeOriginalList->m_data.getTeamId());
+        currNodeNewList->m_data.setTotalRank(currNodeOriginalList->m_data.getTotalRank());
+        currNodeNewList->m_data.setPtrLinkedList(nullptr);
+        // todo: update ptrRankTeam to null with setter
+        currNodeOriginalList = currNodeOriginalList->getNext();
+    }
+
+    knockOutList->setEnd(newEnd);
+    currNodeNewList->setNext(newEnd);
+    newEnd->setPrevious(currNodeNewList);
+    return knockOutList;
+}
 
 
 //void calcWinnerAux(Node<ValidTeams>* node, LinkedListNode<ValidTeams>** listNode){

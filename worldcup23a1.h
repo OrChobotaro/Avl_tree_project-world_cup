@@ -28,18 +28,21 @@
 class world_cup_t {
 private:
 public:
+
     std::shared_ptr<AvlTree<PlayerData>> m_playersAVLTree;
     std::shared_ptr<AvlTree<TeamData>> m_teamsAVLTree;
     std::shared_ptr<AvlTree<RankPlayerData>> m_allPlayersRankTree;
     std::shared_ptr<LinkedList<RankPlayerData>> m_allPlayersRankLinkedList;
     std::shared_ptr<AvlTree<ValidTeams>> m_validTeams;
     int m_numOfPlayers;
+    std::shared_ptr<LinkedList<ValidTeams>> m_validTeamsLinkedList;
 
     void listToArr(LinkedList<RankPlayerData>* list, int size ,  int *const output);
 
     LinkedListNode<RankPlayerData>* addToRankLinkedList(const RankPlayerData& playerRank,LinkedList<RankPlayerData>* rankList,
                                                         AvlTree<RankPlayerData>* rankTree);
 
+    std::shared_ptr<LinkedList<ValidTeams>> copyList(LinkedListNode<ValidTeams>* minNode, LinkedListNode<ValidTeams>* maxNode);
 
 	// <DO-NOT-MODIFY> {
 

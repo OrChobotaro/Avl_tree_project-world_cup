@@ -169,6 +169,7 @@ public:
 
     int getTeamId() const;
     int getTotalRank() const;
+    void setTeamID(int newID);
     void setTotalRank(int rank);
     void setPtrLinkedList(LinkedListNode<ValidTeams>* other);
     LinkedListNode<ValidTeams>* getPtrLinkedList();
@@ -226,7 +227,6 @@ PlayerID findIDPlayerKey(int playerID, Node<PlayerID>* root);
 
 LinkedListNode<RankPlayerData>* insertNode(const RankPlayerData& rankPlayer, AvlTree<RankPlayerData>* tree,
                                            LinkedList<RankPlayerData>* list);
-
 
 
 

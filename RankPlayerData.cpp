@@ -502,6 +502,10 @@ LinkedListNode<ValidTeams>* ValidTeams::getPtrLinkedList(){
     return m_ptrLinkedList;
 }
 
+void ValidTeams::setTeamID(int newID){
+    m_teamID = newID;
+}
+
 
 //////////--------------------------------------------------------
 
