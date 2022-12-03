@@ -380,9 +380,6 @@ StatusType world_cup_t::update_player_stats(int playerId, int gamesPlayed, int s
     teamList->deleteNode(listTeamNode);
 
 
-
-
-
     int newGamesPlayed = oldIndividualGames + gamesPlayed;
     playerNode->m_key.setIndividualGamesPlayed(newGamesPlayed);
     int newGoals = oldRankPlayerData.getGoals() + scoredGoals;

@@ -28,6 +28,7 @@ void buildEmptyTree(int requiredSize, const RankPlayerData& nullKey, AvlTree<Ran
     int* numNodesToDelete = new int(numNodesCompleteTree - requiredSize);
     buildCompleteEmptyTree(requiredSize, nullKey, tree);
     deleteNodesEmptyTreeAux(tree.getRoot(), numNodesToDelete, height);
+    delete numNodesToDelete;
 }
 
 
@@ -168,6 +169,7 @@ void buildEmptyTreePlayerID(int requiredSize, const PlayerID& nullKey, AvlTree<P
     int* numNodesToDelete = new int(numNodesCompleteTree - requiredSize);
     buildCompleteEmptyTreePlayerID(requiredSize, nullKey, tree);
     deleteNodesEmptyTreeAuxPlayerID(tree.getRoot(), numNodesToDelete, height);
+    delete numNodesToDelete;
 }
 
 

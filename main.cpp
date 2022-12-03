@@ -379,6 +379,7 @@ int main(){
     //output_t<int> closestTO5 = wc1.get_closest_player(5, 21);
     //wc1.remove_player(5);
     wc1.unite_teams(21, 22, 23);
+    wc1.update_player_stats(5, 7, 3, 2);
 
     wc1.add_team(24, 78);
 
