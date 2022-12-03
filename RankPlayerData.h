@@ -169,9 +169,13 @@ public:
 
     int getTeamId() const;
     int getTotalRank() const;
+    LinkedListNode<ValidTeams>* getPtrLinkedList();
+    Node<TeamData>* getPtrTeamData();
+
     void setTotalRank(int rank);
     void setPtrLinkedList(LinkedListNode<ValidTeams>* other);
-    LinkedListNode<ValidTeams>* getPtrLinkedList();
+    void setPtrTeamData(Node<TeamData>* other);
+
 
 
     bool operator<(const ValidTeams& other) const;

@@ -346,13 +346,14 @@ int main(){
     wc1.add_player(4, 21, 2, 1, 3, true);
     wc1.add_player(5, 21, 5, 4, 3, false);
     wc1.add_player(8, 21, 2, 600, 20, true);
-    wc1.add_player(1, 21, 30, 3, 3, true);/*
+    wc1.add_player(1, 21, 30, 6, 3, true);
     wc1.add_player(10, 21, 5, 3, 17, false);
-    wc1.add_player(200, 21, 5, 7, 1, false);
+    wc1.add_player(200, 21, 12, 7, 1, false);
     wc1.add_player(201, 21, 5, 3, 17, false);
-    wc1.add_player(202, 21, 5, 3, 17, false);
-    wc1.add_player(203, 21, 5, 3, 17, false);
-    wc1.add_player(204, 21, 5, 3, 17, false);*/
+    wc1.add_player(202, 21, 7, 11, 1, false);
+    wc1.add_player(203, 21, 5, 2, 5, false);
+    wc1.add_player(204, 21, 4, 3, 2, false);
+    wc1.add_player(205, 21, 5, 8, 6, false);
 
 
     wc1.add_team(22, 45);
@@ -378,10 +379,15 @@ int main(){
 //    output_t<int> topScorerAll = wc1.get_top_scorer(-5);
     //output_t<int> closestTO5 = wc1.get_closest_player(5, 21);
     //wc1.remove_player(5);
+
+
     wc1.unite_teams(21, 22, 23);
     wc1.update_player_stats(5, 7, 3, 2);
+    wc1.remove_player(200);
+    wc1.remove_player(4);
 
     wc1.add_team(24, 78);
+
 
     wc1.remove_team(24);
 
