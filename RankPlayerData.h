@@ -168,6 +168,11 @@ public:
     ~ValidTeams() = default;
 
     int getTeamId() const;
+    int getTotalRank() const;
+    void setTotalRank(int rank);
+    void setPtrLinkedList(LinkedListNode<ValidTeams>* other);
+    LinkedListNode<ValidTeams>* getPtrLinkedList();
+
 
     bool operator<(const ValidTeams& other) const;
     bool operator>(const ValidTeams& other) const;
@@ -176,7 +181,9 @@ public:
 private:
     int m_teamID;
     Node<TeamData>* m_ptrTeamData; // pointer to node in teams' tree
-    int m_points;
+    int m_totalRank;
+//    int m_points;
+    LinkedListNode<ValidTeams> *m_ptrLinkedList;
 };
 
 

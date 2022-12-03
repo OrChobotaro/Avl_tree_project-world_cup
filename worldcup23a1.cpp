@@ -597,12 +597,12 @@ StatusType world_cup_t::unite_teams(int teamId1, int teamId2, int newTeamId)
     PlayerID nullPlayerID(-1, nullptr);
     std::shared_ptr<LinkedList<PlayerID>> listTeam1 = AVLTreeToLinkedListPlayerID(nodeTeam1->getKey().getPtrIDTree(),
                                                               nullPlayerID, nodeTeam1->getKey().getNumPlayers());
-    LinkedListNode<PlayerID>* startNodeList1 = listTeam1->getStart();
-    LinkedListNode<PlayerID>* endNodeList1 = listTeam1->getStart();
+//    LinkedListNode<PlayerID>* startNodeList1 = listTeam1->getStart();
+//    LinkedListNode<PlayerID>* endNodeList1 = listTeam1->getStart();
     std::shared_ptr<LinkedList<PlayerID>> listTeam2 = AVLTreeToLinkedListPlayerID(nodeTeam2->getKey().getPtrIDTree(),
                                                               nullPlayerID, nodeTeam2->getKey().getNumPlayers());
-    LinkedListNode<PlayerID>* startNodeList2 = listTeam2->getStart();
-    LinkedListNode<PlayerID>* endNodeList2 = listTeam2->getStart();
+//    LinkedListNode<PlayerID>* startNodeList2 = listTeam2->getStart();
+//    LinkedListNode<PlayerID>* endNodeList2 = listTeam2->getStart();
 
     std::shared_ptr<LinkedList<PlayerID>> listNewTeam(new LinkedList<PlayerID>);
     LinkedListNode<PlayerID>* nodeStart = new LinkedListNode<PlayerID>(nullPlayerID);
@@ -812,6 +812,42 @@ output_t<int> world_cup_t::get_closest_player(int playerId, int teamId)
 output_t<int> world_cup_t::knockout_winner(int minTeamId, int maxTeamId)
 {
 
+
+
+
 	return 2;
 }
 
+
+
+
+
+//void calcWinnerAux(Node<ValidTeams>* node, LinkedListNode<ValidTeams>** listNode){
+//
+//    if(node== nullptr){
+//        return;
+//    }
+//
+//    calcWinnerAux(node->getLeft(), listNode);
+//
+//    calcWinnerAux(node->getRight(), listNode);
+//
+//    if(node->isLeaf()){
+//        node->m_key = (*listNode)->m_data;
+//    }
+//    else {
+//        if(!node->getRight()){
+//            node->m_key = node->getLeft()->m_key;
+//        }
+//        else if(!node->getLeft()) {
+//            node->m_key = node->getRight()->m_key;
+//        }
+//        else {
+//            if(node->getRight()->getKey().getTotalRank() > node->getLeft()->getKey().getTotalRank()){
+//                node->m_key = node->getRight()->m_key;
+//                node->m_key.setTotalRank(3);
+//                node->m_key.setTotalRank(node->getLeft()->m_key.getTotalRank());
+//            }
+//        }
+//    }
+//}
