@@ -28,6 +28,7 @@
 class world_cup_t {
 private:
 public:
+
     std::shared_ptr<AvlTree<PlayerData>> m_playersAVLTree;
     std::shared_ptr<AvlTree<TeamData>> m_teamsAVLTree;
     std::shared_ptr<AvlTree<RankPlayerData>> m_allPlayersRankTree;
@@ -35,12 +36,14 @@ public:
     std::shared_ptr<AvlTree<ValidTeams>> m_validTeams;
     std::shared_ptr<LinkedList<ValidTeams>> m_validTeamsLinkedList;
     int m_numOfPlayers;
-
+    
     void listToArr(LinkedList<RankPlayerData>* list, int size ,  int *const output);
 
     LinkedListNode<RankPlayerData>* addToRankLinkedList(const RankPlayerData& playerRank,LinkedList<RankPlayerData>* rankList,
                                                         AvlTree<RankPlayerData>* rankTree);
 
+
+    std::shared_ptr<LinkedList<ValidTeams>> copyList(LinkedListNode<ValidTeams>* minNode, LinkedListNode<ValidTeams>* maxNode);
     LinkedListNode<ValidTeams>* addToValidTeamsLinkedList(const ValidTeams& validTeamsKey, LinkedList<ValidTeams>* list,
                                                          AvlTree<ValidTeams>* tree);
 
