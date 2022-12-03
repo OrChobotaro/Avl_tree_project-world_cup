@@ -507,6 +507,18 @@ void ValidTeams::setTeamID(int newID){
 }
 
 
+Node<TeamData>* ValidTeams::getPtrTeamData() {
+    return m_ptrTeamData;
+}
+
+
+void ValidTeams::setPtrTeamData(Node<TeamData> *other) {
+    m_ptrTeamData = other;
+}
+
+
+
+
 //////////--------------------------------------------------------
 
 PlayerID::PlayerID(int playerID, Node<PlayerData> *ptrPlayer) : m_playerId(playerID), m_ptrPlayer(ptrPlayer) {};

@@ -20,9 +20,25 @@ world_cup_t::world_cup_t():m_numOfPlayers(0)
     std::shared_ptr<AvlTree<RankPlayerData>> rankPlayersTree(new AvlTree<RankPlayerData>);
     m_allPlayersRankTree = rankPlayersTree;
 
-    // creating valid teams - team with 11 players including a goalkeeper.
+    // creating valid teams tree - team with 11 players including a goalkeeper.
     std::shared_ptr<AvlTree<ValidTeams>> validTeamsTree(new AvlTree<ValidTeams>);
     m_validTeams = validTeamsTree;
+
+    // creating valid teams LinkedList - team with 11 players including a goalkeeper.
+    std::shared_ptr<LinkedList<ValidTeams>> validTeamsList(new LinkedList<ValidTeams>);
+    m_validTeamsLinkedList = validTeamsList;
+
+    ValidTeams nullValidTeam(-1, nullptr);
+
+    LinkedListNode<ValidTeams>* nodeStartValidTeams = new LinkedListNode<ValidTeams>(nullValidTeam);
+    LinkedListNode<ValidTeams>* nodeEndValidTeams = new LinkedListNode<ValidTeams>(nullValidTeam);
+
+    m_validTeamsLinkedList->setStart(nodeStartValidTeams);
+    m_validTeamsLinkedList->setEnd(nodeEndValidTeams);
+
+    nodeStartValidTeams->setNext(nodeEndValidTeams);
+    nodeEndValidTeams->setPrevious(nodeStartValidTeams);
+
 
     // creating null rank object to start and end of linked list
     RankPlayerData nullRank(-1, -1, -1, nullptr);
@@ -153,10 +169,6 @@ StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
         teamNode->m_key.increaseNumPlayers();
 
         //todo: check if team is valid and add to the tree
-        if(teamNode->getKey().getNumPlayers()==11 && teamNode->m_key.getNumGoalKeepers() > 0){
-            ValidTeams validTeamObj(teamId, findTeam(teamId, m_teamsAVLTree->getRoot()));
-            m_validTeams->insert(validTeamObj);
-        }
 
 
         teamNode->m_key.addGoals(goals);
@@ -176,12 +188,12 @@ StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
 
         try {
             // insert node to all players list
-            LinkedListNode<RankPlayerData>* nodeToInsertAllPlayersList = addToRankLinkedList(playerRank, m_allPlayersRankLinkedList.get(), m_allPlayersRankTree.get());
-
+            LinkedListNode<RankPlayerData>* nodeToInsertAllPlayersList = addToRankLinkedList(playerRank,
+                     m_allPlayersRankLinkedList.get(), m_allPlayersRankTree.get());
 
             // insert node to team's list
             LinkedListNode<RankPlayerData>* nodeToInsertTeamList = addToRankLinkedList(playerRank,
-                                                                                           teamNode->getKey().getPtrRankLinkedList(), teamNode->getKey().getPtrRankTree());
+                       teamNode->getKey().getPtrRankLinkedList(), teamNode->getKey().getPtrRankTree());
 
 
             // add to all players tree
@@ -195,6 +207,17 @@ StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
 
             m_allPlayersRankTree->find(playerRank)->m_key.setPtrRankPlayerList(nodeToInsertAllPlayersList);
             teamNode->getKey().getPtrRankTree()->find(playerRank)->m_key.setPtrRankPlayerList(nodeToInsertTeamList);
+
+
+            if(teamNode->getKey().getNumPlayers()==11 && teamNode->m_key.getNumGoalKeepers() > 0){
+                ValidTeams validTeamObj(teamId, findTeam(teamId, m_teamsAVLTree->getRoot()));
+                LinkedListNode<ValidTeams>* nodeToInsertValidTeamsList = addToValidTeamsLinkedList(validTeamObj,
+                                                           m_validTeamsLinkedList.get(), m_validTeams.get());
+                nodeToInsertValidTeamsList->m_data.setPtrLinkedList(nullptr);
+                m_validTeams->insert(validTeamObj);
+                Node<ValidTeams>* nodeToInsertValidTeamsTree = m_validTeams.get()->find(validTeamObj);
+                nodeToInsertValidTeamsTree->m_key.setPtrLinkedList(nodeToInsertValidTeamsList);
+            }
         }
 
 
@@ -242,6 +265,37 @@ LinkedListNode<RankPlayerData>* world_cup_t::addToRankLinkedList(const RankPlaye
 
     return nodeToInsert;
 }
+
+
+
+
+LinkedListNode<ValidTeams>* world_cup_t::addToValidTeamsLinkedList(const ValidTeams& validTeamsKey, LinkedList<ValidTeams>* list,
+                                                                 AvlTree<ValidTeams>* tree) {
+    LinkedListNode<ValidTeams>* nodeToInsert = new LinkedListNode<ValidTeams>(validTeamsKey);
+    //find the node and check if player is left son or right
+    bool isPlayerLeft = false;
+    Node<ValidTeams>* parent = tree->findParentBeforeInsert(validTeamsKey);
+
+
+    if(parent) {
+        if(parent->getKey() > validTeamsKey){
+            isPlayerLeft = true;
+        }
+    }
+
+    if(isPlayerLeft && parent) {
+        list->insertBefore(parent->getKey().getPtrLinkedList(), nodeToInsert);
+    }
+    else if(!(isPlayerLeft) && parent){
+        list->insertAfter(parent->getKey().getPtrLinkedList(), nodeToInsert);
+    }
+    else {
+        list->insertAfter(list->getStart(), nodeToInsert);
+    }
+
+    return nodeToInsert;
+}
+
 
 
 
@@ -300,7 +354,13 @@ StatusType world_cup_t::remove_player(int playerId)
     if(team){
         // if team exist in the valid teams tree, remove if not valid anymore.
         if (newNumPlayersInTeam < 11 || newNumGoalKeepers <= 0 ) {
+            LinkedListNode<ValidTeams>* nodeToDeleteList = team->getKey().getPtrLinkedList();
+            team->m_key.setPtrLinkedList(nullptr);
+            team->m_key.setPtrTeamData(nullptr);
             m_validTeams->remove(team->getKey());
+
+            nodeToDeleteList->m_data.setPtrTeamData(nullptr);
+            m_validTeamsLinkedList->deleteNode(nodeToDeleteList);
             ///////todo:check that the TeamData doesn't have a PTR to ValidTeamPtr
         }
     }

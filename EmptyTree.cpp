@@ -151,6 +151,7 @@ void updateEmptyTreeAux(Node<RankPlayerData>* treeNode, LinkedListNode<RankPlaye
     data.setPtrRankPlayerTree(nullptr);
     treeNode->setKey(data);
     (*listNode)->m_data.setPtrRankPlayerTree(treeNode);
+    (*listNode)->getData().getPlayerPtr()->m_key.m_PtrRankTeamPlayerTree = treeNode;
     *listNode = (*listNode)->getNext();
 
     updateEmptyTreeAux(treeNode->getRight(), listNode);
@@ -325,7 +326,7 @@ void AVLTreeToLinkedListPlayerIDAux(Node<PlayerID>* nodeTree, LinkedListNode<Pla
 }
 
 
-
+/*
 std::shared_ptr<LinkedList<ValidTeams>> AVLTreeToLinkedListValidTeams(AvlTree<ValidTeams>* tree, const ValidTeams& nullParam,
                                                                  int treeSize) {
     std::shared_ptr<LinkedList<ValidTeams>> list(new LinkedList<ValidTeams>);
@@ -360,4 +361,4 @@ void AVLTreeToLinkedListValidTeamsAux(Node<ValidTeams>* nodeTree, LinkedListNode
     (*nodeList)->m_data = nodeTree->getKey();
     (*nodeList) = (*nodeList)->getNext();
     AVLTreeToLinkedListValidTeamsAux(nodeTree->getRight(), nodeList);
-}
+}*/

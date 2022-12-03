@@ -34,15 +34,19 @@ public:
     std::shared_ptr<AvlTree<RankPlayerData>> m_allPlayersRankTree;
     std::shared_ptr<LinkedList<RankPlayerData>> m_allPlayersRankLinkedList;
     std::shared_ptr<AvlTree<ValidTeams>> m_validTeams;
-    int m_numOfPlayers;
     std::shared_ptr<LinkedList<ValidTeams>> m_validTeamsLinkedList;
-
+    int m_numOfPlayers;
+    
     void listToArr(LinkedList<RankPlayerData>* list, int size ,  int *const output);
 
     LinkedListNode<RankPlayerData>* addToRankLinkedList(const RankPlayerData& playerRank,LinkedList<RankPlayerData>* rankList,
                                                         AvlTree<RankPlayerData>* rankTree);
 
+
     std::shared_ptr<LinkedList<ValidTeams>> copyList(LinkedListNode<ValidTeams>* minNode, LinkedListNode<ValidTeams>* maxNode);
+    LinkedListNode<ValidTeams>* addToValidTeamsLinkedList(const ValidTeams& validTeamsKey, LinkedList<ValidTeams>* list,
+                                                         AvlTree<ValidTeams>* tree);
+
 
 	// <DO-NOT-MODIFY> {
 
