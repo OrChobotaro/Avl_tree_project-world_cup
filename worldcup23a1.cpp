@@ -869,19 +869,73 @@ output_t<int> world_cup_t::get_closest_player(int playerId, int teamId)
 output_t<int> world_cup_t::knockout_winner(int minTeamId, int maxTeamId)
 {
 
+    if(minTeamId < 0 || maxTeamId < 0 || maxTeamId<minTeamId){
+        return StatusType::INVALID_INPUT;
+    }
     ValidTeams minObjToSearch(minTeamId, nullptr);
     ValidTeams maxObjToSearch(maxTeamId, nullptr);
-    LinkedListNode<ValidTeams>* minNode = m_validTeams->find(minObjToSearch)->m_key.getPtrLinkedList();
-    LinkedListNode<ValidTeams>* maxNode = m_validTeams->find(maxObjToSearch)->m_key.getPtrLinkedList();
-    LinkedListNode<ValidTeams>* endNode;
+
+    LinkedListNode<ValidTeams>* minNode(nullptr);
+
+    Node<ValidTeams>* tempNodeMin = m_validTeams->find(minObjToSearch);
+    if(tempNodeMin){
+        minNode = tempNodeMin->m_key.getPtrLinkedList();
+    }
+    else {
+        Node<ValidTeams>* parentMinNode = m_validTeams->findParentBeforeInsert(minObjToSearch);
+        if(parentMinNode->m_key.getTeamId() < minTeamId){
+            // minNode == node after the parent
+            minNode = parentMinNode->m_key.getPtrLinkedList()->getNext();
+        } else {
+            minNode = parentMinNode->m_key.getPtrLinkedList();
+        }
+    }
+
+    LinkedListNode<ValidTeams>* maxNode(nullptr);
+    Node<ValidTeams>* tempNodeMax = m_validTeams->find(maxObjToSearch);
+
+    if(tempNodeMax){
+        maxNode = tempNodeMax->m_key.getPtrLinkedList();
+    }
+    else {
+        LinkedListNode<ValidTeams>* currTemp = minNode;
+
+        while(currTemp->m_data.getTeamId() < maxTeamId && currTemp != m_validTeamsLinkedList->getEnd()){
+            currTemp = currTemp->getNext();
+        }
+        maxNode = currTemp->getPrevious();
+    }
+
+
+
     std::shared_ptr<LinkedList<ValidTeams>> knockoutList;
+
+    LinkedListNode<ValidTeams>* temp = minNode;
+    while(temp->getPrevious()!=maxNode){
+        int points = temp->m_data.getPtrTeamData()->getKey().getTeamPoints();
+        int goals = temp->m_data.getPtrTeamData()->getKey().getGoals();
+        int cards = temp->m_data.getPtrTeamData()->getKey().getCard();
+
+        int rank = points + goals - cards;
+
+        temp->m_data.setTotalRank(rank);
+        temp = temp->getNext();
+    }
+
 
     try {
         knockoutList = copyList(minNode, maxNode);
-        endNode = knockoutList->getEnd();
+
     }     catch (std::bad_alloc& e){
     return StatusType::ALLOCATION_ERROR;
 }
+
+    if(knockoutList->countNodes() == 0){
+        return StatusType::FAILURE;
+    }
+
+
+        LinkedListNode<ValidTeams>* endNode = knockoutList->getEnd();
 
         while(knockoutList->countNodes() > 1){
             LinkedListNode<ValidTeams>* currNode = knockoutList->getStart()->getNext();
@@ -926,7 +980,7 @@ output_t<int> world_cup_t::knockout_winner(int minTeamId, int maxTeamId)
 }
 
 
-
+// check what happens if min == max
 std::shared_ptr<LinkedList<ValidTeams>> world_cup_t::copyList(LinkedListNode<ValidTeams>* minNode, LinkedListNode<ValidTeams>* maxNode){
     LinkedListNode<ValidTeams>* currNodeOriginalList = minNode;
 
@@ -944,8 +998,8 @@ std::shared_ptr<LinkedList<ValidTeams>> world_cup_t::copyList(LinkedListNode<Val
     }
 
     // create copied list
-    // try block?
     std::shared_ptr<LinkedList<ValidTeams>> knockOutList(new LinkedList<ValidTeams>);
+
 
     knockOutList->setStart(newStart);
 
