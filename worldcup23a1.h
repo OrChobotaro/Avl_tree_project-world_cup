@@ -47,6 +47,8 @@ private:
     LinkedListNode<ValidTeams>* addToValidTeamsLinkedList(const ValidTeams& validTeamsKey, LinkedList<ValidTeams>* list,
                                                          AvlTree<ValidTeams>* tree);
 
+    StatusType uniteTeamsForOldID(Node<TeamData>* nodeTeam1, Node<TeamData>* nodeSameID);
+
 
 
 
