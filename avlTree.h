@@ -319,7 +319,7 @@ void AvlTree<T>::removeNodeAux(Node<T> *node) {
                 node->setLeft(nullptr);
             }
             else {
-                parent->setRight(right);
+                parent->setLeft(right);
                 right->setParent(parent);
                 node->setRight(nullptr);
             }

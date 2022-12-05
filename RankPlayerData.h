@@ -82,6 +82,7 @@ public:
     void setNumGoalKeepers(int numGoalKeepers);
     void setNumGoals(int numGoals);
     void setNumCards(int numCards);
+    void setPoints(int points);
 
     void addGoals(int goalsToAdd);
     void subtractGoals(int goalsToSubtract);
