@@ -264,6 +264,7 @@ StatusType uniteLists(LinkedListNode<T>* startList1, LinkedListNode<T>* startLis
     endNode2->setPrevious(startList2);
 
     currNewNode->setNext(newEnd);
+    newEnd->setPrevious(currNewNode);
 
 
     return StatusType::SUCCESS;

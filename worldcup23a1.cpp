@@ -106,8 +106,9 @@ StatusType world_cup_t::remove_team(int teamId)
     // find the object
     Node<TeamData>* nodeToDelete = m_teamsAVLTree->find(obj);
 
-
-    // todo: check if node exists
+    if (!nodeToDelete) {
+        return StatusType::FAILURE;
+    }
 
 
     // if team is not empty
@@ -597,7 +598,14 @@ StatusType world_cup_t::unite_teams(int teamId1, int teamId2, int newTeamId)
         return StatusType::FAILURE;
     }
 
-    if (newTeamId != teamId1 && newTeamId != teamId2) {
+
+    if (newTeamId == teamId1 && newTeamId != teamId2) {
+        return uniteTeamsForOldID(nodeTeam2, nodeTeam1);
+    }
+    else if (newTeamId != teamId1 && newTeamId == teamId2) {
+        return uniteTeamsForOldID(nodeTeam1, nodeTeam2);
+    }
+    else if (newTeamId != teamId1 && newTeamId != teamId2) {
         Node<TeamData>* nodeNewTeam = findTeam(newTeamId, m_teamsAVLTree->getRoot());
         if (nodeNewTeam) {
             return StatusType::FAILURE;
@@ -720,8 +728,165 @@ StatusType world_cup_t::unite_teams(int teamId1, int teamId2, int newTeamId)
         return StatusType::FAILURE;
     }
 
+    if (newTeamSize >= 11 && newTeamGoalKeepers >= 1) {
+        ValidTeams newTeamValidTeamsKey(newTeamId, nodeNewTeam);
+        try {
+            LinkedListNode<ValidTeams>* nodeToInsertValidTeamsList = addToValidTeamsLinkedList(newTeamValidTeamsKey,
+                                                                                               m_validTeamsLinkedList.get(), m_validTeams.get());
+            nodeToInsertValidTeamsList->m_data.setPtrLinkedList(nullptr);
+            m_validTeams->insert(newTeamValidTeamsKey);
+            Node<ValidTeams>* nodeToInsertValidTeamsTree = m_validTeams.get()->find(newTeamValidTeamsKey);
+            nodeToInsertValidTeamsTree->m_key.setPtrLinkedList(nodeToInsertValidTeamsList);
+        }
+        catch (std::bad_alloc& e) {
+            /////////////////////////////////////
+            return StatusType::FAILURE;
+        }
+    }
+
+
     return StatusType::SUCCESS;
 }
+
+
+
+StatusType world_cup_t::uniteTeamsForOldID(Node<TeamData>* nodeTeam1, Node<TeamData>* nodeSameID) {
+    std::shared_ptr<AvlTree<RankPlayerData>> newRankPlayerTree(new AvlTree<RankPlayerData>);
+    std::shared_ptr<AvlTree<PlayerID>> newPlayerIDTree(new AvlTree<PlayerID>);
+
+    RankPlayerData nullRank(-1, -1, -1, nullptr);
+    std::shared_ptr<LinkedList<RankPlayerData>> newRankPlayerLinkedList(new LinkedList<RankPlayerData>);
+    LinkedListNode<RankPlayerData>* startNodeRankPlayer(new LinkedListNode<RankPlayerData>(nullRank));
+    LinkedListNode<RankPlayerData>* endNodeRankPlayer(new LinkedListNode<RankPlayerData>(nullRank));
+    startNodeRankPlayer->setNext(endNodeRankPlayer);
+    endNodeRankPlayer->setPrevious(startNodeRankPlayer);
+    newRankPlayerLinkedList->setStart(startNodeRankPlayer);
+    newRankPlayerLinkedList->setEnd(endNodeRankPlayer);
+
+    PlayerID nullPlayerID(-1, nullptr);
+    std::shared_ptr<LinkedList<PlayerID>> newPlayerIDList(new LinkedList<PlayerID>);
+    LinkedListNode<PlayerID>* startNodePlayerID = new LinkedListNode<PlayerID>(nullPlayerID);
+    LinkedListNode<PlayerID>* endNodePlayerID = new LinkedListNode<PlayerID>(nullPlayerID);
+    startNodePlayerID->setNext(endNodePlayerID);
+    endNodePlayerID->setPrevious(startNodePlayerID);
+    newPlayerIDList->setStart(startNodePlayerID);
+    newPlayerIDList->setEnd(endNodePlayerID);
+
+
+    LinkedList<RankPlayerData>* playersListTeam1 = nodeTeam1->getKey().getPtrRankLinkedList();
+    LinkedListNode<RankPlayerData>* playerTeam1 = playersListTeam1->getStart()->getNext();
+    int gamesPlayedTeam1 = nodeTeam1->getKey().getGames();
+    while (playerTeam1 != playersListTeam1->getEnd()) {
+        playerTeam1->getData().getPlayerPtr()->m_key.increaseIndividualGamesPlayer(gamesPlayedTeam1);
+        playerTeam1 = playerTeam1->getNext();
+    }
+
+    LinkedList<RankPlayerData>* playersListTeam2 = nodeSameID->getKey().getPtrRankLinkedList();
+    LinkedListNode<RankPlayerData>* playerTeam2 = playersListTeam2->getStart()->getNext();
+    int gamesPlayedTeam2 = nodeSameID->getKey().getGames();
+    while (playerTeam2 != playersListTeam2->getEnd()) {
+        playerTeam2->getData().getPlayerPtr()->m_key.increaseIndividualGamesPlayer(gamesPlayedTeam1);
+        playerTeam2 = playerTeam2->getNext();
+    }
+
+
+    int newTeamPoints = nodeTeam1->getKey().getTeamPoints() + nodeSameID->getKey().getTeamPoints();
+    int newTeamSize = nodeTeam1->getKey().getNumPlayers() + nodeSameID->getKey().getNumPlayers();
+    int newTeamGoalKeepers = nodeTeam1->getKey().getNumGoalKeepers() + nodeSameID->getKey().getNumGoalKeepers();
+    int newTeamGoals = nodeTeam1->getKey().getGoals() + nodeSameID->getKey().getGoals();
+    int newTeamCards = nodeTeam1->getKey().getCard() + nodeSameID->getKey().getCard();
+
+    uniteLists(nodeTeam1->getKey().getPtrRankLinkedList()->getStart(),
+               nodeSameID->getKey().getPtrRankLinkedList()->getStart(), startNodeRankPlayer, endNodeRankPlayer);
+
+
+    if (newRankPlayerLinkedList->countNodes() != newTeamSize) {
+        return StatusType::FAILURE;
+    }
+    try {
+        buildEmptyTree(newTeamSize, nullRank, *newRankPlayerTree.get());
+        updateEmptyTree(*newRankPlayerTree, *newRankPlayerLinkedList);
+    }
+    catch (std::bad_alloc& e) {
+        /////////// The UniteTeam suppose to split, and the players will return to their old teams
+        /////////The Problem: we already merged the lists...
+        return StatusType::ALLOCATION_ERROR;
+    }
+
+
+    std::shared_ptr<LinkedList<PlayerID>> listTeam1 = AVLTreeToLinkedListPlayerID(nodeTeam1->getKey().getPtrIDTree(),
+                                                          nullPlayerID, nodeTeam1->getKey().getNumPlayers());
+    std::shared_ptr<LinkedList<PlayerID>> listTeamSameID = AVLTreeToLinkedListPlayerID(nodeSameID->getKey().getPtrIDTree(),
+                                                           nullPlayerID, nodeSameID->getKey().getNumPlayers());
+
+    uniteLists(listTeam1->getStart(), listTeamSameID->getStart(), startNodePlayerID, endNodePlayerID);
+
+    if (newPlayerIDList->countNodes() != newTeamSize) {
+        return StatusType::FAILURE;
+    }
+
+    try {
+        buildEmptyTreePlayerID(newTeamSize, nullPlayerID, *newPlayerIDTree);
+        updateEmptyTreePlayerID(*newPlayerIDTree, *newPlayerIDList);
+    }
+    catch (std::bad_alloc& e) {
+        /////////// The UniteTeam suppose to split, and the players will return to their old teams
+        /////////The Problem: we already merged the lists...
+        return StatusType::ALLOCATION_ERROR;
+    }
+
+    ////////////todo::Maybe To delete Nodes in the RankTree & IDPlaayerTree in TeamSameID
+
+    int newTeamID = nodeSameID->getKey().getTeamID();
+
+    remove_team(newTeamID);
+
+    try {
+        add_team(newTeamID, newTeamPoints);
+    }
+    catch (std::bad_alloc& e) {
+        //////////////////////////////////////
+        return StatusType::ALLOCATION_ERROR;
+    }
+
+    Node<TeamData>* newNodeTeam = findTeam(newTeamID, m_teamsAVLTree->getRoot());
+    newNodeTeam->m_key.setNumPlayers(newTeamSize);
+    newNodeTeam->m_key.setNumGoals(newTeamGoals);
+    newNodeTeam->m_key.setNumCards(newTeamCards);
+    newNodeTeam->m_key.setNumGoalKeepers(newTeamGoals);
+    newNodeTeam->m_key.setPoints(newTeamPoints);
+
+    newNodeTeam->m_key.setPtrRankTree(newRankPlayerTree);
+    newNodeTeam->m_key.setPtrRankList(newRankPlayerLinkedList);
+    newNodeTeam->m_key.setPtrIDTree(newPlayerIDTree);
+
+    //newPlayerIDList->clearList(startNodePlayerID, endNodePlayerID);
+
+    LinkedListNode<RankPlayerData>* playerNewTeam = startNodeRankPlayer->getNext();
+    while (playerNewTeam != endNodeRankPlayer) {
+        playerNewTeam->getData().getPlayerPtr()->m_key.setTeamID(newTeamID);
+        playerNewTeam->getData().getPlayerPtr()->m_key.setPtrTeam(newNodeTeam);
+        playerNewTeam = playerNewTeam->getNext();
+    }
+
+    if (newTeamSize >= 11 && newTeamGoalKeepers >= 1) {
+        ValidTeams newTeamValidTeamsKey(newTeamID, newNodeTeam);
+        try {
+            LinkedListNode<ValidTeams>* nodeToInsertValidTeamsList = addToValidTeamsLinkedList(newTeamValidTeamsKey,
+                                                       m_validTeamsLinkedList.get(), m_validTeams.get());
+            nodeToInsertValidTeamsList->m_data.setPtrLinkedList(nullptr);
+            m_validTeams->insert(newTeamValidTeamsKey);
+            Node<ValidTeams>* nodeToInsertValidTeamsTree = m_validTeams.get()->find(newTeamValidTeamsKey);
+            nodeToInsertValidTeamsTree->m_key.setPtrLinkedList(nodeToInsertValidTeamsList);
+
+        }
+        catch (std::bad_alloc& e) {
+            /////////////////////////////////////
+            return StatusType::FAILURE;
+        }
+    }
+}
+
 
 output_t<int> world_cup_t::get_top_scorer(int teamId)
 {
