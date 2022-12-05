@@ -195,6 +195,9 @@ void TeamData::setNumCards(int numCards) {
     m_cards = numCards;
 }
 
+void TeamData::setPoints(int points){
+    m_points = points;
+}
 
 void TeamData::addGoals(int goalsToAdd){
     m_goals+=goalsToAdd;
@@ -225,8 +228,8 @@ void TeamData::decreaseGoalKeeper(){
 
 
 PlayerData::PlayerData(int playerID, int teamID, int gamesPlayed, int goals, int cards, bool goalKeeper) :
-        m_playerID(playerID),m_teamID(teamID), m_individualGamesPlayed(gamesPlayed),
-        m_goals(goals), m_cards(cards), m_isGoalKeeper(goalKeeper), m_ptrTeam(nullptr) ,m_PtrRankTeamPlayerTree(nullptr), m_PtrRankAllPlayersTree(nullptr){}
+        m_PtrRankAllPlayersTree(nullptr),m_PtrRankTeamPlayerTree(nullptr), m_playerID(playerID),m_teamID(teamID), m_individualGamesPlayed(gamesPlayed),
+        m_goals(goals), m_cards(cards), m_isGoalKeeper(goalKeeper), m_ptrTeam(nullptr) {}
 
 
 

@@ -126,8 +126,20 @@ StatusType world_cup_t::remove_team(int teamId)
     //todo: check memory leak
 
     StatusType res = m_teamsAVLTree->remove(obj);
+    Node<ValidTeams>* validTeamToDelete = findValidTeam(teamId, m_validTeams->getRoot());
+    StatusType res2 = StatusType::SUCCESS;
+    StatusType res3 = StatusType::SUCCESS;
+    if(validTeamToDelete){
+        LinkedListNode<ValidTeams>* listNodeToDelete = validTeamToDelete->getKey().getPtrLinkedList();
+        res3 = m_validTeamsLinkedList->deleteNode(listNodeToDelete);
+        res2 = m_validTeams->remove(validTeamToDelete->m_key);
+    }
 
-	return res;
+    if(res != StatusType::SUCCESS || res2 != StatusType::SUCCESS || res3 != StatusType::SUCCESS){
+        return StatusType::FAILURE;
+    }
+
+	return StatusType::SUCCESS;
 }
 
 
@@ -136,7 +148,7 @@ StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
 {
 
     // check if playerID invalid
-    if(playerId<=0 || teamId<=0 || gamesPlayed<=0 || goals<0 || cards <0){
+    if(playerId<=0 || teamId<=0 || gamesPlayed<0 || goals<0 || cards <0){
         return StatusType::INVALID_INPUT;
     }
 
@@ -208,6 +220,8 @@ StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
             m_allPlayersRankTree->find(playerRank)->m_key.setPtrRankPlayerList(nodeToInsertAllPlayersList);
             teamNode->getKey().getPtrRankTree()->find(playerRank)->m_key.setPtrRankPlayerList(nodeToInsertTeamList);
 
+
+            //todo: check if node int valid teams before insert ? (if it is, insert will throw error so not necessary)
 
             if(teamNode->getKey().getNumPlayers()==11 && teamNode->m_key.getNumGoalKeepers() > 0){
                 ValidTeams validTeamObj(teamId, findTeam(teamId, m_teamsAVLTree->getRoot()));
@@ -567,6 +581,7 @@ output_t<int> world_cup_t::get_team_points(int teamId)
 
 //todo: check why ptr in end and start of teams' list not null
 
+// todo: check if team size is bigger then 11 -> add to valid teams if not exists
 StatusType world_cup_t::unite_teams(int teamId1, int teamId2, int newTeamId)
 {
     if (teamId1 <= 0 || teamId2 <= 0 || newTeamId <= 0 || teamId1 == teamId2) {
@@ -582,7 +597,7 @@ StatusType world_cup_t::unite_teams(int teamId1, int teamId2, int newTeamId)
         return StatusType::FAILURE;
     }
 
-    if (newTeamId != teamId1 || newTeamId != teamId2) {
+    if (newTeamId != teamId1 && newTeamId != teamId2) {
         Node<TeamData>* nodeNewTeam = findTeam(newTeamId, m_teamsAVLTree->getRoot());
         if (nodeNewTeam) {
             return StatusType::FAILURE;
@@ -628,7 +643,7 @@ StatusType world_cup_t::unite_teams(int teamId1, int teamId2, int newTeamId)
     uniteLists(nodeTeam1->getKey().getPtrRankLinkedList()->getStart(),
                nodeTeam2->getKey().getPtrRankLinkedList()->getStart(),
                nodeNewTeam->getKey().getPtrRankLinkedList()->getStart(),
-                nodeNewTeam->getKey().getPtrRankLinkedList()->getEnd());
+               nodeNewTeam->getKey().getPtrRankLinkedList()->getEnd());
 
 
     nodeNewTeam->m_key.setNumPlayers(newTeamSize);
@@ -653,11 +668,11 @@ StatusType world_cup_t::unite_teams(int teamId1, int teamId2, int newTeamId)
 
     PlayerID nullPlayerID(-1, nullptr);
     std::shared_ptr<LinkedList<PlayerID>> listTeam1 = AVLTreeToLinkedListPlayerID(nodeTeam1->getKey().getPtrIDTree(),
-                                                              nullPlayerID, nodeTeam1->getKey().getNumPlayers());
+                                                                                  nullPlayerID, nodeTeam1->getKey().getNumPlayers());
 //    LinkedListNode<PlayerID>* startNodeList1 = listTeam1->getStart();
 //    LinkedListNode<PlayerID>* endNodeList1 = listTeam1->getStart();
     std::shared_ptr<LinkedList<PlayerID>> listTeam2 = AVLTreeToLinkedListPlayerID(nodeTeam2->getKey().getPtrIDTree(),
-                                                              nullPlayerID, nodeTeam2->getKey().getNumPlayers());
+                                                                                  nullPlayerID, nodeTeam2->getKey().getNumPlayers());
 //    LinkedListNode<PlayerID>* startNodeList2 = listTeam2->getStart();
 //    LinkedListNode<PlayerID>* endNodeList2 = listTeam2->getStart();
 
@@ -682,6 +697,8 @@ StatusType world_cup_t::unite_teams(int teamId1, int teamId2, int newTeamId)
         /////////The Problem: we already merged the lists...
         return StatusType::ALLOCATION_ERROR;
     }
+
+
 
 
     nodeTeam1->m_key.setNumPlayers(0);
