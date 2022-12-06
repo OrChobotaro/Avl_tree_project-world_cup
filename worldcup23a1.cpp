@@ -455,12 +455,13 @@ StatusType world_cup_t::update_player_stats(int playerId, int gamesPlayed, int s
 
     LinkedListNode<RankPlayerData>* listTeamNode = playerNode->m_key.getPtrRankTeamPlayerTree()->getKey().getPtrRankPlayerList();
     LinkedList<RankPlayerData>* teamList = teamNode->getKey().getPtrRankLinkedList();
-
+    teamList->deleteNode(listTeamNode);
     teamNode->getKey().getPtrRankTree()->remove(oldRankPlayerData);
+
     LinkedListNode<RankPlayerData>* listNode = playerNode->m_key.getPtrRankAllPlayersTree()->getKey().getPtrRankPlayerList();
     m_allPlayersRankLinkedList->deleteNode(listNode);
     m_allPlayersRankTree->remove(oldRankPlayerData);
-    teamList->deleteNode(listTeamNode);
+
 
 
     int newGamesPlayed = oldIndividualGames + gamesPlayed;
@@ -484,8 +485,8 @@ StatusType world_cup_t::update_player_stats(int playerId, int gamesPlayed, int s
 
         LinkedListNode<RankPlayerData>* newNodeTeamList = addToRankLinkedList(newRankData, teamNode->getKey()
         .getPtrRankLinkedList(), teamNode->getKey().getPtrRankTree());
-        LinkedListNode<RankPlayerData>* newNodeAllPlayersList = addToRankLinkedList(newRankData, teamNode->getKey()
-        .getPtrRankLinkedList(), teamNode->getKey().getPtrRankTree());
+        LinkedListNode<RankPlayerData>* newNodeAllPlayersList = addToRankLinkedList(newRankData,
+                    m_allPlayersRankLinkedList.get(), m_allPlayersRankTree.get());
 
         newNodeTeamTree->m_key.setPtrRankPlayerList(newNodeTeamList);
         newNodeAllPlayersTree->m_key.setPtrRankPlayerList(newNodeAllPlayersList);
