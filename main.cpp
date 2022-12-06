@@ -1,3 +1,4 @@
+/*
 
 
 
@@ -6,8 +7,9 @@
 
 int main () {
     world_cup_t wc1;
-    /*StatusType result1 = wc1.add_team(1, 1000);
-    StatusType result = wc1.add_player(1001, 1, 10, 0, 0, false);*/
+StatusType result1 = wc1.add_team(1, 1000);
+    StatusType result = wc1.add_player(1001, 1, 10, 0, 0, false);
+
     int x = 4;
 
     wc1.add_player(2009, 2, 20, 0, 0, false);
@@ -88,7 +90,9 @@ int main () {
 //    wc1.remove_player (3008);
 
 
-
+    int allPlayers[36];
+    wc1.get_all_players(-1, allPlayers);
 
     return 0;
 }
+*/

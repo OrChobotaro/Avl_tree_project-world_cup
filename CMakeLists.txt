@@ -21,4 +21,5 @@ add_executable(DS_WET1
         worldcup23a1.h
         testWC.cpp
         main23a1.cpp
-        test.in)
+        test.in
+        mainTests.cpp)
