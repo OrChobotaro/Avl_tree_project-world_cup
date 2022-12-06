@@ -68,7 +68,7 @@ world_cup_t::~world_cup_t()
 StatusType world_cup_t::add_team(int teamId, int points)
 {
 
-    if(teamId <= 0 || points <= 0)
+    if(teamId <= 0 || points < 0)
         return StatusType::INVALID_INPUT;
 
     StatusType res;
@@ -147,12 +147,17 @@ StatusType world_cup_t::remove_team(int teamId)
 StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
                                    int goals, int cards, bool goalKeeper)
 {
-
+    std::cout << m_allPlayersRankLinkedList->countNodes() << std::endl;
     // check if playerID invalid
     if(playerId<=0 || teamId<=0 || gamesPlayed<0 || goals<0 || cards <0){
         return StatusType::INVALID_INPUT;
     }
 
+    if(gamesPlayed == 0){
+        if(cards > 0 || goals > 0 ){
+            return StatusType::INVALID_INPUT;
+        }
+    }
     // create new player object
     PlayerData newPlayer(playerId, teamId, gamesPlayed, goals, cards, goalKeeper);
 
@@ -440,6 +445,9 @@ StatusType world_cup_t::update_player_stats(int playerId, int gamesPlayed, int s
         return StatusType::INVALID_INPUT;
     }
     Node<PlayerData>* playerNode = findPlayer(playerId, m_playersAVLTree->getRoot());
+    if(!playerNode){
+        return StatusType::FAILURE;
+    }
     Node<TeamData>* teamNode = findTeam(playerNode->getKey().getTeamID(), m_teamsAVLTree->getRoot());
     RankPlayerData oldRankPlayerData = playerNode->getKey().getPtrRankTeamPlayerTree()->getKey();
     int oldIndividualGames = playerNode->getKey().getIndividualGamesPlayed();
@@ -785,7 +793,7 @@ StatusType world_cup_t::uniteTeamsForOldID(Node<TeamData>* nodeTeam1, Node<TeamD
     LinkedListNode<RankPlayerData>* playerTeam2 = playersListTeam2->getStart()->getNext();
     int gamesPlayedTeam2 = nodeSameID->getKey().getGames();
     while (playerTeam2 != playersListTeam2->getEnd()) {
-        playerTeam2->getData().getPlayerPtr()->m_key.increaseIndividualGamesPlayer(gamesPlayedTeam1);
+        playerTeam2->getData().getPlayerPtr()->m_key.increaseIndividualGamesPlayer(gamesPlayedTeam2);
         playerTeam2 = playerTeam2->getNext();
     }
 
@@ -885,6 +893,7 @@ StatusType world_cup_t::uniteTeamsForOldID(Node<TeamData>* nodeTeam1, Node<TeamD
             return StatusType::FAILURE;
         }
     }
+    return StatusType::SUCCESS;
 }
 
 
@@ -943,6 +952,7 @@ StatusType world_cup_t::get_all_players(int teamId, int *const output)
         if(m_numOfPlayers == 0){
             return StatusType::FAILURE;
         }
+        std:: cout << m_allPlayersRankLinkedList->countNodes();
         listToArr(m_allPlayersRankLinkedList.get(), m_numOfPlayers, output);
     }
 
@@ -959,7 +969,6 @@ StatusType world_cup_t::get_all_players(int teamId, int *const output)
 }
 
 
-// todo: create function
 void world_cup_t::listToArr(LinkedList<RankPlayerData>* list, int size ,int *output){
     LinkedListNode<RankPlayerData>* node = list->getStart()->getNext();
 

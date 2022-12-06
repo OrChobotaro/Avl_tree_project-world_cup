@@ -465,7 +465,7 @@ LinkedListNode<RankPlayerData>* insertNode(const RankPlayerData& rankPlayer, Avl
 
 
 ValidTeams::ValidTeams(int teamID, Node<TeamData>* ptrTeamData) :
-        m_teamID(teamID), m_ptrTeamData(ptrTeamData), m_totalRank(0), m_ptrLinkedList(nullptr){};
+        m_teamID(teamID), m_ptrTeamData(ptrTeamData), m_totalRank(0), m_ptrLinkedList(nullptr){}
 
 
 
@@ -524,7 +524,7 @@ void ValidTeams::setPtrTeamData(Node<TeamData> *other) {
 
 //////////--------------------------------------------------------
 
-PlayerID::PlayerID(int playerID, Node<PlayerData> *ptrPlayer) : m_playerId(playerID), m_ptrPlayer(ptrPlayer) {};
+PlayerID::PlayerID(int playerID, Node<PlayerData> *ptrPlayer) : m_playerId(playerID), m_ptrPlayer(ptrPlayer) {}
 
 Node<PlayerData>* PlayerID::getPtrPlayer() const {
     return m_ptrPlayer;
