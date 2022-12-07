@@ -36,7 +36,7 @@ public:
     bool isLeaf();
     int calcHeight();
     void switchNodesRegular(Node<T>* node2);
-    void switchCloseNodes(Node<T>* node2);
+
 
 
 
@@ -150,6 +150,8 @@ void Node<T>::switchNodes(Node<T>* nodeToSwitchWith){
     else {
         switchNodesRegular(nodeToSwitchWith);
     }
+
+
 }
 
 

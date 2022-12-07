@@ -271,6 +271,11 @@ Node<T>* AvlTree<T>::removeFromBinaryTree(Node<T> *node) {
             followingNode = findFollowNode(node);
             parent = followingNode->getParent();
             node->switchNodes(followingNode);
+            if(this->getRoot() == node){
+                this->setRoot(followingNode);
+            } else if(this->getRoot() == followingNode){
+                this->setRoot(node);
+            }
             removeNodeAux(followingNode);
         }
         else{
@@ -279,7 +284,7 @@ Node<T>* AvlTree<T>::removeFromBinaryTree(Node<T> *node) {
 
     }
     catch (std::bad_alloc& e) {
-        node->reversSwitchNodes(nodeToDeleteKey);
+//        node->reversSwitchNodes(nodeToDeleteKey);
         throw std::bad_alloc();
     }
     if (parent) {
