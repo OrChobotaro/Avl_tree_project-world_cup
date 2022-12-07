@@ -97,6 +97,7 @@ StatusType result1 = wc1.add_team(1, 1000);
 }
 */
 
+
 #include "avlTree.h"
 
 int main(){
@@ -110,20 +111,23 @@ int main(){
     tree.insert(7);
     tree.insert(10);
     tree.insert(2);
+    tree.insert(4);
 
     Node<int>* node2 = tree.find(3);
-    Node<int>* node1 = tree.find(5);
+    Node<int>* node1 = tree.find(8);
 
 
     //node1 - parent
     //node2 - son
-    node1->switchCloseNodes(node2);
+/*    node1->switchCloseNodes(node2);
     if(tree.getRoot() == node1){
         tree.setRoot(node2);
     } else if(tree.getRoot() == node2){
         tree.setRoot(node1);
-    }
+    }*/
 
+
+    node1->switchNodes(node2);
 
     return 0;
 }
