@@ -229,7 +229,7 @@ StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
 
             //todo: check if node int valid teams before insert ? (if it is, insert will throw error so not necessary)
 
-            if(teamNode->getKey().getNumPlayers()==11 && teamNode->m_key.getNumGoalKeepers() > 0){
+            if(teamNode->getKey().getNumPlayers()>=11 && teamNode->m_key.getNumGoalKeepers() > 0){
                 ValidTeams validTeamObj(teamId, findTeam(teamId, m_teamsAVLTree->getRoot()));
                 LinkedListNode<ValidTeams>* nodeToInsertValidTeamsList = addToValidTeamsLinkedList(validTeamObj,
                                                            m_validTeamsLinkedList.get(), m_validTeams.get());
@@ -364,8 +364,8 @@ StatusType world_cup_t::remove_player(int playerId)
     int newNumPlayersInTeam = playerTeam->getKey().getNumPlayers() - 1;
     playerTeam->m_key.setNumPlayers(newNumPlayersInTeam);
 
-    int newNumGoalKeepers = playerTeam->getKey().getNumGoalKeepers() - playerToRemove->getKey().isGoalKeeper();
-    playerTeam->m_key.setNumGoals(newNumGoalKeepers);
+    int newNumGoalKeepers = playerTeam->m_key.getNumGoalKeepers() - playerToRemove->m_key.isGoalKeeper();
+    playerTeam->m_key.setNumGoalKeepers(newNumGoalKeepers);
 
     m_numOfPlayers -= 1;
 
@@ -475,6 +475,13 @@ StatusType world_cup_t::update_player_stats(int playerId, int gamesPlayed, int s
 
     try {
         //teamNode->m_key.getPtrRankTree()->insert(newRankData);
+
+
+        LinkedListNode<RankPlayerData>* newNodeTeamList = addToRankLinkedList(newRankData, teamNode->getKey()
+        .getPtrRankLinkedList(), teamNode->getKey().getPtrRankTree());
+        LinkedListNode<RankPlayerData>* newNodeAllPlayersList = addToRankLinkedList(newRankData,
+                    m_allPlayersRankLinkedList.get(), m_allPlayersRankTree.get());
+
         teamNode->m_key.m_ptrRankTree->insert(newRankData);
         Node<RankPlayerData>* newNodeTeamTree = teamNode->m_key.getPtrRankTree()->find(newRankData);
         playerNode->m_key.setPtrRankTeamPlayerTree(newNodeTeamTree);
@@ -482,12 +489,6 @@ StatusType world_cup_t::update_player_stats(int playerId, int gamesPlayed, int s
         m_allPlayersRankTree->insert(newRankData);
         Node<RankPlayerData>* newNodeAllPlayersTree = m_allPlayersRankTree->find(newRankData);
         playerNode->m_key.setPtrRankAllPlayersTree(newNodeAllPlayersTree);
-
-
-        LinkedListNode<RankPlayerData>* newNodeTeamList = addToRankLinkedList(newRankData, teamNode->getKey()
-        .getPtrRankLinkedList(), teamNode->getKey().getPtrRankTree());
-        LinkedListNode<RankPlayerData>* newNodeAllPlayersList = addToRankLinkedList(newRankData,
-                    m_allPlayersRankLinkedList.get(), m_allPlayersRankTree.get());
 
         newNodeTeamTree->m_key.setPtrRankPlayerList(newNodeTeamList);
         newNodeAllPlayersTree->m_key.setPtrRankPlayerList(newNodeAllPlayersList);
@@ -1095,6 +1096,11 @@ output_t<int> world_cup_t::knockout_winner(int minTeamId, int maxTeamId)
     if(minTeamId < 0 || maxTeamId < 0 || maxTeamId<minTeamId){
         return StatusType::INVALID_INPUT;
     }
+
+    if(!m_validTeams->getRoot()){
+        return StatusType::FAILURE;
+    }
+
     ValidTeams minObjToSearch(minTeamId, nullptr);
     ValidTeams maxObjToSearch(maxTeamId, nullptr);
 
@@ -1106,11 +1112,24 @@ output_t<int> world_cup_t::knockout_winner(int minTeamId, int maxTeamId)
     }
     else {
         Node<ValidTeams>* parentMinNode = m_validTeams->findParentBeforeInsert(minObjToSearch);
+        if(!parentMinNode){
+            return StatusType::FAILURE;
+        }
         if(parentMinNode->m_key.getTeamId() < minTeamId){
-            // minNode == node after the parent
-            minNode = parentMinNode->m_key.getPtrLinkedList()->getNext();
-        } else {
-            minNode = parentMinNode->m_key.getPtrLinkedList();
+            int parentNextNodeID = parentMinNode->m_key.getPtrLinkedList()->getNext()->getData().getTeamId();
+            if(parentNextNodeID > minTeamId && parentNextNodeID < maxTeamId){
+                // minNode == node after the parent
+                minNode = parentMinNode->m_key.getPtrLinkedList()->getNext();
+            }
+            else {
+                return StatusType::FAILURE;
+            }
+        } else if(parentMinNode->m_key.getTeamId() < maxTeamId){{
+                minNode = parentMinNode->m_key.getPtrLinkedList();
+            }
+        }
+        else {
+            return StatusType::FAILURE;
         }
     }
 
@@ -1122,6 +1141,7 @@ output_t<int> world_cup_t::knockout_winner(int minTeamId, int maxTeamId)
     }
     else {
         LinkedListNode<ValidTeams>* currTemp = minNode;
+
 
         while(currTemp->m_data.getTeamId() < maxTeamId && currTemp != m_validTeamsLinkedList->getEnd()){
             currTemp = currTemp->getNext();
