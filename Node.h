@@ -249,7 +249,6 @@ void Node<T>::switchCloseNodes(Node<T>* node2){
 
     node1->setHeight(height2);
     node2->setHeight(height1);
-
 }
 
 
