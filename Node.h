@@ -265,14 +265,15 @@ void Node<T>::switchNodesRegular(Node<T>* node2) {
     Node<T>* parentNode1 = m_parent;
     Node<T>* rightSon1 = m_right;
     Node<T>* leftSon1 = m_left;
+    bool isNode1Left = this->isLeftNew(m_parent);
 
     Node<T>* parentNode2 = node2->getParent();
     Node<T>* rightSon2 = node2->getRight();
     Node<T>* leftSon2 = node2->getLeft();
+    bool isNode2Left = node2->isLeftNew(parentNode2);
 
     setParent(parentNode2);
     if (parentNode2) {
-        bool isNode2Left = this->isLeftNew(parentNode2);
         if (isNode2Left) {
             parentNode2->setLeft(this);
         }
@@ -293,7 +294,6 @@ void Node<T>::switchNodesRegular(Node<T>* node2) {
 
     node2->setParent(parentNode1);
     if (parentNode1) {
-        bool isNode1Left = this->isLeftNew(m_parent);
         if (isNode1Left) {
             parentNode1->setLeft(node2);
         }
