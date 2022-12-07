@@ -870,7 +870,10 @@ StatusType world_cup_t::uniteTeamsForOldID(Node<TeamData>* nodeTeam1, Node<TeamD
 
     int newTeamID = nodeSameID->getKey().getTeamID();
 
+    nodeSameID->m_key.setNumPlayers(0);
     remove_team(newTeamID);
+    nodeTeam1->m_key.setNumPlayers(0);
+    remove_team(nodeTeam1->getKey().getTeamID());
 
     try {
         add_team(newTeamID, newTeamPoints);
