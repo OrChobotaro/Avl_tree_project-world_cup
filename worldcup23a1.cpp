@@ -518,38 +518,38 @@ StatusType world_cup_t::update_player_stats(int playerId, int gamesPlayed, int s
     newRankDataForTeamLinkedList.setPtrRankPlayerTree(playerNode->get)*/
 
 
-    // todo: DELETE LINES BELOW
-
-    Node<TeamData>* teamNode2 = findTeam(1, m_teamsAVLTree->getRoot());
-    Node<PlayerID>* playerIDNode = findIDPlayer(101, teamNode2->getKey().getPtrIDTree()->getRoot());
-    if (!playerIDNode) {
-        return StatusType::FAILURE;
-    }
-
-    Node<PlayerData>* playerNode2 = playerIDNode->getKey().getPtrPlayer();
-    LinkedListNode<RankPlayerData>* playerLinkedList = playerNode2->getKey().getPtrRankAllPlayersTree()->getKey().getPtrRankPlayerList();
-
-
-    std::cout << "101: " ;
-
-    std::cout << playerLinkedList->getData().getPlayerID() << std::endl;
-
-    // todo: DELETE LINES ABOVE
-
-    // todo: DELETE LINES BELOW
-    Node<TeamData>* teamNode3 = findTeam(1, m_teamsAVLTree->getRoot());
-    Node<PlayerID>* playerIDNode2 = findIDPlayer(102, teamNode3->getKey().getPtrIDTree()->getRoot());
-    if (!playerIDNode) {
-        return StatusType::FAILURE;
-    }
-
-    Node<PlayerData>* playerNode3 = playerIDNode2->getKey().getPtrPlayer();
-    LinkedListNode<RankPlayerData>* playerLinkedList2 = playerNode2->getKey().getPtrRankAllPlayersTree()->getKey().getPtrRankPlayerList();
-
-    std::cout << "102: " ;
-    std::cout << playerLinkedList2->getData().getPlayerID() << std::endl;
-
-    // todo: DELETE LINES ABOVE
+//    // todo: DELETE LINES BELOW
+//
+//    Node<TeamData>* teamNode2 = findTeam(1, m_teamsAVLTree->getRoot());
+//    Node<PlayerID>* playerIDNode = findIDPlayer(101, teamNode2->getKey().getPtrIDTree()->getRoot());
+//    if (!playerIDNode) {
+//        return StatusType::FAILURE;
+//    }
+//
+//    Node<PlayerData>* playerNode2 = playerIDNode->getKey().getPtrPlayer();
+//    LinkedListNode<RankPlayerData>* playerLinkedList = playerNode2->getKey().getPtrRankAllPlayersTree()->getKey().getPtrRankPlayerList();
+//
+//
+//    std::cout << "101: " ;
+//
+//    std::cout << playerLinkedList->getData().getPlayerID() << std::endl;
+//
+//    // todo: DELETE LINES ABOVE
+//
+//    // todo: DELETE LINES BELOW
+//    Node<TeamData>* teamNode3 = findTeam(1, m_teamsAVLTree->getRoot());
+//    Node<PlayerID>* playerIDNode2 = findIDPlayer(102, teamNode3->getKey().getPtrIDTree()->getRoot());
+//    if (!playerIDNode) {
+//        return StatusType::FAILURE;
+//    }
+//
+//    Node<PlayerData>* playerNode3 = playerIDNode2->getKey().getPtrPlayer();
+//    LinkedListNode<RankPlayerData>* playerLinkedList2 = playerNode2->getKey().getPtrRankAllPlayersTree()->getKey().getPtrRankPlayerList();
+//
+//    std::cout << "102: " ;
+//    std::cout << playerLinkedList2->getData().getPlayerID() << std::endl;
+//
+//    // todo: DELETE LINES ABOVE
 
 
 	return StatusType::SUCCESS;
@@ -594,19 +594,19 @@ StatusType world_cup_t::play_match(int teamId1, int teamId2)
     team1->m_key.m_gamesPlayed++;
     team2->m_key.m_gamesPlayed++;
 
-    // todo: DELETE LINES BELOW
-    Node<TeamData>* teamNode2 = findTeam(1, m_teamsAVLTree->getRoot());
-    Node<PlayerID>* playerIDNode = findIDPlayer(101, teamNode2->getKey().getPtrIDTree()->getRoot());
-    if (!playerIDNode) {
-        return StatusType::FAILURE;
-    }
-
-    Node<PlayerData>* playerNode2 = playerIDNode->getKey().getPtrPlayer();
-    LinkedListNode<RankPlayerData>* playerLinkedList = playerNode2->getKey().getPtrRankAllPlayersTree()->getKey().getPtrRankPlayerList();
-
-    std::cout << playerLinkedList->getData().getPlayerID() << std::endl;
-
-    // todo: DELETE LINES ABOVE
+//    // todo: DELETE LINES BELOW
+//    Node<TeamData>* teamNode2 = findTeam(1, m_teamsAVLTree->getRoot());
+//    Node<PlayerID>* playerIDNode = findIDPlayer(101, teamNode2->getKey().getPtrIDTree()->getRoot());
+//    if (!playerIDNode) {
+//        return StatusType::FAILURE;
+//    }
+//
+//    Node<PlayerData>* playerNode2 = playerIDNode->getKey().getPtrPlayer();
+//    LinkedListNode<RankPlayerData>* playerLinkedList = playerNode2->getKey().getPtrRankAllPlayersTree()->getKey().getPtrRankPlayerList();
+//
+//    std::cout << playerLinkedList->getData().getPlayerID() << std::endl;
+//
+//    // todo: DELETE LINES ABOVE
 
     return StatusType::SUCCESS;
 }
@@ -1008,7 +1008,7 @@ StatusType world_cup_t::get_all_players(int teamId, int *const output)
         if(m_numOfPlayers == 0){
             return StatusType::FAILURE;
         }
-        std:: cout << m_allPlayersRankLinkedList->countNodes();
+//        std:: cout << m_allPlayersRankLinkedList->countNodes();
         listToArr(m_allPlayersRankLinkedList.get(), m_numOfPlayers, output);
     }
 
