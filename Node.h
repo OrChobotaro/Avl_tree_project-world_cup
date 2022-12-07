@@ -29,7 +29,7 @@ public:
     void setKey(T newKey);
 
 //    bool isNextTo(Node<T> *node1);
-//    void switchCloseNodes(Node<T>* node2);
+    void switchCloseNodes(Node<T>* node2);
     bool isLeftNew(Node<T>* parent);
     void switchNodes(Node<T>* nodeToSwitchWith);
     void reversSwitchNodes(const T& key);
@@ -168,6 +168,9 @@ int Node<T>::calcHeight(){
     return max(heightLeft, heightRight);
 }
 
+
+//node1 - parent
+ //node2 - son
 template<class T>
 void Node<T>::switchCloseNodes(Node<T>* node2){
     Node<T>* node1Left = this->getLeft();
@@ -180,17 +183,16 @@ void Node<T>::switchCloseNodes(Node<T>* node2){
     Node<T>* node1;
     // continue the opposite situation
     //check if works!!
-    if(node2->getRight() == this || node2->getLeft() == this){
-        Node<T>* temp = node2;
-        node2 = this;
-        node1 = temp;
 
+//    if(node2->getRight() == this || node2->getLeft() == this){
+//        Node<T>* temp = node2;
+//        node2 = this;
+//        node1 = temp;
 
-    }
-    else{
+//    }
+//    else{
         node1 = this;
-    }
-
+//    }
 
 
     if(node1->getRight() == node2 || node1->getLeft() == node2){
@@ -208,7 +210,9 @@ void Node<T>::switchCloseNodes(Node<T>* node2){
              }
          }
 
-         isLeft2 = node1->isLeftNew(node2);
+
+         isLeft2 = node2->isLeftNew(node1);
+
          if(isLeft2){
              node2->setLeft(node1);
              node1->setParent((node2));
@@ -227,14 +231,26 @@ void Node<T>::switchCloseNodes(Node<T>* node2){
          }
 
         node1->setRight(node2Right);
+
+         if(node2Right){
+             node2Right->setParent(node1);
+         }
         node1->setLeft(node2Left);
+         if(node2Left){
+             node2Left->setParent(node1);
+         }
     }
+
+
 }
 
 
 template<class T>
 bool Node<T>::isLeftNew(Node<T>* parent){
     bool isLeft = false;
+    if(!parent){
+        return false;
+    }
     if(parent->getLeft() == this){
         isLeft = true;
     }

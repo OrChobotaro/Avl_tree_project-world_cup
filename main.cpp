@@ -96,3 +96,34 @@ StatusType result1 = wc1.add_team(1, 1000);
     return 0;
 }
 */
+
+#include "avlTree.h"
+
+int main(){
+
+    AvlTree<int> tree;
+
+    tree.insert(3);
+    tree.insert(5);
+    tree.insert(6);
+    tree.insert(8);
+    tree.insert(7);
+    tree.insert(10);
+    tree.insert(2);
+
+    Node<int>* node2 = tree.find(3);
+    Node<int>* node1 = tree.find(5);
+
+
+    //node1 - parent
+    //node2 - son
+    node1->switchCloseNodes(node2);
+    if(tree.getRoot() == node1){
+        tree.setRoot(node2);
+    } else if(tree.getRoot() == node2){
+        tree.setRoot(node1);
+    }
+
+
+    return 0;
+}
