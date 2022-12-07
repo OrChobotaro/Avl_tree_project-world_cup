@@ -148,58 +148,85 @@ int main(){
 int main(){
 
     world_cup_t *obj = new world_cup_t();
+    int playerId = 1;
+    StatusType res;
+    for (int teamId = 1; teamId < 10; teamId += 2)
+    {
+        res = obj->add_team(teamId, 1000 / ((6 - teamId) * (6 - teamId)));
+//        REQUIRE(res == StatusType::SUCCESS);
 
-    StatusType res = obj->add_team(1, 2);
-//    REQUIRE(res == StatusType::SUCCESS);
-    res = obj->add_player(1001, 1, 1, 5, 2, true);
-//    REQUIRE(res == StatusType::SUCCESS);
-    res = obj->add_player(1002, 1, 1, 3, 4, false);
-//    REQUIRE(res == StatusType::SUCCESS);
-    res = obj->add_player(1003, 1, 1, 1, 1, false);
-//    REQUIRE(res == StatusType::SUCCESS);
-    res = obj->add_player(1004, 1, 1, 1, 2, true);
-//    REQUIRE(res == StatusType::SUCCESS);
-    res = obj->add_player(1005, 1, 1, 1, 4, false);
-//    REQUIRE(res == StatusType::SUCCESS);
-    res = obj->add_team(2, 2);
-//    REQUIRE(res == StatusType::SUCCESS);
-    res = obj->add_player(1006, 2, 1, 1, 1, false);
-//    REQUIRE(res == StatusType::SUCCESS);
-    res = obj->add_player(1007, 2, 1, 1, 1, false);
-//    REQUIRE(res == StatusType::SUCCESS);
-    res = obj->add_player(1008, 2, 1, 1, 1, false);
-//    REQUIRE(res == StatusType::SUCCESS);
-    res = obj->add_player(1009, 2, 1, 1, 1, false);
-//    REQUIRE(res == StatusType::SUCCESS);
-    res = obj->add_player(1010, 2, 1, 1, 1, false);
-//    REQUIRE(res == StatusType::SUCCESS);
-    res = obj->add_player(1011, 2, 1, 1, 1, false);
-//    REQUIRE(res == StatusType::SUCCESS);
-    res = obj->add_player(1012, 2, 1, 1, 1, false);
-//    REQUIRE(res == StatusType::SUCCESS);
-    res = obj->add_player(1013, 2, 1, 1, 1, false);
-//    REQUIRE(res == StatusType::SUCCESS);
-    res = obj->add_player(1014, 2, 1, 1, 1, false);
-//    REQUIRE(res == StatusType::SUCCESS);
-    res = obj->add_player(1015, 2, 1, 1, 1, true);
-//    REQUIRE(res == StatusType::SUCCESS);
-    res = obj->add_player(1016, 2, 1, 1, 1, false);
-//    REQUIRE(res == StatusType::SUCCESS);
-    res = obj->add_player(1017, 2, 1, 1, 1, false);
-//    REQUIRE(res == StatusType::SUCCESS);
-    output_t<int> resn3 = obj->knockout_winner(1, 4);
-//    REQUIRE(resn3.status() == StatusType::SUCCESS);
-//    REQUIRE(resn3.ans() == 2);
+        for (int startingId = playerId; playerId < startingId + 10 + teamId; ++playerId)
+        {
+            res = obj->add_player(playerId, teamId, 1, playerId, 3, true);
+//            REQUIRE(res == StatusType::SUCCESS);
+        }
+        ++playerId;
+    }
+    // Strengths team1:73 team3:319 team5:1485 team7:1816 team9:1384
 
-    res = obj->unite_teams(1, 2, 3);
+    res = obj->add_team(4, 1000000);
 //    REQUIRE(res == StatusType::SUCCESS);
 
-    output_t<int> resn1 = obj->get_all_players_count(3);
-//    REQUIRE(resn1.status() == StatusType::SUCCESS);
-//    REQUIRE(resn1.ans() == 17);
-    output_t<int> resn2 = obj->knockout_winner(1, 4);
-//    REQUIRE(resn2.status() == StatusType::SUCCESS);
-//    REQUIRE(resn2.ans() == 3);
+    output_t<int> res1 = obj->knockout_winner(8, 9);
+//    REQUIRE(res1.status() == StatusType::SUCCESS);
+//    REQUIRE(res1.ans() == 9);
+
+    output_t<int> res2 = obj->knockout_winner(1, 1);
+//    REQUIRE(res2.status() == StatusType::SUCCESS);
+//    REQUIRE(res2.ans() == 1);
+
+    output_t<int> res3 = obj->knockout_winner(2, 4);
+//    REQUIRE(res3.status() == StatusType::SUCCESS);
+//    REQUIRE(res3.ans() == 3);
+
+    output_t<int> res4 = obj->knockout_winner(3, 9);
+//    REQUIRE(res4.status() == StatusType::SUCCESS); // todo: problem here
+//    REQUIRE(res4.ans() == 7);
+
+    output_t<int> res5 = obj->knockout_winner(2, 8);
+//    REQUIRE(res5.status() == StatusType::SUCCESS);
+//    REQUIRE(res5.ans() == 7);
+
+    output_t<int> res6 = obj->knockout_winner(0, 5);
+//    REQUIRE(res6.status() == StatusType::SUCCESS);
+//    REQUIRE(res6.ans() == 5);
+
+    output_t<int> res7 = obj->knockout_winner(1, 9);
+//    REQUIRE(res7.status() == StatusType::SUCCESS);
+//    REQUIRE(res7.ans() == 7);
+
+    res = obj->add_player(999, 3, 1, 3000, 200, false);
+//    REQUIRE(res == StatusType::SUCCESS);
+    // Strengths team1:73 team3:3119 team5:1485 team7:1816 team9:1384
+
+    output_t<int> res8 = obj->knockout_winner(1, 999);
+//    REQUIRE(res8.status() == StatusType::SUCCESS);
+//    REQUIRE(res8.ans() == 7);
+
+    res = obj->add_player(998, 3, 1, 2000, 0, false);
+//    REQUIRE(res == StatusType::SUCCESS);
+    // Strengths team1:73 team3: 5119 team5:1485 team7:1816 team9:1384
+
+    output_t<int> res9 = obj->knockout_winner(0, 13);
+//    REQUIRE(res9.status() == StatusType::SUCCESS);
+//    REQUIRE(res9.ans() == 3);
+
+    res = obj->add_player(997, 3, 1, 1, 5001, false);
+//    REQUIRE(res == StatusType::SUCCESS);
+    // Strengths team1:73 team3:119 team5:1485 team7:1816 team9:1384
+
+    output_t<int> res9andahalf = obj->knockout_winner(0, 13);
+//    REQUIRE(res9andahalf.status() == StatusType::SUCCESS);
+//    REQUIRE(res9andahalf.ans() == 7);
+
+    res = obj->update_player_stats(79, 1, 10000, 0);
+//    REQUIRE(res == StatusType::SUCCESS);
+    // Strengths team1:73 team3:119 team5:1485 team7:1816 team9:11384
+
+    output_t<int> res10 = obj->knockout_winner(1, 9);
+//    REQUIRE(res10.status() == StatusType::SUCCESS);
+
+//    REQUIRE(res10.ans() == 9);
 
     delete obj;
     return 0;

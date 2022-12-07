@@ -231,12 +231,17 @@ StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
 
             if(teamNode->getKey().getNumPlayers()>=11 && teamNode->m_key.getNumGoalKeepers() > 0){
                 ValidTeams validTeamObj(teamId, findTeam(teamId, m_teamsAVLTree->getRoot()));
-                LinkedListNode<ValidTeams>* nodeToInsertValidTeamsList = addToValidTeamsLinkedList(validTeamObj,
-                                                           m_validTeamsLinkedList.get(), m_validTeams.get());
-                nodeToInsertValidTeamsList->m_data.setPtrLinkedList(nullptr);
-                m_validTeams->insert(validTeamObj);
-                Node<ValidTeams>* nodeToInsertValidTeamsTree = m_validTeams.get()->find(validTeamObj);
-                nodeToInsertValidTeamsTree->m_key.setPtrLinkedList(nodeToInsertValidTeamsList);
+                Node<ValidTeams>* team = findValidTeam(teamId, m_validTeams->getRoot());
+                if(!team) {
+
+                    LinkedListNode<ValidTeams> *nodeToInsertValidTeamsList = addToValidTeamsLinkedList(validTeamObj,
+                                                                                                       m_validTeamsLinkedList.get(),
+                                                                                                       m_validTeams.get());
+                    nodeToInsertValidTeamsList->m_data.setPtrLinkedList(nullptr);
+                    m_validTeams->insert(validTeamObj);
+                    Node<ValidTeams> *nodeToInsertValidTeamsTree = m_validTeams.get()->find(validTeamObj);
+                    nodeToInsertValidTeamsTree->m_key.setPtrLinkedList(nodeToInsertValidTeamsList);
+                }
             }
         }
 
@@ -752,6 +757,8 @@ StatusType world_cup_t::unite_teams(int teamId1, int teamId2, int newTeamId)
     nodeTeam1->m_key.setPtrIDTree(nullptr);
     nodeTeam2->m_key.setPtrIDTree(nullptr);*/
 
+    nodeTeam1->m_key.setNumPlayers(0);
+    nodeTeam2->m_key.setNumPlayers(0);
     StatusType removeTeam1 = remove_team(teamId1);
     StatusType removeTeam2 = remove_team(teamId2);
     if (removeTeam1 != StatusType::SUCCESS || removeTeam2 != StatusType::SUCCESS) {
@@ -1117,14 +1124,14 @@ output_t<int> world_cup_t::knockout_winner(int minTeamId, int maxTeamId)
         }
         if(parentMinNode->m_key.getTeamId() < minTeamId){
             int parentNextNodeID = parentMinNode->m_key.getPtrLinkedList()->getNext()->getData().getTeamId();
-            if(parentNextNodeID > minTeamId && parentNextNodeID < maxTeamId){
+            if(parentNextNodeID > minTeamId && parentNextNodeID <= maxTeamId){
                 // minNode == node after the parent
                 minNode = parentMinNode->m_key.getPtrLinkedList()->getNext();
             }
             else {
                 return StatusType::FAILURE;
             }
-        } else if(parentMinNode->m_key.getTeamId() < maxTeamId){{
+        } else if(parentMinNode->m_key.getTeamId() <= maxTeamId){{
                 minNode = parentMinNode->m_key.getPtrLinkedList();
             }
         }
@@ -1194,24 +1201,24 @@ output_t<int> world_cup_t::knockout_winner(int minTeamId, int maxTeamId)
                 int secondTeamRank = secondTeam->getData().getTotalRank();
 
                 if(firstTeamRank > secondTeamRank){
-                    firstTeam->m_data.setTotalRank(secondTeamRank);
-                    firstTeam->m_data.setTotalRank(3);
+                    firstTeam->m_data.addRank(secondTeamRank);
+                    firstTeam->m_data.addRank(3);
                     m_validTeamsLinkedList->deleteNode(secondTeam);
 
                 } else if (firstTeamRank < secondTeamRank){
-                    secondTeam->m_data.setTotalRank(firstTeamRank);
-                    secondTeam->m_data.setTotalRank(3);
+                    secondTeam->m_data.addRank(firstTeamRank);
+                    secondTeam->m_data.addRank(3);
                     m_validTeamsLinkedList->deleteNode(firstTeam);
 
                 }else {
                     if(firstTeam->getData().getTeamId() > secondTeam->getData().getTeamId()){
-                        firstTeam->m_data.setTotalRank(secondTeamRank);
-                        firstTeam->m_data.setTotalRank(3);
+                        firstTeam->m_data.addRank(secondTeamRank);
+                        firstTeam->m_data.addRank(3);
                         m_validTeamsLinkedList->deleteNode(secondTeam);
 
                     } else {
-                        secondTeam->m_data.setTotalRank(firstTeamRank);
-                        secondTeam->m_data.setTotalRank(3);
+                        secondTeam->m_data.addRank(firstTeamRank);
+                        secondTeam->m_data.addRank(3);
                         m_validTeamsLinkedList->deleteNode(firstTeam);
 
                     }

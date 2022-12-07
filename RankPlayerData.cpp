@@ -486,8 +486,15 @@ int ValidTeams::getTotalRank() const{
 }
 
 void ValidTeams::setTotalRank(int rank){
+    m_totalRank = rank;
+}
+
+void ValidTeams::addRank(int rank){
     m_totalRank += rank;
 }
+
+
+
 
 //int ValidTeams::getPoints() const {
 //    return m_points;
