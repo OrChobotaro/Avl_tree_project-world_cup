@@ -1,12 +1,12 @@
-/*
-
 
 #include "worldcup23a1.h"
+/*
+
 
 
 int main () {
     world_cup_t wc1;
-StatusType result1 = wc1.add_team(1, 1000);
+    StatusType result1 = wc1.add_team(1, 1000);
     StatusType result = wc1.add_player(1001, 1, 10, 0, 0, false);
 
     int x = 4;
@@ -27,6 +27,7 @@ StatusType result1 = wc1.add_team(1, 1000);
     wc1.add_player(3011, 3, 30, 0, 0, true);
     wc1.add_player(4001, 4, 2, 1, 2, false);
     wc1.add_player(4002, 4, 2, 2, 2, false);
+
 
 
 
@@ -99,6 +100,7 @@ StatusType result1 = wc1.add_team(1, 1000);
 
 
 
+
 /*
 
 #include "avlTree.h"
@@ -138,4 +140,85 @@ int main(){
     return 0;
 }
 
-*/
+ */
+
+
+
+int main() {
+    world_cup_t *obj = new world_cup_t();
+    StatusType res = obj->add_team(1, 2);
+    //REQUIRE(res == StatusType::SUCCESS);
+    res = obj->add_player(1001, 1, 1, 5, 2, true);
+    //REQUIRE(res == StatusType::SUCCESS);
+    res = obj->add_team(2, 2);
+    //REQUIRE(res == StatusType::SUCCESS);
+    res = obj->add_player(1002, 2, 1, 3, 4, false);
+    //REQUIRE(res == StatusType::SUCCESS);
+    res = obj->unite_teams(1, 2, 3);
+    //REQUIRE(res == StatusType::SUCCESS);
+    int players[10] = {};
+    res = obj->get_all_players(3, players);
+/*    REQUIRE(res == StatusType::SUCCESS);
+    REQUIRE(players[0] == 1002);
+    REQUIRE(players[1] == 1001);
+    REQUIRE(players[2] == 0);
+    REQUIRE(players[3] == 0);
+    REQUIRE(players[4] == 0);
+    REQUIRE(players[5] == 0);
+    REQUIRE(players[6] == 0);
+    REQUIRE(players[7] == 0);
+    REQUIRE(players[8] == 0);
+    REQUIRE(players[9] == 0);*/
+
+    res = obj->add_team(3, 2);
+    //REQUIRE(res == StatusType::FAILURE);
+    res = obj->add_team(1, 2);
+    //REQUIRE(res == StatusType::SUCCESS);
+    res = obj->add_team(2, 2);
+    //REQUIRE(res == StatusType::SUCCESS);
+    res = obj->add_team(4, 2);
+    //REQUIRE(res == StatusType::SUCCESS);
+    res = obj->add_player(1001, 3, 1, 5, 2, true);
+    //REQUIRE(res == StatusType::FAILURE);
+    res = obj->add_player(1002, 3, 1, 3, 4, false);
+    //REQUIRE(res == StatusType::FAILURE);
+    res = obj->add_player(1003, 3, 1, 1, 1, false);
+    //REQUIRE(res == StatusType::SUCCESS);
+    res = obj->add_player(1004, 4, 1, 1, 2, true);
+    //REQUIRE(res == StatusType::SUCCESS);
+    res = obj->add_player(1005, 4, 1, 1, 4, false);
+    //REQUIRE(res == StatusType::SUCCESS);
+    res = obj->add_player(1006, 4, 1, 1, 1, false);
+    //REQUIRE(res == StatusType::SUCCESS);
+    res = obj->add_player(1007, 4, 1, 1, 1, false);
+    //REQUIRE(res == StatusType::SUCCESS);
+    res = obj->unite_teams(3, 4, 5);
+    //REQUIRE(res == StatusType::SUCCESS);
+    res = obj->add_team(5, 2);
+    //REQUIRE(res == StatusType::FAILURE);
+    res = obj->add_team(3, 2);
+    //REQUIRE(res == StatusType::SUCCESS);
+    res = obj->add_team(4, 2);
+    //REQUIRE(res == StatusType::SUCCESS);
+    res = obj->add_player(1008, 3, 1, 1, 1, false);
+    //REQUIRE(res == StatusType::SUCCESS);
+    res = obj->add_player(1004, 3, 1, 1, 1, false);
+    //REQUIRE(res == StatusType::FAILURE);
+    res = obj->add_player(1009, 4, 1, 1, 1, false);
+    //REQUIRE(res == StatusType::SUCCESS);
+    res = obj->add_player(1005, 4, 1, 1, 1, false);
+    //REQUIRE(res == StatusType::FAILURE);
+    res = obj->unite_teams(3, 4, 3);
+    //REQUIRE(res == StatusType::SUCCESS);
+    res = obj->add_team(3, 2);
+    //REQUIRE(res == StatusType::FAILURE);
+
+    res = obj->add_team(4, 2);
+    //REQUIRE(res == StatusType::SUCCESS);
+    res = obj->add_player(1009, 3, 1, 1, 1, false);
+    //REQUIRE(res == StatusType::FAILURE);
+
+    delete obj;
+    }
+
+
