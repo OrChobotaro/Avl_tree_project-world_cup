@@ -55,7 +55,7 @@ private:
 
 template<class T>
 Node<T>::Node(const T& key):
-    m_key(key), m_right(nullptr), m_left(nullptr), m_parent(nullptr), m_height(0){};
+    m_key(key), m_right(nullptr), m_left(nullptr), m_parent(nullptr), m_height(0){}
 
 
 template<class T>
@@ -180,7 +180,7 @@ void Node<T>::switchCloseNodes(Node<T>* node2){
     Node<T>* node1Parent = this->getParent();
     Node<T>* node2Left = node2->getLeft();
     Node<T>* node2Right = node2->getRight();
-    Node<T>* node2Parent = node2->getParent();
+    //Node<T>* node2Parent = node2->getParent();
 
     Node<T>* node1;
     // continue the opposite situation

@@ -15,6 +15,7 @@
 #ifndef WORLDCUP23A1_H_
 #define WORLDCUP23A1_H_
 
+#include <math.h>
 #include "wet1util.h"
 #include "avlTree.h"
 #include "PlayerData.h"
