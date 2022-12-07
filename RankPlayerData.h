@@ -176,6 +176,7 @@ public:
 
 
     void setTotalRank(int rank);
+    void addRank(int rank);
     void setPtrLinkedList(LinkedListNode<ValidTeams>* other);
     void setPtrTeamData(Node<TeamData>* other);
 
