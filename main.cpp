@@ -1,4 +1,3 @@
-/*
 
 
 
@@ -71,11 +70,11 @@ StatusType result1 = wc1.add_team(1, 1000);
     wc1.add_player(3011, 3, 30, 0, 0, true);
     wc1.add_player(4001, 4, 2, 1, 2, false);
     wc1.add_player(4002, 4, 2, 2, 2, false);
-//    wc1.remove_player(4001);
-//    wc1.remove_player(4002);
-//    wc1.remove_team(4);
+    wc1.remove_player(4001);
+    wc1.remove_player(4002);
+    wc1.remove_team(4);
 
-//    wc1.update_player_stats( 3011, 2 ,1 ,1);
+    wc1.update_player_stats( 3011, 2 ,1 ,1);
 //    wc1.play_match( 2, 3);
 //    wc1.play_match (1 ,2);
 //    wc1.get_num_played_games( 2003);
@@ -95,10 +94,12 @@ StatusType result1 = wc1.add_team(1, 1000);
 
     return 0;
 }
-*/
 
+
+/*
 
 #include "avlTree.h"
+
 
 int main(){
 
@@ -134,3 +135,4 @@ int main(){
     return 0;
 }
 
+*/
