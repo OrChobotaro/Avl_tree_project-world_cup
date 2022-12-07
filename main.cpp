@@ -113,21 +113,24 @@ int main(){
     tree.insert(2);
     tree.insert(4);
 
-    Node<int>* node2 = tree.find(3);
-    Node<int>* node1 = tree.find(8);
+
+    Node<int>* node2 = tree.find(5);
+    Node<int>* node1 = tree.find(7);
 
 
     //node1 - parent
     //node2 - son
-/*    node1->switchCloseNodes(node2);
+
+    node1->switchCloseNodes(node2);
     if(tree.getRoot() == node1){
         tree.setRoot(node2);
     } else if(tree.getRoot() == node2){
         tree.setRoot(node1);
-    }*/
+    }
 
 
     node1->switchNodes(node2);
 
     return 0;
 }
+

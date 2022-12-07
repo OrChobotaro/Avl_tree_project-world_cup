@@ -39,6 +39,7 @@ public:
 
 
 
+
     T m_key;
 private:
     Node<T>* m_right;
@@ -149,6 +150,8 @@ void Node<T>::switchNodes(Node<T>* nodeToSwitchWith){
     else {
         switchNodesRegular(nodeToSwitchWith);
     }
+
+
 }
 
 
