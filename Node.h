@@ -31,10 +31,12 @@ public:
 //    bool isNextTo(Node<T> *node1);
     void switchCloseNodes(Node<T>* node2);
     bool isLeftNew(Node<T>* parent);
-    virtual void switchNodes(Node<T>* nodeToSwitchWith);
-    virtual void reversSwitchNodes(const T& key);
+    void switchNodes(Node<T>* nodeToSwitchWith);
+    void reversSwitchNodes(const T& key);
     bool isLeaf();
     int calcHeight();
+    void switchNodesRegular(Node<T>* node2);
+    void switchCloseNodes(Node<T>* node2);
 
 
 
@@ -121,24 +123,35 @@ bool Node<T>::isLeaf(){
     return false;
 }
 
-//template<class T>
-//bool Node<T>::isNextTo(Node<T> *node1){
-//    if(node1->getRight() == this || node1->getRight() == this || this->getRight() == node1 || this->getLeft() == node1){
-//        return true;
-//    }
-//    return false;
-//}
 
 // copying nodeToSwitchWith to this
-template<class T>
+/*template<class T>
 void Node<T>::switchNodes(Node<T>* nodeToSwitchWith){
     this->setKey(nodeToSwitchWith->getKey());
 }
-
+*/
 template<class T>
 void Node<T>::reversSwitchNodes(const T& key){
     this->setKey(key);
 }
+
+
+template<class T>
+void Node<T>::switchNodes(Node<T>* nodeToSwitchWith){
+    if (!nodeToSwitchWith) {
+        return;
+    }
+    if (nodeToSwitchWith->getRight() == this || nodeToSwitchWith->getLeft() == this) {
+        nodeToSwitchWith->switchCloseNodes(this);
+    }
+    else if (this->getRight() == nodeToSwitchWith || this->getLeft() == nodeToSwitchWith) {
+        this->switchCloseNodes(nodeToSwitchWith);
+    }
+    else {
+        switchNodesRegular(nodeToSwitchWith);
+    }
+}
+
 
 
 template<class T>
@@ -155,8 +168,9 @@ int Node<T>::calcHeight(){
     return max(heightLeft, heightRight);
 }
 
-// node2 -> parent
-// this -> son
+
+//node1 - parent
+ //node2 - son
 template<class T>
 void Node<T>::switchCloseNodes(Node<T>* node2){
     Node<T>* node1Left = this->getLeft();
@@ -169,6 +183,7 @@ void Node<T>::switchCloseNodes(Node<T>* node2){
     Node<T>* node1;
     // continue the opposite situation
     //check if works!!
+
 //    if(node2->getRight() == this || node2->getLeft() == this){
 //        Node<T>* temp = node2;
 //        node2 = this;
@@ -195,7 +210,9 @@ void Node<T>::switchCloseNodes(Node<T>* node2){
              }
          }
 
+
          isLeft2 = node2->isLeftNew(node1);
+
          if(isLeft2){
              node2->setLeft(node1);
              node1->setParent((node2));
@@ -214,6 +231,7 @@ void Node<T>::switchCloseNodes(Node<T>* node2){
          }
 
         node1->setRight(node2Right);
+
          if(node2Right){
              node2Right->setParent(node1);
          }
@@ -222,6 +240,7 @@ void Node<T>::switchCloseNodes(Node<T>* node2){
              node2Left->setParent(node1);
          }
     }
+
 
 }
 
@@ -236,6 +255,60 @@ bool Node<T>::isLeftNew(Node<T>* parent){
         isLeft = true;
     }
     return isLeft;
+}
+
+
+template<class T>
+void Node<T>::switchNodesRegular(Node<T>* node2) {
+    Node<T>* parentNode1 = m_parent;
+    Node<T>* rightSon1 = m_right;
+    Node<T>* leftSon1 = m_left;
+
+    Node<T>* parentNode2 = node2->getParent();
+    Node<T>* rightSon2 = node2->getRight();
+    Node<T>* leftSon2 = node2->getLeft();
+
+    setParent(parentNode2);
+    if (parentNode2) {
+        bool isNode2Left = this->isLeftNew(parentNode2);
+        if (isNode2Left) {
+            parentNode2->setLeft(this);
+        }
+        else {
+            parentNode2->setRight(this);
+        }
+    }
+
+    setRight(rightSon2);
+    if (rightSon2) {
+        rightSon2->setParent(this);
+    }
+
+    setLeft(leftSon2);
+    if (leftSon2) {
+        leftSon2->setParent(this);
+    }
+
+    node2->setParent(parentNode1);
+    if (parentNode1) {
+        bool isNode1Left = this->isLeftNew(m_parent);
+        if (isNode1Left) {
+            parentNode1->setLeft(node2);
+        }
+        else {
+            parentNode1->setRight(node2);
+        }
+    }
+
+    node2->setRight(rightSon1);
+    if (rightSon1) {
+        rightSon1->setParent(node2);
+    }
+
+    node2->setLeft(leftSon1);
+    if (leftSon1) {
+        leftSon1->setParent(node2);
+    }
 }
 
 

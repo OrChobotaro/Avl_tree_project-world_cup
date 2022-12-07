@@ -474,7 +474,8 @@ StatusType world_cup_t::update_player_stats(int playerId, int gamesPlayed, int s
     RankPlayerData newRankData(playerId, newGoals, newCards, oldRankPlayerData.getPlayerPtr());
 
     try {
-        teamNode->m_key.getPtrRankTree()->insert(newRankData);
+        //teamNode->m_key.getPtrRankTree()->insert(newRankData);
+        teamNode->m_key.m_ptrRankTree->insert(newRankData);
         Node<RankPlayerData>* newNodeTeamTree = teamNode->m_key.getPtrRankTree()->find(newRankData);
         playerNode->m_key.setPtrRankTeamPlayerTree(newNodeTeamTree);
 
@@ -518,6 +519,7 @@ StatusType world_cup_t::update_player_stats(int playerId, int gamesPlayed, int s
 
 
     // todo: DELETE LINES BELOW
+
     Node<TeamData>* teamNode2 = findTeam(1, m_teamsAVLTree->getRoot());
     Node<PlayerID>* playerIDNode = findIDPlayer(101, teamNode2->getKey().getPtrIDTree()->getRoot());
     if (!playerIDNode) {
@@ -527,7 +529,9 @@ StatusType world_cup_t::update_player_stats(int playerId, int gamesPlayed, int s
     Node<PlayerData>* playerNode2 = playerIDNode->getKey().getPtrPlayer();
     LinkedListNode<RankPlayerData>* playerLinkedList = playerNode2->getKey().getPtrRankAllPlayersTree()->getKey().getPtrRankPlayerList();
 
+
     std::cout << "101: " ;
+
     std::cout << playerLinkedList->getData().getPlayerID() << std::endl;
 
     // todo: DELETE LINES ABOVE
@@ -546,6 +550,7 @@ StatusType world_cup_t::update_player_stats(int playerId, int gamesPlayed, int s
     std::cout << playerLinkedList2->getData().getPlayerID() << std::endl;
 
     // todo: DELETE LINES ABOVE
+
 
 	return StatusType::SUCCESS;
 }
