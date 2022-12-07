@@ -95,7 +95,8 @@ StatusType result1 = wc1.add_team(1, 1000);
 
     return 0;
 }
-*/
+*//*
+
 
 
 #include "avlTree.h"
@@ -134,3 +135,4 @@ int main(){
     return 0;
 }
 
+*/
