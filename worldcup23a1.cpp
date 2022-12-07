@@ -516,11 +516,44 @@ StatusType world_cup_t::update_player_stats(int playerId, int gamesPlayed, int s
     RankPlayerData newRankDataForTeamLinkedList(newRankData);
     newRankDataForTeamLinkedList.setPtrRankPlayerTree(playerNode->get)*/
 
+
+    // todo: DELETE LINES BELOW
+    Node<TeamData>* teamNode2 = findTeam(1, m_teamsAVLTree->getRoot());
+    Node<PlayerID>* playerIDNode = findIDPlayer(101, teamNode2->getKey().getPtrIDTree()->getRoot());
+    if (!playerIDNode) {
+        return StatusType::FAILURE;
+    }
+
+    Node<PlayerData>* playerNode2 = playerIDNode->getKey().getPtrPlayer();
+    LinkedListNode<RankPlayerData>* playerLinkedList = playerNode2->getKey().getPtrRankAllPlayersTree()->getKey().getPtrRankPlayerList();
+
+    std::cout << "101: " ;
+    std::cout << playerLinkedList->getData().getPlayerID() << std::endl;
+
+    // todo: DELETE LINES ABOVE
+
+    // todo: DELETE LINES BELOW
+    Node<TeamData>* teamNode3 = findTeam(1, m_teamsAVLTree->getRoot());
+    Node<PlayerID>* playerIDNode2 = findIDPlayer(102, teamNode3->getKey().getPtrIDTree()->getRoot());
+    if (!playerIDNode) {
+        return StatusType::FAILURE;
+    }
+
+    Node<PlayerData>* playerNode3 = playerIDNode2->getKey().getPtrPlayer();
+    LinkedListNode<RankPlayerData>* playerLinkedList2 = playerNode2->getKey().getPtrRankAllPlayersTree()->getKey().getPtrRankPlayerList();
+
+    std::cout << "102: " ;
+    std::cout << playerLinkedList2->getData().getPlayerID() << std::endl;
+
+    // todo: DELETE LINES ABOVE
+
 	return StatusType::SUCCESS;
 }
 
 StatusType world_cup_t::play_match(int teamId1, int teamId2)
 {
+
+
     if (teamId1 <= 0 || teamId2 <= 0 || teamId1 == teamId2) {
         return StatusType::INVALID_INPUT;
     }
@@ -555,6 +588,20 @@ StatusType world_cup_t::play_match(int teamId1, int teamId2)
 
     team1->m_key.m_gamesPlayed++;
     team2->m_key.m_gamesPlayed++;
+
+    // todo: DELETE LINES BELOW
+    Node<TeamData>* teamNode2 = findTeam(1, m_teamsAVLTree->getRoot());
+    Node<PlayerID>* playerIDNode = findIDPlayer(101, teamNode2->getKey().getPtrIDTree()->getRoot());
+    if (!playerIDNode) {
+        return StatusType::FAILURE;
+    }
+
+    Node<PlayerData>* playerNode2 = playerIDNode->getKey().getPtrPlayer();
+    LinkedListNode<RankPlayerData>* playerLinkedList = playerNode2->getKey().getPtrRankAllPlayersTree()->getKey().getPtrRankPlayerList();
+
+    std::cout << playerLinkedList->getData().getPlayerID() << std::endl;
+
+    // todo: DELETE LINES ABOVE
 
     return StatusType::SUCCESS;
 }
@@ -904,6 +951,9 @@ output_t<int> world_cup_t::get_top_scorer(int teamId)
         return StatusType::INVALID_INPUT;
 
     } else if(teamId < 0){
+        if(m_numOfPlayers == 0){
+            return StatusType::FAILURE;
+        }
         // find the last node in all players' rank list
         LinkedListNode<RankPlayerData>* topScorer = m_allPlayersRankLinkedList->getEnd()->getPrevious();
         return topScorer->getData().getPlayerID();
@@ -994,6 +1044,10 @@ output_t<int> world_cup_t::get_closest_player(int playerId, int teamId)
         return StatusType::FAILURE;
     }
 
+    if(m_numOfPlayers < 2){
+        return StatusType::FAILURE;
+    }
+
     Node<PlayerData>* playerNode = playerIDNode->getKey().getPtrPlayer();
     LinkedListNode<RankPlayerData>* playerLinkedList = playerNode->getKey().getPtrRankAllPlayersTree()->getKey().getPtrRankPlayerList();
 
@@ -1054,8 +1108,8 @@ output_t<int> world_cup_t::get_closest_player(int playerId, int teamId)
 
 
 
-	// TODO: Your code goes here
-	return 1006;
+
+
 }
 
 output_t<int> world_cup_t::knockout_winner(int minTeamId, int maxTeamId)

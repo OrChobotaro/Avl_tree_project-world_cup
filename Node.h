@@ -29,7 +29,7 @@ public:
     void setKey(T newKey);
 
 //    bool isNextTo(Node<T> *node1);
-//    void switchCloseNodes(Node<T>* node2);
+    void switchCloseNodes(Node<T>* node2);
     bool isLeftNew(Node<T>* parent);
     virtual void switchNodes(Node<T>* nodeToSwitchWith);
     virtual void reversSwitchNodes(const T& key);
@@ -154,74 +154,84 @@ int Node<T>::calcHeight(){
     }
     return max(heightLeft, heightRight);
 }
-//
-//template<class T>
-//void Node<T>::switchCloseNodes(Node<T>* node2){
-//    Node<T>* node1Left = this->getLeft();
-//    Node<T>* node1Right = this->getRight();
-//    Node<T>* node1Parent = this->getParent();
-//    Node<T>* node2Left = node2->getLeft();
-//    Node<T>* node2Right = node2->getRight();
-//    Node<T>* node2Parent = node2->getParent();
-//
-//    Node<T>* node1;
-//    // continue the opposite situation
-//    //check if works!!
+
+// node2 -> parent
+// this -> son
+template<class T>
+void Node<T>::switchCloseNodes(Node<T>* node2){
+    Node<T>* node1Left = this->getLeft();
+    Node<T>* node1Right = this->getRight();
+    Node<T>* node1Parent = this->getParent();
+    Node<T>* node2Left = node2->getLeft();
+    Node<T>* node2Right = node2->getRight();
+    Node<T>* node2Parent = node2->getParent();
+
+    Node<T>* node1;
+    // continue the opposite situation
+    //check if works!!
 //    if(node2->getRight() == this || node2->getLeft() == this){
 //        Node<T>* temp = node2;
 //        node2 = this;
 //        node1 = temp;
-//
-//
+
 //    }
 //    else{
-//        node1 = this;
+        node1 = this;
 //    }
-//
-//
-//
-//    if(node1->getRight() == node2 || node1->getLeft() == node2){
-//        bool isLeft;
-//        bool isLeft2;
-//
-//        node2->setParent(node1Parent);
-//        isLeft = node1->isLeftNew(node1Parent);
-//         if(node1Parent){
-//             if(isLeft){
-//                 node1Parent->setLeft(node2);
-//             }
-//             else {
-//                 node1Parent->setRight(node2);
-//             }
-//         }
-//
-//         isLeft2 = node1->isLeftNew(node2);
-//         if(isLeft2){
-//             node2->setLeft(node1);
-//             node1->setParent((node2));
-//             node2->setRight(node1Right);
-//             if(node1Right){
-//                 node1Right->setParent(node2);
-//             }
-//         }
-//         else {
-//             node2->setRight(node1);
-//             node1->setParent(node2);
-//             node2->setLeft(node1Left);
-//             if(node1Left){
-//                 node1Left->setParent(node2);
-//             }
-//         }
-//
-//        node1->setRight(node2Right);
-//        node1->setLeft(node2Left);
-//    }
-//}
+
+
+    if(node1->getRight() == node2 || node1->getLeft() == node2){
+        bool isLeft;
+        bool isLeft2;
+
+        node2->setParent(node1Parent);
+        isLeft = node1->isLeftNew(node1Parent);
+         if(node1Parent){
+             if(isLeft){
+                 node1Parent->setLeft(node2);
+             }
+             else {
+                 node1Parent->setRight(node2);
+             }
+         }
+
+         isLeft2 = node2->isLeftNew(node1);
+         if(isLeft2){
+             node2->setLeft(node1);
+             node1->setParent((node2));
+             node2->setRight(node1Right);
+             if(node1Right){
+                 node1Right->setParent(node2);
+             }
+         }
+         else {
+             node2->setRight(node1);
+             node1->setParent(node2);
+             node2->setLeft(node1Left);
+             if(node1Left){
+                 node1Left->setParent(node2);
+             }
+         }
+
+        node1->setRight(node2Right);
+         if(node2Right){
+             node2Right->setParent(node1);
+         }
+        node1->setLeft(node2Left);
+         if(node2Left){
+             node2Left->setParent(node1);
+         }
+    }
+
+}
 
 
 template<class T>
 bool Node<T>::isLeftNew(Node<T>* parent){
     bool isLeft = false;
+    if(!parent){
+        return false;
+    }
     if(parent->getLeft() == this){
         isLeft = true;
     }
