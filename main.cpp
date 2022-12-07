@@ -1,12 +1,12 @@
-/*
-
 
 #include "worldcup23a1.h"
+/*
+
 
 
 int main () {
     world_cup_t wc1;
-StatusType result1 = wc1.add_team(1, 1000);
+    StatusType result1 = wc1.add_team(1, 1000);
     StatusType result = wc1.add_player(1001, 1, 10, 0, 0, false);
 
     int x = 4;
@@ -27,6 +27,7 @@ StatusType result1 = wc1.add_team(1, 1000);
     wc1.add_player(3011, 3, 30, 0, 0, true);
     wc1.add_player(4001, 4, 2, 1, 2, false);
     wc1.add_player(4002, 4, 2, 2, 2, false);
+
 
 
 
@@ -99,6 +100,7 @@ StatusType result1 = wc1.add_team(1, 1000);
 
 
 
+
 /*
 
 #include "avlTree.h"
@@ -137,6 +139,7 @@ int main(){
 
     return 0;
 }
+
 
 */
 
@@ -203,3 +206,4 @@ int main(){
 
 
 }
+
