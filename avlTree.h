@@ -265,7 +265,7 @@ template<class T>
 Node<T>* AvlTree<T>::removeFromBinaryTree(Node<T> *node) {
     Node<T>* followingNode = nullptr;
     Node<T>* parent = node->getParent();
-    T nodeToDeleteKey = node->getKey();
+    //T nodeToDeleteKey = node->getKey();
     try{
         if (node->getLeft() && node->getRight()){
             followingNode = findFollowNode(node);
@@ -276,7 +276,8 @@ Node<T>* AvlTree<T>::removeFromBinaryTree(Node<T> *node) {
             } else if(this->getRoot() == followingNode){
                 this->setRoot(node);
             }
-            removeNodeAux(followingNode);
+            parent = node->getParent();
+            removeNodeAux(node);
         }
         else{
             removeNodeAux(node);

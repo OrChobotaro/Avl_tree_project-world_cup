@@ -147,7 +147,7 @@ StatusType world_cup_t::remove_team(int teamId)
 StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
                                    int goals, int cards, bool goalKeeper)
 {
-    std::cout << m_allPlayersRankLinkedList->countNodes() << std::endl;
+    //std::cout << m_allPlayersRankLinkedList->countNodes() << std::endl;
     // check if playerID invalid
     if(playerId<=0 || teamId<=0 || gamesPlayed<0 || goals<0 || cards <0){
         return StatusType::INVALID_INPUT;
@@ -518,38 +518,8 @@ StatusType world_cup_t::update_player_stats(int playerId, int gamesPlayed, int s
     newRankDataForTeamLinkedList.setPtrRankPlayerTree(playerNode->get)*/
 
 
-//    // todo: DELETE LINES BELOW
-//
-//    Node<TeamData>* teamNode2 = findTeam(1, m_teamsAVLTree->getRoot());
-//    Node<PlayerID>* playerIDNode = findIDPlayer(101, teamNode2->getKey().getPtrIDTree()->getRoot());
-//    if (!playerIDNode) {
-//        return StatusType::FAILURE;
-//    }
-//
-//    Node<PlayerData>* playerNode2 = playerIDNode->getKey().getPtrPlayer();
-//    LinkedListNode<RankPlayerData>* playerLinkedList = playerNode2->getKey().getPtrRankAllPlayersTree()->getKey().getPtrRankPlayerList();
-//
-//
-//    std::cout << "101: " ;
-//
-//    std::cout << playerLinkedList->getData().getPlayerID() << std::endl;
-//
-//    // todo: DELETE LINES ABOVE
-//
-//    // todo: DELETE LINES BELOW
-//    Node<TeamData>* teamNode3 = findTeam(1, m_teamsAVLTree->getRoot());
-//    Node<PlayerID>* playerIDNode2 = findIDPlayer(102, teamNode3->getKey().getPtrIDTree()->getRoot());
-//    if (!playerIDNode) {
-//        return StatusType::FAILURE;
-//    }
-//
-//    Node<PlayerData>* playerNode3 = playerIDNode2->getKey().getPtrPlayer();
-//    LinkedListNode<RankPlayerData>* playerLinkedList2 = playerNode2->getKey().getPtrRankAllPlayersTree()->getKey().getPtrRankPlayerList();
-//
-//    std::cout << "102: " ;
-//    std::cout << playerLinkedList2->getData().getPlayerID() << std::endl;
-//
-//    // todo: DELETE LINES ABOVE
+
+
 
 
 	return StatusType::SUCCESS;
@@ -1069,39 +1039,38 @@ output_t<int> world_cup_t::get_closest_player(int playerId, int teamId)
     int playerAfterCards = playerAfter->getData().getCards();
     int playerAfterID = playerAfter->getData().getPlayerID();
 
-    if (playerBefore == m_allPlayersRankLinkedList->getStart() || playerAfter != m_allPlayersRankLinkedList->getEnd()) {
+    if (playerBefore == m_allPlayersRankLinkedList->getStart()) {
         return playerAfter->getData().getPlayerID();
     }
-    else if (playerBefore != m_allPlayersRankLinkedList->getStart() || playerAfter ==
-    m_allPlayersRankLinkedList->getEnd()) {
+    else if (playerAfter == m_allPlayersRankLinkedList->getEnd()) {
         return playerBefore->getData().getPlayerID();
     }
 
-    if ((playerAfterGoals - playerGoals) > (playerGoals - playerBeforeGoals)) {
+    if (abs(playerAfterGoals - playerGoals) > abs(playerGoals - playerBeforeGoals)) {
         return playerBefore->getData().getPlayerID();
     }
-    else if ((playerAfterGoals - playerGoals) < (playerGoals - playerBeforeGoals)) {
+    else if (abs(playerAfterGoals - playerGoals) < abs(playerGoals - playerBeforeGoals)) {
         return playerAfter->getData().getPlayerID();
     }
     else {
-        if ((playerAfterCards - playerCards) > (playerCards - playerBeforeCards)) {
+        if (abs(playerAfterCards - playerCards) > abs(playerCards - playerBeforeCards)) {
             return playerBefore->getData().getPlayerID();
         }
-        else if ((playerAfterCards - playerCards) < (playerCards - playerBeforeCards)) {
+        else if (abs(playerAfterCards - playerCards) < abs(playerCards - playerBeforeCards)) {
             return playerAfter->getData().getPlayerID();
         }
         else {
-            if ((playerAfterID - playerId) > (playerId - playerBeforeID)) {
+            if (abs(playerAfterID - playerId) > abs(playerId - playerBeforeID)) {
                 return playerBefore->getData().getPlayerID();
             }
-            else if ((playerAfterID - playerId) < (playerId - playerBeforeID)) {
+            else if (abs(playerAfterID - playerId) < abs(playerId - playerBeforeID)) {
                 return playerAfter->getData().getPlayerID();
             }
             else {
-                if (playerBeforeID < playerAfterID) {
+                if (abs(playerBeforeID < playerAfterID)) {
                     return playerAfter->getData().getPlayerID();
                 }
-                else if (playerBeforeID > playerAfterID) {
+                else if (abs(playerBeforeID > playerAfterID)) {
                     return playerBefore->getData().getPlayerID();
                 }
                 else {

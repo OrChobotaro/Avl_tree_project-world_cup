@@ -1,4 +1,4 @@
-
+/*
 
 
 #include "worldcup23a1.h"
@@ -93,9 +93,9 @@ StatusType result1 = wc1.add_team(1, 1000);
     wc1.get_all_players(-1, allPlayers);
 
     return 0;
-}
+}*/
 
-*//*
+
 
 
 
