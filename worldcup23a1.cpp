@@ -218,13 +218,17 @@ StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
             m_allPlayersRankTree->insert(playerRank);
             // update rank node in player's node
             m_playersAVLTree->find(newPlayer)->m_key.m_PtrRankAllPlayersTree =  m_allPlayersRankTree->find(playerRank);
+            m_allPlayersRankTree->find(playerRank)->m_key.setPtrRankPlayerList(nodeToInsertAllPlayersList);
+            nodeToInsertAllPlayersList->m_data.setPtrRankPlayerTree(m_allPlayersRankTree->find(playerRank));
+
 
             //add to team rank tree
             teamNode->m_key.getPtrRankTree()->insert(playerRank);
             m_playersAVLTree->find(newPlayer)->m_key.m_PtrRankTeamPlayerTree = teamNode->getKey().getPtrRankTree()->find(playerRank);
 
-            m_allPlayersRankTree->find(playerRank)->m_key.setPtrRankPlayerList(nodeToInsertAllPlayersList);
+
             teamNode->getKey().getPtrRankTree()->find(playerRank)->m_key.setPtrRankPlayerList(nodeToInsertTeamList);
+            nodeToInsertTeamList->m_data.setPtrRankPlayerTree(teamNode->getKey().getPtrRankTree()->find(playerRank));
 
 
             //todo: check if node int valid teams before insert ? (if it is, insert will throw error so not necessary)
@@ -356,8 +360,7 @@ StatusType world_cup_t::remove_player(int playerId)
     playerToRemove->m_key.setPtrRankAllPlayersTree(nullptr);
     m_allPlayersRankTree->remove(rankPlayer);
 
-    PlayerID playerID = findIDPlayerKey(playerId, playerTeam->getKey().getPtrIDTree()->getRoot());
-    playerTeam->m_key.m_ptrIDTree->remove(playerID);
+
 
 
     int newNumGoals = playerTeam->getKey().getGoals() - playerToRemove->getKey().getGoals();
@@ -376,6 +379,8 @@ StatusType world_cup_t::remove_player(int playerId)
 
     // find the team on the valid team
     Node<ValidTeams>* team = findValidTeam(playerTeam->getKey().getTeamID(), m_validTeams.get()->getRoot());
+    PlayerID playerID = findIDPlayerKey(playerId, playerTeam->getKey().getPtrIDTree()->getRoot());
+    playerTeam->m_key.m_ptrIDTree->remove(playerID);
     if(team){
         // if team exist in the valid teams tree, remove if not valid anymore.
         if (newNumPlayersInTeam < 11 || newNumGoalKeepers <= 0 ) {
@@ -852,6 +857,8 @@ StatusType world_cup_t::uniteTeamsForOldID(Node<TeamData>* nodeTeam1, Node<TeamD
         return StatusType::ALLOCATION_ERROR;
     }
 
+//    inorder((*newRankPlayerTree).getRoot());
+
 
     std::shared_ptr<LinkedList<PlayerID>> listTeam1 = AVLTreeToLinkedListPlayerID(nodeTeam1->getKey().getPtrIDTree(),
                                                           nullPlayerID, nodeTeam1->getKey().getNumPlayers());
@@ -881,7 +888,7 @@ StatusType world_cup_t::uniteTeamsForOldID(Node<TeamData>* nodeTeam1, Node<TeamD
     nodeSameID->m_key.setNumPlayers(0);
     remove_team(newTeamID);
     nodeTeam1->m_key.setNumPlayers(0);
-    remove_team(nodeTeam1->getKey().getTeamID());
+    remove_team(nodeTeam1->getKey().getTeamID()); // here!!!!
 
     try {
         add_team(newTeamID, newTeamPoints);
@@ -902,12 +909,18 @@ StatusType world_cup_t::uniteTeamsForOldID(Node<TeamData>* nodeTeam1, Node<TeamD
     newNodeTeam->m_key.setPtrRankList(newRankPlayerLinkedList);
     newNodeTeam->m_key.setPtrIDTree(newPlayerIDTree);
 
+    //todo:
+//    newRankPlayerTree->getRoot()->getLeft()->getKey().getPlayerPtr()->m_key.setPtrRankTeamPlayerTree()
+
+
     //newPlayerIDList->clearList(startNodePlayerID, endNodePlayerID);
 
     LinkedListNode<RankPlayerData>* playerNewTeam = startNodeRankPlayer->getNext();
     while (playerNewTeam != endNodeRankPlayer) {
+        Node<RankPlayerData>* rankPlayerTreeNode = playerNewTeam->getData().getPtrRankPlayerTree();
         playerNewTeam->getData().getPlayerPtr()->m_key.setTeamID(newTeamID);
         playerNewTeam->getData().getPlayerPtr()->m_key.setPtrTeam(newNodeTeam);
+        playerNewTeam->m_data.m_ptrPlayer->m_key.setPtrRankTeamPlayerTree(rankPlayerTreeNode);
         playerNewTeam = playerNewTeam->getNext();
     }
 
@@ -930,6 +943,20 @@ StatusType world_cup_t::uniteTeamsForOldID(Node<TeamData>* nodeTeam1, Node<TeamD
     return StatusType::SUCCESS;
 }
 
+
+// הבעיה היא שהכתובת בעץ שחקנים של הנואוד דירוג שחקן לא מתעדכנת. נרצה לגשת דרך הנואוד דירוג שחקן לעת שחקנים ומשם לעדכן
+void world_cup_t::inorder(Node<RankPlayerData>* currnode){
+    if(!currnode){
+        return;
+    }
+
+    inorder(currnode->getLeft());
+
+    std::cout<< currnode->getKey().getPlayerID();
+
+    inorder(currnode->getRight());
+
+}
 
 output_t<int> world_cup_t::get_top_scorer(int teamId)
 {

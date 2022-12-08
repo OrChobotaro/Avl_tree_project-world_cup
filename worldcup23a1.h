@@ -49,7 +49,7 @@ private:
                                                          AvlTree<ValidTeams>* tree);
 
     StatusType uniteTeamsForOldID(Node<TeamData>* nodeTeam1, Node<TeamData>* nodeSameID);
-
+    void inorder(Node<RankPlayerData>* currnode);
 
 
 
