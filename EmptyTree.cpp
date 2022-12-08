@@ -146,12 +146,12 @@ void updateEmptyTreeAux(Node<RankPlayerData>* treeNode, LinkedListNode<RankPlaye
     }
     updateEmptyTreeAux(treeNode->getLeft(), listNode);
 
-    RankPlayerData data = (*listNode)->getData();
+    RankPlayerData data = (*listNode)->m_data;
     data.setPtrRankPlayerList(*listNode);
     data.setPtrRankPlayerTree(nullptr);
     treeNode->setKey(data);
     (*listNode)->m_data.setPtrRankPlayerTree(treeNode);
-    (*listNode)->getData().getPlayerPtr()->m_key.m_PtrRankTeamPlayerTree = treeNode;
+    (*listNode)->m_data.getPlayerPtr()->m_key.m_PtrRankTeamPlayerTree = treeNode;
     *listNode = (*listNode)->getNext();
 
     updateEmptyTreeAux(treeNode->getRight(), listNode);

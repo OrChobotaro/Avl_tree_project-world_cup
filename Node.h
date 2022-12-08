@@ -13,7 +13,7 @@ public:
     Node(const T& key);
     Node(const Node& otherNode) = default;
     Node& operator=(const Node& otherNode) = delete;
-    virtual ~Node() = default;
+    ~Node() = default;
 
     T getKey();
     Node<T>* getParent() const;
