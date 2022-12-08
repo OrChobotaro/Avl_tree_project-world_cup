@@ -241,7 +241,8 @@ int main(){
 
 }
 
-*/
+*//*
+
 
 
 #include "worldcup23a1.h"
@@ -1141,7 +1142,7 @@ int main(){
     wc.knockout_winner(14,25);
     wc.knockout_winner(14,15);
     wc.get_closest_player(128,18);
-    //wc.update_player_stats(171,6192,1770,3826);
+    wc.update_player_stats(171,6192,1770,3826);
     wc.get_top_scorer(17);
     wc.update_player_stats(146,2693,11200,9472);
     wc.add_team(3,8504);
@@ -1743,3 +1744,4 @@ int main(){
 
 }
 
+*/
