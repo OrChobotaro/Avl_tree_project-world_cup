@@ -42,11 +42,11 @@ public:
 
     LinkedListNode<RankPlayerData>* m_ptrLinkedList;
     Node<RankPlayerData>* m_ptrRankTree;
+    Node<PlayerData>* m_ptrPlayer; // pointer to players' tree
 private:
     int m_playerID;
     int m_goals;
     int m_cards;
-    Node<PlayerData>* m_ptrPlayer; // pointer to players' tree
 };
 
 
