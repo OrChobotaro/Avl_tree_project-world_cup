@@ -4,7 +4,7 @@
 int calcEmptyTreeHeight(int requiredSize) {
     int height = 0;
     int temp = 2;
-    while (requiredSize > temp) {
+    while (requiredSize >= temp) {
         temp *=2;
         height+=1;
     }
