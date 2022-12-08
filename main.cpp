@@ -1,5 +1,7 @@
+/*
 
 #include "worldcup23a1.h"
+*/
 /*
 
 
@@ -94,13 +96,15 @@ int main () {
     wc1.get_all_players(-1, allPlayers);
 
     return 0;
-}*/
+}*//*
 
 
 
 
 
 
+
+*/
 /*
 
 #include "avlTree.h"
@@ -143,92 +147,136 @@ int main(){
 
 */
 
+
 #include "worldcup23a1.h"
 
 int main(){
+    world_cup_t wc = world_cup_t();
+    wc.add_team(1,7277);
+    wc.add_team(2,1895);
+    wc.add_team(3,3560);
+    wc.add_team(4,5071);
+    wc.add_team(5,5402);
+    wc.add_player(1,4,2020,690,8183,true);
+    wc.add_player(2,4,6818,470,593,false);
+    wc.add_player(3,2,1789,4025,7020,true);
+    wc.add_player(4,5,5907,5576,5004,true);
+    wc.add_player(5,4,5426,6988,3645,false);
+    wc.add_player(6,3,2705,4044,5810,true);
+    wc.add_player(7,1,12276,11256,6737,false);
+    wc.add_player(8,1,930,459,8753,true);
+    wc.add_player(9,4,10678,3337,2864,true);
+    wc.add_player(10,5,1471,6424,4735,true);
+    wc.add_player(11,5,7385,68,10873,true);
+    wc.add_player(12,5,10896,7033,5250,true);
+    wc.add_player(13,4,44,9948,10555,true);
+    wc.add_player(14,5,5835,1680,11454,true);
+    wc.add_player(15,4,9223,8053,6938,true);
+    wc.add_player(16,5,3749,4987,2264,true);
+    wc.add_player(17,2,5127,3462,3710,true);
+    wc.add_player(18,2,3203,11584,98,false);
+    wc.add_player(19,4,11920,407,6910,true);
+    wc.add_player(20,3,7544,3892,8069,true);
+    wc.add_player(21,3,10550,7617,6324,true);
+    wc.add_player(22,3,2211,10797,1603,true);
+    wc.add_player(23,3,1424,9016,5136,true);
+    wc.add_player(24,3,1550,11130,3458,false);
+    wc.add_player(25,4,4145,5426,11568,true);
+    wc.add_player(26,2,10228,2145,9742,true);
+    wc.add_player(27,3,8243,6452,7573,true);
+    wc.add_player(28,4,9292,9624,4340,false);
+    wc.add_player(29,5,6202,3761,5116,false);
+    wc.add_player(30,4,7779,10448,1749,true);
+    wc.add_player(31,3,11957,10061,132,false);
+    wc.add_player(32,5,8194,11019,11039,true);
+    wc.add_player(33,1,6124,1884,2449,true);
+    wc.add_player(34,2,9270,11107,965,true);
+    wc.add_player(35,3,8545,11370,1075,false);
+    wc.add_player(36,4,8153,10868,2010,false);
+    wc.add_player(37,5,1084,2253,9975,true);
+    wc.add_player(38,1,6606,7024,11949,true);
+    wc.add_player(39,3,6424,8498,6152,true);
+    wc.add_player(40,1,11358,3503,11609,true);
+    wc.add_team(3,12208);
+    wc.get_team_points(2);
+    wc.knockout_winner(1,3);
+    wc.knockout_winner(-4,8);
+    wc.knockout_winner(-4,-2);
+    wc.knockout_winner(6,8);
+    wc.knockout_winner(6,-2);
+    wc.update_player_stats(19,495,3254,7461);
+    wc.get_team_points(4);
+    wc.update_player_stats(29,4042,4378,9598);
+    wc.get_team_points(3);
+    wc.get_all_players_count(1);
 
-    world_cup_t *obj = new world_cup_t();
-    int playerId = 1;
-    StatusType res;
-    for (int teamId = 1; teamId < 10; teamId += 2)
-    {
-        res = obj->add_team(teamId, 1000 / ((6 - teamId) * (6 - teamId)));
-//        REQUIRE(res == StatusType::SUCCESS);
-
-        for (int startingId = playerId; playerId < startingId + 10 + teamId; ++playerId)
-        {
-            res = obj->add_player(playerId, teamId, 1, playerId, 3, true);
-//            REQUIRE(res == StatusType::SUCCESS);
-        }
-        ++playerId;
-    }
-    // Strengths team1:73 team3:319 team5:1485 team7:1816 team9:1384
-
-    res = obj->add_team(4, 1000000);
-//    REQUIRE(res == StatusType::SUCCESS);
-
-    output_t<int> res1 = obj->knockout_winner(8, 9);
-//    REQUIRE(res1.status() == StatusType::SUCCESS);
-//    REQUIRE(res1.ans() == 9);
-
-    output_t<int> res2 = obj->knockout_winner(1, 1);
-//    REQUIRE(res2.status() == StatusType::SUCCESS);
-//    REQUIRE(res2.ans() == 1);
-
-    output_t<int> res3 = obj->knockout_winner(2, 4);
-//    REQUIRE(res3.status() == StatusType::SUCCESS);
-//    REQUIRE(res3.ans() == 3);
-
-    output_t<int> res4 = obj->knockout_winner(3, 9);
-//    REQUIRE(res4.status() == StatusType::SUCCESS); // todo: problem here
-//    REQUIRE(res4.ans() == 7);
-
-    output_t<int> res5 = obj->knockout_winner(2, 8);
-//    REQUIRE(res5.status() == StatusType::SUCCESS);
-//    REQUIRE(res5.ans() == 7);
-
-    output_t<int> res6 = obj->knockout_winner(0, 5);
-//    REQUIRE(res6.status() == StatusType::SUCCESS);
-//    REQUIRE(res6.ans() == 5);
-
-    output_t<int> res7 = obj->knockout_winner(1, 9);
-//    REQUIRE(res7.status() == StatusType::SUCCESS);
-//    REQUIRE(res7.ans() == 7);
-
-    res = obj->add_player(999, 3, 1, 3000, 200, false);
-//    REQUIRE(res == StatusType::SUCCESS);
-    // Strengths team1:73 team3:3119 team5:1485 team7:1816 team9:1384
-
-    output_t<int> res8 = obj->knockout_winner(1, 999);
-//    REQUIRE(res8.status() == StatusType::SUCCESS);
-//    REQUIRE(res8.ans() == 7);
-
-    res = obj->add_player(998, 3, 1, 2000, 0, false);
-//    REQUIRE(res == StatusType::SUCCESS);
-    // Strengths team1:73 team3: 5119 team5:1485 team7:1816 team9:1384
-
-    output_t<int> res9 = obj->knockout_winner(0, 13);
-//    REQUIRE(res9.status() == StatusType::SUCCESS);
-//    REQUIRE(res9.ans() == 3);
-
-    res = obj->add_player(997, 3, 1, 1, 5001, false);
-//    REQUIRE(res == StatusType::SUCCESS);
-    // Strengths team1:73 team3:119 team5:1485 team7:1816 team9:1384
-
-    output_t<int> res9andahalf = obj->knockout_winner(0, 13);
-//    REQUIRE(res9andahalf.status() == StatusType::SUCCESS);
-//    REQUIRE(res9andahalf.ans() == 7);
-
-    res = obj->update_player_stats(79, 1, 10000, 0);
-//    REQUIRE(res == StatusType::SUCCESS);
-    // Strengths team1:73 team3:119 team5:1485 team7:1816 team9:11384
-
-    output_t<int> res10 = obj->knockout_winner(1, 9);
-//    REQUIRE(res10.status() == StatusType::SUCCESS);
-
-//    REQUIRE(res10.ans() == 9);
-
-    delete obj;
+    wc.get_num_played_games(22);
+    wc.get_top_scorer(3);
+    wc.get_top_scorer(3);
+    wc.add_team(1,3093);
+    wc.unite_teams(2,4,5);
+    wc.get_num_played_games(8);
+    wc.update_player_stats(6,10341,8618,8506);
+    wc.unite_teams(1,4,2);
+    wc.get_all_players_count(4);
+    wc.add_team(3,6338);
+    wc.get_num_played_games(17);
+    wc.get_num_played_games(32);
+    wc.knockout_winner(5,5);
+    wc.knockout_winner(0,10);
+    wc.knockout_winner(0,0);
+    wc.knockout_winner(10,10);
+    wc.knockout_winner(10,0);
+    wc.remove_player(15);
+    wc.update_player_stats(27,11360,8919,423);
+    wc.get_team_points(2);
+    wc.unite_teams(4,4,5);
+    wc.add_player(12,4,11308,11434,10959,true);
+    wc.unite_teams(2,4,4);
+    wc.play_match(3,4);
+    wc.remove_player(1);
+    wc.remove_player(2);
+    wc.remove_player(3);
+    wc.remove_player(4);
+    wc.remove_player(5);
+    wc.remove_player(6);
+    wc.remove_player(7);
+    wc.remove_player(8);
+    wc.remove_player(9);
+    wc.remove_player(10);
+    wc.remove_player(11);
+    wc.remove_player(12);
+    wc.remove_player(13);
+    wc.remove_player(14);
+    wc.remove_player(16);
+    wc.remove_player(17);
+    wc.remove_player(18);
+    wc.remove_player(19);
+    wc.remove_player(20);
+    wc.remove_player(21);
+    wc.remove_player(22);
+    wc.remove_player(23);
+    wc.remove_player(24);
+    wc.remove_player(25);
+    wc.remove_player(26);
+    wc.remove_player(27);
+    wc.remove_player(28);
+    wc.remove_player(29);
+    wc.remove_player(30);
+    wc.remove_player(31);
+    wc.remove_player(32);
+    wc.remove_player(33);
+    wc.remove_player(34);
+    wc.remove_player(35);
+    wc.remove_player(36);
+    wc.remove_player(37);
+    wc.remove_player(38);
+    wc.remove_player(39);
+    wc.remove_player(40);
+    wc.remove_team(1);
+    wc.remove_team(3);
+    wc.remove_team(5);
+    wc.remove_team(4);
     return 0;
 
 

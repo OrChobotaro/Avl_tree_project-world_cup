@@ -22,4 +22,4 @@ add_executable(DS_WET1
         testWC.cpp
         main23a1.cpp
         test.in
-        mainTests.cpp)
+        main23a1.cpp)
